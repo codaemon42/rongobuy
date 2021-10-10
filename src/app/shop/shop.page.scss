@@ -1,0 +1,11 @@
+// product section
+.rb-mini-product-list {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+    ion-chip {
+      --background: var(--ion-color-dark);
+      --color: var(--ion-color-warning);
+    }
+}

@@ -1,0 +1,20 @@
+  <ion-header>
+    <ion-toolbar class="main-header-menu" color="warning">
+
+      <ion-buttons slot="start">
+        <ion-button (click)="openMenu()">
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+      <ion-avatar class="rb-logo-center">
+        <img [src]="logo">
+      </ion-avatar>
+      <ion-buttons slot="end">
+        <ion-button (click)="onCartClicked()">
+          <ion-icon slot="icon-only" name="cart"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-searchbar (ionChange)="onSearch($event)" debounce="300" showCancelButton="focus" animated [placeholder]="searchText"></ion-searchbar>
+  </ion-header>

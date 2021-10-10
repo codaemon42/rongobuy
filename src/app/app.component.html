@@ -1,3 +1,24 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+
+  <ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu">
+    <ion-header>
+      <ion-toolbar color="warning">
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item detail>Menu Item</ion-item>
+        <ion-item detail>Menu Item</ion-item>
+        <ion-item detail>Menu Item</ion-item>
+        <ion-item detail>Menu Item</ion-item>
+        <ion-item detail>Menu Item</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main"></ion-router-outlet>
+
+  <!-- footer void -->
+  <div class="rb-footer-void"></div>
 </ion-app>

@@ -1,0 +1,110 @@
+<app-header (searchTextFound)="onSearch($event)"></app-header>
+
+<ion-content>
+  <!-- fab icon section -->
+	<!-- <ion-fab vertical="top" horizontal="end" slot="fixed">
+		<ion-fab-button color="danger">
+			<ion-icon name="cart"></ion-icon>
+		</ion-fab-button>
+	</ion-fab> -->
+      <!-- chat section -->
+      <ion-fab class="rb-chat-icon" vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="warning">
+          <ion-icon name="chatbubbles"></ion-icon>
+          <ion-badge color="danger">1</ion-badge>
+        </ion-fab-button>
+      </ion-fab>
+
+
+
+  <!-- slider banner section -->
+	<ion-slides pager="true" scrollbar="true" [options]="slideOpts">
+		<ion-slide *ngFor="let slide of sliderEl;let i=index" (click)="sliderNavigate(i)">
+			<ion-img src="../../assets/slides/one.jpg"></ion-img>
+		</ion-slide>
+	</ion-slides>
+
+	<!-- <ion-list>
+		<ion-item-sliding>
+			<ion-item>
+				<ion-label>
+					Sliding Item, Icons Bottom
+				</ion-label>
+			</ion-item>
+			<ion-item-options>
+				<ion-item-option color="primary">
+					<ion-icon slot="bottom" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+					More
+				</ion-item-option>
+				<ion-item-option color="secondary">
+					<ion-icon slot="bottom" name="archive"></ion-icon>
+					Archive
+				</ion-item-option>
+			</ion-item-options>
+		</ion-item-sliding>
+	</ion-list> -->
+
+  <!-- emergency info -->
+  <ion-grid>
+    <ion-row>
+      <ion-col sizeLg="3" sizeMd="3" sizeSm="6" *ngFor="let emergency of emergencyInfo">
+        <div class="rb-emergency-info">
+          <ion-avatar>
+            <img [src]="emergency.link" alt="icon">
+          </ion-avatar>
+          <ion-label>{{emergency.name}}</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- product section -->
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+        <!-- <app-product></app-product> -->
+        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
+          <ion-card>
+            <ion-img [src]="product.featured_image"></ion-img>
+            <div class="rb-mini-product-list ion-text-right">
+              <ion-chip class="ion-text-right">{{ product.title }}</ion-chip>
+            </div>
+          </ion-card>
+        </ion-col>
+
+<!--
+        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
+          <ion-card>
+            <ion-img [src]="pImage"></ion-img>
+            <div class="rb-mini-product-list ion-text-right">
+              <ion-chip class="ion-text-right">Product Name 2</ion-chip>
+            </div>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
+          <ion-card>
+            <ion-img [src]="pImage"></ion-img>
+            <div class="rb-mini-product-list ion-text-right">
+              <ion-chip class="ion-text-right">Product Name 2</ion-chip>
+            </div>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
+          <ion-card>
+            <ion-img [src]="pImage"></ion-img>
+            <div class="rb-mini-product-list ion-text-right">
+              <ion-chip class="ion-text-right">Product Name 2</ion-chip>
+            </div>
+          </ion-card>
+        </ion-col> -->
+
+
+        <!-- footer void -->
+        <div class="rb-footer-void"></div>
+
+    </ion-row>
+  </ion-grid>
+
+
+</ion-content>

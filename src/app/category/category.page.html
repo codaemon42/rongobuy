@@ -1,0 +1,120 @@
+<app-header (searchTextFound)="onSearch($event)" [searchText]="catSearchPlaceholder ? catSearchPlaceholder : 'search in All category'"></app-header>
+
+<ion-content>
+  <!-- <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col size="4" class="rb-category-split">
+        <ion-row>
+          <ion-col>
+            <ion-card>
+              <ion-label>Category one</ion-label>
+            </ion-card>
+
+            <div class="secondary-category">
+              <ion-card class="">
+                <ion-label>Category one sub</ion-label>
+              </ion-card>
+              <ion-card>
+                <ion-label>Category one sub</ion-label>
+              </ion-card>
+            </div>
+
+            <div class="third-category">
+              <ion-card class="">
+                <ion-label>Category 3rd sub</ion-label>
+              </ion-card>
+              <ion-card>
+                <ion-label>Category 3rd sub</ion-label>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-card>
+              <ion-label>Category one</ion-label>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-card>
+              <ion-label>Category one</ion-label>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size="8">Main content</ion-col>
+    </ion-row>
+  </ion-grid> -->
+  <!-- <ion-segment value="heart">
+    <ion-segment-button value="home">
+      <ion-icon name="man-sharp"></ion-icon>
+      <ion-label>Men</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="heart">
+      <ion-icon name="woman-sharp"></ion-icon>
+      <ion-label>Women</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="pin">
+      <ion-icon name="apps"></ion-icon>
+      <ion-label>Accessories</ion-label>
+    </ion-segment-button>
+  </ion-segment> -->
+
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col size="12" sizeSm="12" sizeMd="4" sizeLg="3">
+        <p-panelMenu [model]="items" [style]="{'width':'100%'}"></p-panelMenu>
+      </ion-col>
+      <ion-col size="12" sizeSm="12" sizeMd="8" sizeLg="9">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="ion-no-padding">
+              <!-- <app-product></app-product> -->
+              <ion-col size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
+                <ion-card>
+                  <ion-img [src]="product.featured_image"></ion-img>
+                  <div class="rb-mini-product-list ion-text-right">
+                    <ion-chip class="ion-text-right">{{ product.title }}</ion-chip>
+                  </div>
+                </ion-card>
+              </ion-col>
+
+      <!--
+              <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
+                <ion-card>
+                  <ion-img [src]="pImage"></ion-img>
+                  <div class="rb-mini-product-list ion-text-right">
+                    <ion-chip class="ion-text-right">Product Name 2</ion-chip>
+                  </div>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
+                <ion-card>
+                  <ion-img [src]="pImage"></ion-img>
+                  <div class="rb-mini-product-list ion-text-right">
+                    <ion-chip class="ion-text-right">Product Name 2</ion-chip>
+                  </div>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
+                <ion-card>
+                  <ion-img [src]="pImage"></ion-img>
+                  <div class="rb-mini-product-list ion-text-right">
+                    <ion-chip class="ion-text-right">Product Name 2</ion-chip>
+                  </div>
+                </ion-card>
+              </ion-col> -->
+
+
+              <!-- footer void -->
+              <div class="rb-footer-void"></div>
+
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

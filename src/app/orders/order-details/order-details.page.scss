@@ -1,0 +1,20 @@
+.custom-marker{
+  padding: 14px;
+  border-radius: 50%;
+
+  ion-icon{
+    display: flex;
+  }
+}
+
+ion-card-header{
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+ion-card-subtitle{
+  font-size: 12px;
+}

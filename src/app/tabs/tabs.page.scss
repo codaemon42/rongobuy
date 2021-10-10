@@ -1,1 +1,73 @@
+.tabbar {
+  justify-content: center;
+}
 
+.tab-button {
+  max-width: 200px;
+}
+
+::ng-deep ion-icon.icon-button {
+  background: var(--ion-color-warning-tint)!important;
+  color: white;
+  border-radius: 50%!important;
+}
+
+:host ::ng-deep .tabs-inner {
+  position: unset!important;
+  contain: size style!important;
+}
+
+.bottom-tab-bar {
+  --background: transparent;
+  --border: 0;
+}
+
+ion-tab-button {
+  --background: var(--ion-color-dark-tint);
+  --color-selected: var(--ion-color-warning);
+}
+
+.button-center {
+  --background: transparent!important;
+  ion-icon {
+    height: 50px;
+    width: 50px;
+    font-size: 75px;
+  }
+}
+
+ion-tab-bar {
+  &:before {
+    box-shadow: 0 347px 0 456px var(--ion-color-dark-tint);
+    position: absolute;
+    margin-top: -48px;
+    //padding: 46px;
+    border-radius: 48%;
+    content: "";
+    margin-bottom: 68px;
+  }
+}
+
+.inner-left-btn {
+  //border-radius: 0 39% 0 0; // create the curved style on the left side of the center
+}
+
+.inner-right-btn {
+  //border-radius: 39% 0 0 0; // create the curved style on the right side of the center
+}
+
+.inner-center-btn {
+  position: absolute;
+  left: calc(50% - 27px);
+  //bottom: 20px;
+  bottom: 28px;
+  font-size: 70px;
+  --background: transparent;
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+}
+
+.rb-tab-middle {
+  //background: red;
+}

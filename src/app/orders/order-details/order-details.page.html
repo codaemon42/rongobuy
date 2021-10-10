@@ -1,0 +1,40 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>order-details</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" sizeSM="12" sizeMd="6" sizeLg="4">
+        <div class="card">
+          <h5 class="ion-text-center">Order Status</h5>
+          <p-timeline [value]="events1" align="alternate" styleClass="customized-timeline">
+            <ng-template pTemplate="marker" let-event>
+              <span class="custom-marker p-shadow-2" [style.backgroundColor]="event.color">
+                        <!-- <i [ngClass]="event.icon"></i> -->
+                        <ion-icon color="light" [name]="event.icon"></ion-icon>
+                    </span>
+            </ng-template>
+            <ng-template pTemplate="content" let-event>
+              <ion-card-header>
+                <ion-icon color="success" *ngIf="event.done && event.working" name="checkmark-circle"></ion-icon>
+                <ion-icon *ngIf="!event.done && !event.working" color="danger" name="close-circle"></ion-icon>
+                {{event.status}}</ion-card-header>
+              <ion-card-subtitle *ngIf="event.done && event.working">{{event.date}}</ion-card-subtitle>
+              <ion-progress-bar *ngIf="!event.done && event.working" value="0.25" buffer="0.5"></ion-progress-bar>
+
+            </ng-template>
+          </p-timeline>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

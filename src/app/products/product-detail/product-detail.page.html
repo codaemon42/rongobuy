@@ -1,0 +1,62 @@
+<ion-content>
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button  color="danger">
+      <ion-icon name="cart"></ion-icon>
+      <ion-badge class="cart-badge" color="warning">1</ion-badge>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-grid class="fullscreen ion-no-padding">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button color="light" defaultHref="tabs/home"></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col class="title-wrapper ion-text-center" size="12" style="z-index: 15; margin-top: -20px">
+        <ion-text color="light" class="title ion-text-center">{{ singleProduct.title }}</ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+    <ion-row class="upper-part">
+      <ion-col size="2"></ion-col>
+      <ion-col size="10">
+        <ion-slides pager="true" [options]="slideOpts">
+          <ion-slide *ngFor="let image of singleProduct.images">
+            <ion-img [src]="image"></ion-img>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+    <ion-row class="bottom-part">
+      <ion-col size="6" style="height:min-content">
+        <ion-chip class="regular-price" color="primary" ><del>BDT {{singleProduct.regular_price}}</del></ion-chip>
+        <ion-chip class="regular-price" color="success" >BDT {{singleProduct.sale_price}}</ion-chip>
+      </ion-col>
+      <ion-col size="6" class="ion-text-right ion-padding-right" style="height:min-content">
+        <ion-chip color="success" class="stock">In stock</ion-chip>
+      </ion-col>
+      <ion-col class="description">
+        <ion-text color="medium">
+          {{ singleProduct.description }}
+        </ion-text>
+      </ion-col>
+    </ion-row>
+
+
+
+  </ion-grid>
+
+  <ion-grid class="ion-no-padding">
+    <ion-row class="actions">
+      <ion-col size="6">
+          <ion-button color="warning" expand="full" class="buy-now">Buy Now</ion-button>
+      </ion-col>
+      <ion-col size="6">
+          <ion-button color="danger" expand="full" class="add-to-cart">Add to cart</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

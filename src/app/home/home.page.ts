@@ -231,32 +231,34 @@ export class HomePage implements OnInit {
       }
     ];
 
-    this.miniProducts = [
-      {
-        id: '2',
-        title: 'Product One',
-        slug: 'product-slug-1',
-        featured_image: this.pImage,
-      },
-      {
-        id: '2',
-        title: 'Product One',
-        slug: 'product-slug-2',
-        featured_image: this.pImage,
-      },
-      {
-        id: '2',
-        title: 'Product One',
-        slug: 'product-slug-3',
-        featured_image: this.pImage,
-      },
-      {
-        id: '2',
-        title: 'Product One',
-        slug: 'product-slug-4',
-        featured_image: this.pImage,
-      },
-    ];
+    setTimeout(()=>{
+      this.miniProducts = [
+        {
+          id: '2',
+          title: 'Product One',
+          slug: 'product-slug-1',
+          featured_image: this.pImage,
+        },
+        {
+          id: '2',
+          title: 'Product One',
+          slug: 'product-slug-2',
+          featured_image: this.pImage,
+        },
+        {
+          id: '2',
+          title: 'Product One',
+          slug: 'product-slug-3',
+          featured_image: this.pImage,
+        },
+        {
+          id: '2',
+          title: 'Product One',
+          slug: 'product-slug-4',
+          featured_image: this.pImage,
+        },
+      ];
+    }, 2000);
 
   }
 

@@ -1,6 +1,6 @@
-<ion-content>
+<ion-content [scrollEvents]="true">
   <ion-fab vertical="top" horizontal="end" slot="fixed">
-    <ion-fab-button  color="danger">
+    <ion-fab-button  color="danger" [routerLink]="['/carts']">
       <ion-icon name="cart"></ion-icon>
       <ion-badge class="cart-badge" color="warning">1</ion-badge>
     </ion-fab-button>
@@ -36,9 +36,43 @@
       </ion-col>
       <ion-col size="6" class="ion-text-right ion-padding-right" style="height:min-content">
         <ion-chip color="success" class="stock">In stock</ion-chip>
+        <div class="rating">
+          <p-rating [(ngModel)]="rating" readonly="true" [cancel]="false"></p-rating>
+        </div>
       </ion-col>
       <ion-col class="description">
-        <ion-text color="medium">
+        <ion-segment color="medium" value="reviews" (ionChange)="segmentChanged($event)">
+          <ion-segment-button value="reviews">
+            <ion-label>Reviews</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="description">
+            <ion-label>Description</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+        <!-- review section -->
+        <ion-grid *ngIf="segment === 'reviews'" >
+          <ion-row>
+            <ion-col size="12" *ngFor="let review of reviews">
+              <div class="reviews">
+                <div class="header">
+                  <div class="name">
+                    <ion-icon name="person"></ion-icon>{{ review.user_name }}
+                  </div>
+                  <div class="ratinng">
+                    <p-rating [(ngModel)]="review.rating" readonly="true" [cancel]="false"></p-rating>
+                  </div>
+                </div>
+
+                <div class="body">
+                  <ion-text>
+                    {{ review.review }}
+                  </ion-text>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-text *ngIf="segment === 'description'" color="medium">
           {{ singleProduct.description }}
         </ion-text>
       </ion-col>

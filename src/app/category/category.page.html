@@ -71,7 +71,7 @@
         <ion-grid class="ion-no-padding">
           <ion-row class="ion-no-padding">
               <!-- <app-product></app-product> -->
-              <ion-col size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
+              <ion-col [routerLink]="['/products', product.slug]" size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
                 <ion-card>
                   <ion-img [src]="product.featured_image"></ion-img>
                   <div class="rb-mini-product-list ion-text-right">

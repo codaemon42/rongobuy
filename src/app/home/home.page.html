@@ -59,10 +59,18 @@
   </ion-grid>
 
   <!-- product section -->
-  <ion-grid class="ion-no-padding">
+    <!-- skeleton -->
+  <div *ngIf="!miniProducts">
+    <div class="ion-padding custom-skeleton">
+      <div class="skeleton-img">
+        <ion-skeleton-text animated style="width: 100%; height:300px"></ion-skeleton-text>
+      </div>
+    </div>
+  </div>
+  <ion-grid class="ion-no-padding" *ngIf="miniProducts">
     <ion-row class="ion-no-padding">
         <!-- <app-product></app-product> -->
-        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
+        <ion-col [routerLink]="['/products', product.slug]" size="12" sizeSm="12" sizeMd="6" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
           <ion-card>
             <ion-img [src]="product.featured_image"></ion-img>
             <div class="rb-mini-product-list ion-text-right">

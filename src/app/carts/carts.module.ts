@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
+import {DividerModule} from 'primeng/divider';
+
 import { CartsPageRoutingModule } from './carts-routing.module';
 
 import { CartsPage } from './carts.page';
@@ -13,6 +15,7 @@ import { CartsPage } from './carts.page';
     CommonModule,
     FormsModule,
     IonicModule,
+    DividerModule,
     CartsPageRoutingModule
   ],
   declarations: [CartsPage]

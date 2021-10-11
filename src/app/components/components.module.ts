@@ -8,7 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import {InputTextModule} from 'primeng/inputtext';
+import {RatingModule} from 'primeng/rating';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ReviewsComponent } from './reviews/reviews.component';
 
 
 
@@ -18,7 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     FooterComponent,
     ProductComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     FooterComponent,
     ProductComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
   ]
 })
 export class ComponentsModule { }

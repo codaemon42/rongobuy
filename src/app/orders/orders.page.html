@@ -1,9 +1,69 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>orders</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="tabs/home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
 
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="card">
+            <div class="header">
+              <ion-chip color="tertiary">#12341</ion-chip>
+              <div class="date"> 12-10-2021 </div>
+            </div>
+            <div class="content">
+              <div class="status">
+                status: processing
+              </div>
+              <div class="total">
+                Total: BDT 2000
+              </div>
+            </div>
+            <div class="actions">
+              <ion-button expand="block" color="secondary" [routerLink]="['new']"> View Details </ion-button>
+            </div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="card">
+            <div class="header">
+              <ion-chip color="tertiary">#12341</ion-chip>
+              <div class="date"> 12-10-2021 </div>
+            </div>
+            <div class="content">
+              <div class="status">
+                status: processing
+              </div>
+              <div class="total">
+                Total: BDT 2000
+              </div>
+            </div>
+            <div class="actions">
+              <ion-button expand="block" color="secondary" [routerLink]="['new']"> View Details </ion-button>
+            </div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="card">
+            <div class="header">
+              <ion-chip color="tertiary">#12341</ion-chip>
+              <div class="date"> 12-10-2021 </div>
+            </div>
+            <div class="content">
+              <div class="status">
+                status: processing
+              </div>
+              <div class="total">
+                Total: BDT 2000
+              </div>
+            </div>
+            <div class="actions">
+              <ion-button expand="block" color="secondary" [routerLink]="['new']"> View Details </ion-button>
+            </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -35,4 +35,8 @@ export class AppComponent {
     this.menu.open('custom');
     console.log('menu clicked');
   }
+
+  closeMenu() {
+    this.menu.close('custom');
+  }
 }

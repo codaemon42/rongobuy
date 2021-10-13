@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar color="warning" class="ion-text-center">
+    <ion-title>Checkout</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="checkout">
+          <form [formGroup]="checkoutForm">
+            <div class="name-section">
+              <ion-input formControlName="name" placeholder="Full Name"></ion-input>
+               <ion-note *ngIf="checkoutForm.controls.phone.invalid && (checkoutForm.controls.phone.dirty || checkoutForm.controls.phone.touched)" color="danger" slot="end">valid phone number required !</ion-note>
+              <ion-input maxLength="11" formControlName="phone" placeholder="Phone number"></ion-input>
+              <ion-note *ngIf="checkoutForm.controls.email.invalid && (checkoutForm.controls.email.dirty || checkoutForm.controls.email.touched)" color="danger" slot="end">valid email address required !</ion-note>
+              <ion-input formControlName="email" type="email" placeholder="email"></ion-input>
+            </div>
+            <div class="address-section">
+              <ion-input formControlName="address" placeholder="house, street, local Address"></ion-input>
+            </div>
+          </form>
+          <p-dropdown (onChange)="onChangeArea()" [options]="area" [(ngModel)]="selectedArea" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Area">
+                <ng-template pTemplate="selectedItem">
+                    <div class="country-item country-item-value"  *ngIf="selectedArea">
+                        <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" /> -->
+                        <div>{{selectedArea.name}}</div>
+                    </div>
+                </ng-template>
+          </p-dropdown>
+
+          <div class="payment-section">
+            <div class="order-review-section">
+              <div class="order-amount-section">
+                <div class="total-ordered-amount-text">
+                  Sub-total
+                </div>
+                <div class="total-ordered-amount">
+                  BDT {{subTotal}}
+                </div>
+              </div>
+
+              <div class="shipping-cost-section">
+                <div class="shipping-label">
+                  Shipping cost
+                </div>
+                <div class="shipping-total">
+                  BDT {{selectedArea.cost}}
+                </div>
+              </div>
+
+              <div class="grand-total-section">
+                <div class="grand-total-label">
+                  Grand Total
+                </div>
+                <div class="grand-total-amount">
+                  BDT {{grandTotal}}
+                </div>
+              </div>
+            </div>
+            <div class="payment-method-section">
+              <ion-list>
+                <ion-radio-group #payment color="warning" value="cod" (ionChange)="onChangePayment(payment.value)">
+                  <ion-list-header>
+                    <ion-label>
+                      Select Payment Method
+                    </ion-label>
+                  </ion-list-header>
+
+                  <ion-item>
+                    <ion-radio color="warning" value="cod"></ion-radio>
+                    <ion-label>Cash on delivery</ion-label>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-radio color="warning" value="sslcommerz"></ion-radio>
+                    <ion-label>SSLCOMMERZ (pay online)</ion-label>
+                  </ion-item>
+                </ion-radio-group>
+              </ion-list>
+            </div>
+          </div>
+          <ion-button [disabled]="!checkoutForm.valid && (selectedArea.name !== undefined || selectedArea.name !== null)" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

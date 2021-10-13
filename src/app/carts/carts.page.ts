@@ -1,5 +1,6 @@
 import { BreakpointObserverService } from './../services/breakpoint.service';
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-carts',
@@ -9,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 export class CartsPage implements OnInit {
   layout = 'horizontal';
 
-  constructor(private breakpoint: BreakpointObserverService) { }
+  constructor(private breakpoint: BreakpointObserverService, private nav: NavController) { }
 
   ngOnInit() {
     this.getLayout();
@@ -25,5 +26,10 @@ export class CartsPage implements OnInit {
         this.layout = 'horizontal';
       }
     });
+  }
+
+  onCart() {
+    this.nav.navigateForward('checkout');
+    console.log('next');
   }
 }

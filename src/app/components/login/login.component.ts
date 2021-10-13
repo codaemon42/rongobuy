@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
   message: string;
   loginForm = new FormGroup({
     phone: new FormControl(null, {
-      validators: [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      validators: [Validators.required, Validators.pattern("^[0-9]*$")],
       updateOn: 'change'
     })
   });

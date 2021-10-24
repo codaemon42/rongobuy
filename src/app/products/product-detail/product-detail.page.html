@@ -2,7 +2,7 @@
   <ion-fab vertical="top" horizontal="end" slot="fixed">
     <ion-fab-button  color="danger" [routerLink]="['/carts']">
       <ion-icon name="cart"></ion-icon>
-      <ion-badge class="cart-badge" color="warning">1</ion-badge>
+      <ion-badge class="cart-badge" color="warning">{{ totalCartQty }}</ion-badge>
     </ion-fab-button>
   </ion-fab>
   <ion-grid class="fullscreen ion-no-padding">
@@ -41,12 +41,12 @@
         </div>
       </ion-col>
       <ion-col class="description">
-        <ion-segment color="medium" value="reviews" (ionChange)="segmentChanged($event)">
-          <ion-segment-button value="reviews">
-            <ion-label>Reviews</ion-label>
-          </ion-segment-button>
+        <ion-segment color="medium" value="description" (ionChange)="segmentChanged($event)">
           <ion-segment-button value="description">
             <ion-label>Description</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="reviews">
+            <ion-label>Reviews</ion-label>
           </ion-segment-button>
         </ion-segment>
         <!-- review section -->
@@ -88,7 +88,8 @@
           <ion-button color="warning" expand="full" class="buy-now" [routerLink]="['/checkout']">Buy Now</ion-button>
       </ion-col>
       <ion-col size="6">
-          <ion-button color="danger" expand="full" class="add-to-cart">Add to cart</ion-button>
+          <div class="square"></div>
+          <ion-button color="danger" expand="full" class="add-to-cart" (click)="addToCart()">Add to cart</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

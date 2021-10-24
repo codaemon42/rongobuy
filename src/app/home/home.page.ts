@@ -21,7 +21,6 @@ export class HomePage implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
     this.slideOpts = {
       grabCursor: true,
       cubeEffect: {
@@ -259,7 +258,6 @@ export class HomePage implements OnInit {
         },
       ];
     }, 2000);
-
   }
 
   sliderNavigate(i) {

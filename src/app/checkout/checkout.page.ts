@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
+import { CartsService } from '../carts/carts.service';
 import { ShippingArea } from '../models/shipping.model';
 import { ShippingService } from '../services/shipping.service';
 
@@ -13,7 +14,7 @@ import { ShippingService } from '../services/shipping.service';
 })
 
 export class CheckoutPage implements OnInit {
-  subTotal = '300';
+  subTotal: number;
   grandTotal;
   paymentMethod: any = 'cod';
   area: ShippingArea[];
@@ -40,7 +41,9 @@ export class CheckoutPage implements OnInit {
     private nav: NavController,
     private shippingService: ShippingService,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController,
+    private cartsService: CartsService
+    ) { }
 
   ngOnInit() {
     this.selectedArea = {
@@ -48,6 +51,7 @@ export class CheckoutPage implements OnInit {
       code: null,
       cost: '60'
     };
+    this.subTotal = this.cartsService.subTotal();
     this.calcGrandTotal();
     this.dynamicForm();
         this.area = this.shippingService.getArea();
@@ -88,7 +92,7 @@ export class CheckoutPage implements OnInit {
   // helpers
 
   calcGrandTotal(){
-    this.grandTotal = parseInt(this.subTotal, 10) + parseInt(this.selectedArea.cost, 10);
+    this.grandTotal = this.subTotal + parseInt(this.selectedArea.cost, 10);
   }
 
   onChangeArea() {

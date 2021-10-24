@@ -10,10 +10,12 @@ export class AccountPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
   }
 
   onSendOTP(event) {
     console.log(event);
   }
+
 
 }

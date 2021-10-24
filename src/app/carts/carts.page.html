@@ -8,7 +8,27 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12" sizeSm="6" sizeMd="6" sizeLg="4">
-        <div class="card">
+        <div class="card" *ngFor="let cartItem of carts; let i = index">
+          <img [src]="cartItem.product_image">
+          <ion-label class="detail">
+            <h3 class="title">{{ cartItem.product_title }}</h3>
+            <p class="price">{{ cartItem.unit_price }}</p>
+            <p class="price">
+              <ion-icon class="delete"  name="trash"></ion-icon>
+              <!-- <ion-buttons>
+                <ion-button>
+                  <ion-icon name="trash"></ion-icon>
+                </ion-button>
+              </ion-buttons> -->
+            </p>
+          </ion-label>
+          <div class="actions">
+              <ion-icon name="add" (click)="increaseCart(i)"></ion-icon>
+            <ion-label>{{ cartItem.qty }}</ion-label>
+              <ion-icon name="remove" (click)="decreaseCart(i)"></ion-icon>
+          </div>
+        </div>
+        <!-- <div class="card">
           <img src="../../assets/images/productone.png">
           <ion-label class="detail">
             <h3 class="title">product one</h3>
@@ -31,19 +51,7 @@
             <ion-label>1</ion-label>
               <ion-icon name="remove"></ion-icon>
           </div>
-        </div>
-        <div class="card">
-          <img src="../../assets/images/productone.png">
-          <ion-label class="detail">
-            <h3 class="title">product one</h3>
-            <p class="price"> BDT 320 </p>
-          </ion-label>
-          <div class="actions">
-              <ion-icon name="add"></ion-icon>
-            <ion-label>1</ion-label>
-              <ion-icon name="remove"></ion-icon>
-          </div>
-        </div>
+        </div> -->
       </ion-col>
 
       <ion-col>
@@ -56,7 +64,7 @@
         <div class="proceed">
           <div class="total-section">
             <span class="total-text"> Total </span>
-            <span class="total"> BDT 640</span>
+            <span class="total"> BDT {{ subTotal }}</span>
           </div>
           <ion-button color="warning" (click)="onCart()" > Next </ion-button>
         </div>

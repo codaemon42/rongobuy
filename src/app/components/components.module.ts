@@ -1,3 +1,4 @@
+import { YoutubeComponent } from './youtube/youtube.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 
@@ -21,6 +22,7 @@ import { ReviewsComponent } from './reviews/reviews.component';
     ProductComponent,
     SignupComponent,
     LoginComponent,
+    YoutubeComponent
   ],
   imports: [
     CommonModule,
@@ -34,6 +36,7 @@ import { ReviewsComponent } from './reviews/reviews.component';
     ProductComponent,
     SignupComponent,
     LoginComponent,
+    YoutubeComponent
   ]
 })
 export class ComponentsModule { }

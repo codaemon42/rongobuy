@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: CategoryPage
+  },
+  {
+    path: 'phone-cover/:slug',
+    loadChildren: () => import('./category-detail/category-detail.module').then( m => m.CategoryDetailPageModule)
   }
 ];
 

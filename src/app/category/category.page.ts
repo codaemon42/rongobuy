@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import {MenuItem} from 'primeng/api';
 import { MiniProduct } from '../components/product/product.model';
 
@@ -13,13 +14,17 @@ export class CategoryPage implements OnInit {
   items: MenuItem[];
   menuBackLabel: string;
   catSearchPlaceholder: string;
+  prevCat: string;
+  postCat: string;
 
   //mock
   logo = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=4vf2J_gHjV4AX9Iw4WH&_nc_ht=scontent.fdac22-1.fna&oh=cc8086e722ec06839a2993d3ac1852a3&oe=6180485F';
   pImage = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/p960x960/196212923_938037606764749_8713735566665562108_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=730e14&_nc_ohc=7cDGYr4RfeUAX-XeiRq&_nc_ht=scontent.fdac22-1.fna&oh=6736547cb51ace26d76ca4d70c7a05f2&oe=618033C6';
   miniProducts: MiniProduct[];
 
-  constructor() {}
+  constructor(
+    private nav: NavController
+  ) {}
 
   ngOnInit() {
     this.items = [
@@ -90,15 +95,15 @@ export class CategoryPage implements OnInit {
                 this.menuHandler(event.item);
               },
               items: [{
-                      id: 't-shirt',
-                      label: 'T-Shirt',
+                      id: 'phone-cover',
+                      label: 'Phone Cover',
                       command: (event) => {
                         this.menuHandler(event.item);
                       },
                       items: [
                           {
-                            id: 'customized',
-                            label: 'Customized',
+                            id: 'iphone',
+                            label: 'iphone',
                             command: (event) => this.menuHandler(event.item)
                           },
                           {id: 'pre-made', label: 'Pre Made', command: (event) => this.menuHandler(event.item)}
@@ -140,8 +145,17 @@ export class CategoryPage implements OnInit {
   }
 
   menuHandler(e) {
+    this.prevCat = e.id;
     console.log(e);
     this.catSearchPlaceholder = 'Search ' + e.label;
+    if( this.postCat === 'phone-cover'){
+      this.nav.navigateForward(`/category/phone-cover/${e.id}`);
+    }
+    this.postCat = e.id;
+  }
+
+  onClickProduct(index) {
+    console.log('category index', index);
   }
 
   onSearch(event) {

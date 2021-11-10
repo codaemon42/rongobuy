@@ -1,3 +1,8 @@
+import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
+import { PhoneDisplayComponent } from './phone-display/phone-display.component';
+import { PhoneSelectorComponent } from './phone-selector/phone-selector.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
+import { TextEditorScreenComponent } from './text-editor-screen/text-editor-screen.component';
 import { YoutubeComponent } from './youtube/youtube.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
@@ -10,9 +15,11 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import {InputTextModule} from 'primeng/inputtext';
 import {RatingModule} from 'primeng/rating';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReviewsComponent } from './reviews/reviews.component';
-
+import { CustomizationReviewComponent } from './customization-review/customization-review.component';
+import {ColorPickerModule} from 'primeng/colorpicker';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
@@ -22,13 +29,22 @@ import { ReviewsComponent } from './reviews/reviews.component';
     ProductComponent,
     SignupComponent,
     LoginComponent,
-    YoutubeComponent
+    VerifyOtpComponent,
+    YoutubeComponent,
+    CustomizationReviewComponent,
+    TextEditorScreenComponent,
+    SearchResultsComponent,
+    PhoneSelectorComponent,
+    PhoneDisplayComponent
   ],
   imports: [
     CommonModule,
     IonicModule,
+    FormsModule,
     InputTextModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ColorPickerModule,
+    DropdownModule
   ],
   exports: [
     HeaderComponent,
@@ -36,7 +52,13 @@ import { ReviewsComponent } from './reviews/reviews.component';
     ProductComponent,
     SignupComponent,
     LoginComponent,
-    YoutubeComponent
+    VerifyOtpComponent,
+    YoutubeComponent,
+    CustomizationReviewComponent,
+    TextEditorScreenComponent,
+    SearchResultsComponent,
+    PhoneSelectorComponent,
+    PhoneDisplayComponent
   ]
 })
 export class ComponentsModule { }

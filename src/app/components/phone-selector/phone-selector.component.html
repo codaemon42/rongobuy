@@ -1,0 +1,10 @@
+<div class="phone-model">
+  <p-dropdown (onHide)="onHide()" (onChange)="onChangeModel()" [options]="model" [(ngModel)]="selectedModel" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" [hideTransitionOptions]="'0ms'" placeholder="Select Phone Model">
+    <ng-template pTemplate="selectedItem">
+      <div class="country-item country-item-value"  *ngIf="selectedModel">
+        <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" /> -->
+        <div>{{selectedModel.name}}</div>
+      </div>
+    </ng-template>
+  </p-dropdown>
+</div>

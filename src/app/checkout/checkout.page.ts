@@ -37,6 +37,17 @@ export class CheckoutPage implements OnInit {
         validators: [Validators.required]
       }),
   });
+  giftForm = new FormGroup({
+    message: new FormControl(null, {
+      updateOn: 'change',
+      validators: [Validators.required]
+    }),
+    sender: new FormControl(null, {
+      updateOn: 'change',
+      validators: [Validators.required]
+    })
+  });
+  sendGift = false;
   constructor(
     private nav: NavController,
     private shippingService: ShippingService,
@@ -63,6 +74,7 @@ export class CheckoutPage implements OnInit {
     //this.nav.navigateForward('checkout/thankyou');
     console.log(this.selectedArea);
     console.log(this.checkoutForm);
+    console.log(this.giftForm.value);
     console.log('paymentMethod : ', this.paymentMethod);
     this.loadingCtrl.create({
       message: 'Placing order',
@@ -131,6 +143,15 @@ export class CheckoutPage implements OnInit {
       validators: [Validators.required]
     }));
 
+  }
+
+
+
+
+  // helper
+  sendAsGift(event) {
+    console.log('check box event : ', event);
+    this.sendGift = !this.sendGift;
   }
 
 }

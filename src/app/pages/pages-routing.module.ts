@@ -15,6 +15,14 @@ const routes: Routes = [
   {
     path: 'order-tracking',
     loadChildren: () => import('./order-tracking/order-tracking.module').then( m => m.OrderTrackingPageModule)
+  },
+  {
+    path: 'invite',
+    loadChildren: () => import('./invite/invite.module').then( m => m.InvitePageModule)
+  },
+  {
+    path: ':slug',
+    loadChildren: () => import('./page-detail/page-detail.module').then( m => m.PageDetailPageModule)
   }
 ];
 

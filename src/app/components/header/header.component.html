@@ -1,5 +1,13 @@
   <ion-header>
-    <ion-toolbar class="main-header-menu" color="warning">
+    <ion-toolbar [ngStyle]="
+    {
+      'padding-bottom.px': toolbarStyle.paddingBottom,
+      'border-top-left-radius.px': toolbarStyle.borderRadius.topLeft,
+      'border-top-right-radius.px': toolbarStyle.borderRadius.topRight,
+      'border-bottom-right-radius.px': toolbarStyle.borderRadius.bottomRight,
+      'border-bottom-left-radius.px': toolbarStyle.borderRadius.bottomLeft
+      }"
+    color="warning">
 
       <ion-buttons slot="start">
         <ion-button (click)="openMenu()">
@@ -7,14 +15,43 @@
         </ion-button>
       </ion-buttons>
 
-      <ion-avatar class="rb-logo-center">
-        <img [src]="logo">
-      </ion-avatar>
+      <!-- <ion-avatar class="rb-logo-center">
+        <img src="../../../assets/icon/icon.png">
+      </ion-avatar> -->
+
+        <ion-img class="rb-logo-center" src="../../../assets/logo/logo.gif"></ion-img>
+
+
       <ion-buttons slot="end">
         <ion-button (click)="onCartClicked()">
-          <ion-icon slot="icon-only" name="cart"></ion-icon>
+          <ion-icon slot="icon-only" name="search"></ion-icon>
         </ion-button>
       </ion-buttons>
+
     </ion-toolbar>
-    <ion-searchbar (ionChange)="onSearch($event)" debounce="300" showCancelButton="focus" animated [placeholder]="searchText"></ion-searchbar>
+    <ion-searchbar *ngIf="showSearch" (ionInput)="onKeyInput($event)" (ionChange)="onSearch($event)" debounce="200" showCancelButton="focus" animated [placeholder]="searchText"></ion-searchbar>
+    <ion-grid *ngIf="isLoading">
+      <ion-row>
+        <ion-col size="12">
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px;">
+            <ion-spinner color="warning"></ion-spinner>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-grid *ngIf="!isLoading && searchShow && display">
+      <ion-row>
+        <ion-col size="12">
+          <app-search-results
+            [ngStyle]="
+              {
+                'max-height.px': searchResult.height,
+                'display': searchResult.display,
+                'overflow': searchResult.overflow
+              }"
+            [data]="searchResultData"></app-search-results>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-header>

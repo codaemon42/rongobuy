@@ -43,7 +43,7 @@
         </ion-item> -->
 
 
-        <ion-menu-toggle auto-hide="false">
+        <ion-menu-toggle *ngIf="menu.show"  auto-hide="false">
           <ion-list lines="none">
             <ion-item
               *ngFor="let subMenu of menu.children; let si = index"

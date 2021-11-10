@@ -43,7 +43,7 @@
           <ion-img class="logo-img" [src]="logo"></ion-img>
         </div> -->
 
-        <div  class="customize-section">
+        <div  #screen  class="customize-section">
           <!-- <ion-img
             class="canvas-img-section"
             [ngStyle]=""
@@ -51,8 +51,7 @@
           </ion-img> -->
 
           <div id="screen">
-
-            <img #screen
+            <img
               [ngStyle]="{
                 'margin-bottom.px': 20,
                 'background-image': 'url('+backgroundImg+')',
@@ -63,18 +62,77 @@
               }"
               [src]="selectedArea.img"
             >
-            <!-- <img style="width: 153px; margin-top: -333px; margin-left: 100px;" [src]="selectedArea.img">
-            <p style="margin-bottom: 333px; margin-top: -333px; margin-left: 100px;">Hello</p> -->
+            <div style="position: relative">
+              <img
+                #logoRef
+                [ngStyle]="{
+                  'scale': logoParams.scale,
+                  'width.px': logoParams.width,
+                  'height': logoParams.height,
+                  'margin-top.px': logoParams.marginTop,
+                  'margin-left.px':logoParams.marginLeft,
+                  'z-index': logoParams.zIndex,
+                  'position': logoParams.position
+                  }"
+                [src]="logoParams.src"
+              >
+              <div
+                (wheel)="logoEdit($event, 'wheel')"
+                (pinchIn)="logoEdit($event, 'pinchIn')"
+                (pinchOut)="logoEdit($event, 'pinchOut')"
+                (panup)="logoEdit($event, 'panup')"
+                (pandown)="logoEdit($event, 'pandown')"
+                (panright)="logoEdit($event, 'panright')"
+                (panleft)="logoEdit($event, 'panleft')"
+                [ngStyle]="{
+                  'scale': logoParams.scale,
+                  'width.px': logoParams.width,
+                  'margin-top.px': logoParams.marginTop,
+                  'margin-left.px':logoParams.marginLeft,
+                  'z-index': logoParams.zIndex+2,
+                  'position': logoParams.position,
+                  'height.px': logoParams.overlayHeight
+                  }"></div>
+              <span *ngIf="textEditor">
+                <span
+                  class="textContext"
+                  (dblclick)="editedText({
+                    text : textEditor.text,
+                    styleParams: textEditor ? textEditor.styleParams : textStyleParams
+                    })"
+                  (wheel)="textEdit($event, 'wheel')"
+                  (pinchIn)="textEdit($event, 'pinchIn')"
+                  (pinchOut)="textEdit($event, 'pinchOut')"
+                  (panup)="textEdit($event, 'panup')"
+                  (pandown)="textEdit($event, 'pandown')"
+                  (panright)="textEdit($event, 'panright')"
+                  (panleft)="textEdit($event, 'panleft')"
+                  [ngStyle]="{
+                    'scale': textParams.scale,
+                    'margin-top.px': textParams.marginTop,
+                    'margin-left.px':textParams.marginLeft,
+                    'z-index': textParams.zIndex,
+                    'position': textParams.position,
+                    'font-size.px': textEditor.styleParams.font.size,
+                    'font-weight': textEditor.styleParams.font.weight,
+                    'transform': 'scale('+textEditor.styleParams.transform.scale+') rotate('+textEditor.styleParams.transform.rotate+'deg)'
+                    }"
+                  >{{ textEditor.text }}</span>
+              </span>
+            </div>
           </div>
           <div
             class="canvas overlay"
             [ngStyle]="{'cursor': cursor}"
-            (click)="initialClick()"
-            (wheel)="pinch($event)"
+            (click)="initialEditorClick()"
+            (wheel)="wheel($event)"
+            (pinchIn)="pinchIn($event)"
+            (pinchOut)="pinchOut($event)"
             (panup)="panUp($event)"
             (pandown)="panDown($event)"
             (panright)="panRight($event)"
-            (panleft)="panLeft($event)">
+            (panleft)="panLeft($event)"
+          >
           </div>
           <!-- <ion-button (click)="initialClick()" *ngIf="img !== undefined || img !== ''" class="upload-btn"><ion-icon name="cloud-upload"></ion-icon></ion-button> -->
         </div>
@@ -86,15 +144,15 @@
       <ion-col size="2" offset="5">
         <div class="card">
           <div style="margin-bottom: -20px">
-              <!-- <p-speedDial [model]="tooltipItems" radius="80" type="circle" buttonClassName="p-button-warning"></p-speedDial>
-              <p-speedDial [model]="tooltipItems" radius="80" direction="down" type="semi-circle"></p-speedDial>
-              <p-speedDial [model]="tooltipItems" radius="80" direction="left" type="semi-circle"></p-speedDial>
-              <p-speedDial [model]="tooltipItems" radius="80" direction="right" type="semi-circle"></p-speedDial>
-              <p-speedDial [model]="tooltipItems" radius="120" direction="up-left" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
-              <p-speedDial [model]="tooltipItems" radius="120" direction="up-right" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
-              <p-speedDial [model]="tooltipItems" radius="120" direction="down-left" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
-              <p-speedDial [model]="tooltipItems" radius="120" direction="down-right" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial> -->
-              <p-speedDial [model]="tooltipItems" radius="80" direction="up" type="semi-circle"></p-speedDial>
+            <!-- <p-speedDial [model]="tooltipItems" radius="80" type="circle" buttonClassName="p-button-warning"></p-speedDial>
+            <p-speedDial [model]="tooltipItems" radius="80" direction="down" type="semi-circle"></p-speedDial>
+            <p-speedDial [model]="tooltipItems" radius="80" direction="left" type="semi-circle"></p-speedDial>
+            <p-speedDial [model]="tooltipItems" radius="80" direction="right" type="semi-circle"></p-speedDial>
+            <p-speedDial [model]="tooltipItems" radius="120" direction="up-left" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
+            <p-speedDial [model]="tooltipItems" radius="120" direction="up-right" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
+            <p-speedDial [model]="tooltipItems" radius="120" direction="down-left" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
+            <p-speedDial [model]="tooltipItems" radius="120" direction="down-right" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial> -->
+            <p-speedDial [model]="tooltipItems" radius="80" direction="up" type="semi-circle"></p-speedDial>
           </div>
         </div>
       </ion-col>
@@ -108,14 +166,15 @@
           </ion-button>
           <ion-button  (click)="addBG()">
             <ion-icon name="add" size='small' slot="icon-only"></ion-icon>
-          </ion-button>
-          <input #addbg hidden id="bg-img" type="file" name="bg_img" value="" (change)="onUpload($event)"> -->
+          </ion-button> -->
+          <input #addbg hidden id="bg-img" type="file" name="bg_img" value="" (change)="onUploadBackgroundImage($event, 'background')">
+          <input #addLogo hidden id="logo-img" type="file" name="logo_img" value="" (change)="onUploadBackgroundImage($event, 'logo')">
 
           <!-- <div id="pdfContent">
             <h1>Testing this to pdf</h1>
           </div> -->
           <a #downloadLink hidden></a>
-          <!-- <img #imgg [src]="img"> -->
+          <img hidden [ngStyle]="{'background-image': 'url('+img+')'}" [src]="img">
       </div>
     </ion-row>
   </ion-grid>

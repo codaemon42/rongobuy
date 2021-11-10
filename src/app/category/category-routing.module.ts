@@ -9,6 +9,10 @@ const routes: Routes = [
     component: CategoryPage
   },
   {
+    path: 'phone-cover',
+    loadChildren: () => import('./phone-cover/phone-cover.module').then( m => m.PhoneCoverPageModule)
+  },
+  {
     path: 'phone-cover/:slug',
     loadChildren: () => import('./category-detail/category-detail.module').then( m => m.CategoryDetailPageModule)
   }

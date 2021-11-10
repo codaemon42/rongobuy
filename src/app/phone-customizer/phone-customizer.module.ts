@@ -6,6 +6,9 @@ import { HammerModule } from '@angular/platform-browser';
 
 import { IonicModule } from '@ionic/angular';
 
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { File } from '@ionic-native/file/ngx';
+
 import {DropdownModule} from 'primeng/dropdown';
 import {SpeedDialModule} from 'primeng/speeddial';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
@@ -43,7 +46,10 @@ import { PhoneCustomizerPage } from './phone-customizer.page';
   ],
   declarations: [PhoneCustomizerPage],
   providers: [
-    { provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig,}
+    { provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig,},
+    FileTransfer,
+    FileTransferObject,
+    File
   ]
 })
 export class PhoneCustomizerPageModule {}

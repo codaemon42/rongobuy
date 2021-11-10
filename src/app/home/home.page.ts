@@ -1,9 +1,16 @@
+import { HomepageService } from './../services/homepage/homepage.service';
+import { AuthService } from './../services/auth.service';
+import { Device } from '@ionic-native/device/ngx';
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable curly */
 /* eslint-disable object-shorthand */
 /* eslint-disable max-len */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MiniProduct } from '../components/product/product.model';
+import { PhoneCoverService } from '../services/phone-cover/phone-cover.service';
+import { ColorsService } from '../services/colors/colors.service';
+import { BreakpointObserverService } from '../services/breakpoint.service';
+import { IonSlides, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -11,23 +18,59 @@ import { MiniProduct } from '../components/product/product.model';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+  @ViewChild('categorySlide') categorySlide: IonSlides;
   logo = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=4vf2J_gHjV4AX9Iw4WH&_nc_ht=scontent.fdac22-1.fna&oh=cc8086e722ec06839a2993d3ac1852a3&oe=6180485F';
   image = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/243141730_1930955927087406_8439625270110780804_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=666b5a&_nc_ohc=zAXTa3xu9zgAX-Mzz2d&_nc_ht=scontent.fdac22-1.fna&oh=4c6324ea350ce5d6bdcb6adc428527bd&oe=617ED4F1';
   pImage = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/p960x960/196212923_938037606764749_8713735566665562108_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=730e14&_nc_ohc=7cDGYr4RfeUAX-XeiRq&_nc_ht=scontent.fdac22-1.fna&oh=6736547cb51ace26d76ca4d70c7a05f2&oe=618033C6';
   slideOpts;
+  emergencyCatSlider;
+  catSlider;
   sliderEl;
   emergencyInfo;
   miniProducts: MiniProduct[];
-  constructor() { }
+  searchData;
+  isLoadingSearch = false;
+  homepage: any[];
+  colors: any[];
+  mobileView = true;
+  showSearch = false;
+  constructor(
+    private device: Device,
+    private platform: Platform,
+    private authService: AuthService,
+    private colorsService: ColorsService,
+    private brkPointService: BreakpointObserverService,
+    private homepageService: HomepageService
+  ) { }
 
   ngOnInit() {
+    this.platform.ready().then(res=>{
+      console.log('Device UUID is: ' + this.device);
+    });
+
+
+    this.setColors();
+    this.setHomePage();
+    this.sizeController();
+    //this.colorsService.getColors();
+
+    this.authService.loginWithOtp();
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Content-Type':  'application/json',
+    //     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5teXZhbHVlZmlyc3QuY29tL3BzbXMiLCJzdWIiOiJyb25nb2J1eWh0cGludCIsImV4cCI6MTYzNjcwNzA2M30.5PQ5BB4oJewuzUS4E59jGHlU24wjFzA6aDBX5Mk5iRQ'
+    //   })
+    // };
+    // this.http.post('https://http.myvfirst.com/smpp/sendsms?username=rongobuyhtpint&password=3o^sIp@RyR%\&to=8801884462875&from=8804445632712&text=message&dlr-mask=19&dlr-url', '', httpOptions).subscribe(data => {
+    //   console.log('sms response : ', data);
+    // });
     this.slideOpts = {
       grabCursor: true,
       cubeEffect: {
         shadow: true,
         slideShadows: true,
-        shadowOffset: 20,
-        shadowScale: 0.94,
+        shadowOffset: 10,
+        shadowScale: 0.64,
       },
       on: {
         beforeInit: function() {
@@ -177,6 +220,45 @@ export class HomePage implements OnInit {
       }
     };
 
+    this.emergencyCatSlider = {
+      initialSlide: 0,
+      speed: 400,
+      slidesPerView: 2.2,
+      spaceBetween: 1
+    };
+
+    this.catSlider = {
+      initialSlide: 0,
+      speed: 400,
+      loop: true,
+      slidesPerView: 3.9,
+      spaceBetween: 1,
+      autoplay:1000,
+      breakpoints: {
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 3.7,
+            spaceBetween: 10
+          },
+          // when window width is >= 480px
+          480: {
+            slidesPerView: 3.3,
+            spaceBetween: 30
+          },
+          // when window width is >= 640px
+          768: {
+            slidesPerView: 3.9,
+            spaceBetween: 40
+          },
+          // when window width is >= 640px
+          980: {
+            slidesPerView: 3.9,
+            spaceBetween: 40
+          }
+      }
+    };
+
+
     this.sliderEl = [
       {
         image: this.image,
@@ -198,7 +280,7 @@ export class HomePage implements OnInit {
     this.emergencyInfo = [
       {
         id: '1',
-        name: 'Delivery Charge',
+        name: 'Customized Design',
         slug: 'delivery-charge',
         description: 'This is my page',
         link: this.pImage,
@@ -206,7 +288,7 @@ export class HomePage implements OnInit {
       },
       {
         id: '1',
-        name: 'Delivery Charge',
+        name: '7 days return',
         slug: 'delivery-charge',
         description: 'This is my page',
         link: this.pImage,
@@ -214,7 +296,7 @@ export class HomePage implements OnInit {
       },
       {
         id: '1',
-        name: 'Delivery Charge',
+        name: '15 days Refund',
         slug: 'delivery-charge',
         description: 'This is my page',
         link: this.pImage,
@@ -222,7 +304,7 @@ export class HomePage implements OnInit {
       },
       {
         id: '1',
-        name: 'Delivery Charge',
+        name: 'Secure Payment',
         slug: 'delivery-charge',
         description: 'This is my page',
         link: this.pImage,
@@ -272,6 +354,43 @@ export class HomePage implements OnInit {
 
   onSearch(event) {
     console.log('new event created: ', event);
+    this.searchData = event;
+  }
+
+  isLoading(event) {
+    console.log('is loading', event);
+    this.isLoadingSearch = event;
+  }
+
+  setColors() {
+    this.colorsService.getColors();
+    this.colorsService.randomColors.subscribe(res=>{
+      this.colors = res;
+    });
+    console.log(this.colors);
+  }
+
+  setHomePage() {
+    this.homepageService.homepage.subscribe(res => {
+      this.homepage = res;
+    });
+    this.homepageService.fetchHomePage().subscribe();
+  }
+
+  sizeController() {
+    this.brkPointService.size.subscribe(size=>{
+      console.log('size home : ', size);
+      if( size === 'xs' ){
+        this.mobileView = true;
+      } else{
+        this.mobileView = false;
+      }
+    });
+  }
+
+  catSliderLoaded(event) {
+    console.log('catslide : ', event);
+
   }
 
 }

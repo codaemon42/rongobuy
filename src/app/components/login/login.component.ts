@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 /* eslint-disable max-len */
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -25,13 +26,16 @@ export class LoginComponent implements OnInit {
   otpSection = false;
   successSection = false;
 
-  constructor() { }
+  constructor(
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {}
 
   onReqOTP(){
     console.log(this.loginForm);
     if(this.loginForm.valid) {
+      this.authService.loginWithOtp()
       this.rbOTPSend.emit({
         success: true,
         phone: this.loginForm.value.phone

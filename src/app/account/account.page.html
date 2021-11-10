@@ -6,5 +6,7 @@
       <ion-back-button defaultHref="tabs/home"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-  <app-login (rbOTPSend)="onSendOTP($event)"></app-login>
+    <app-login *ngIf="isLogin" (rbOTPSend)="onSendOTP($event)"></app-login>
+    <app-verify-otp *ngIf="!isLogin"></app-verify-otp>
+
 </ion-content>

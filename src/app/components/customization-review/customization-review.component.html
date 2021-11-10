@@ -1,0 +1,27 @@
+
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" style="display: block; text-align: center;">
+      <ion-button (click)="confirmPreview(true)" slot="start" color="success"><ion-icon slot="icon-only" name="save"></ion-icon></ion-button>
+    </ion-buttons>
+
+    <ion-button (click)="onPurchase()" class="buy" strong="true" mode="ios" expand="block" color="warning">
+      <ion-icon name="checkmark-done-outline"></ion-icon>
+      Buy Now
+    </ion-button>
+
+    <ion-buttons slot="end" style="display: block; text-align: center;">
+      <ion-button (click)="confirmPreview(false)" slot="end" color="danger"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <p class="ion-text-center">Preview your design</p>
+  <p id="preview"></p>
+
+</ion-content>
+
+
+
+

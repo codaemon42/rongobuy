@@ -1,16 +1,20 @@
+import { Cart } from './../../models/cart.model';
+import { Product } from '../../models/product.model';
+
 // import { StorageService } from './../../services/storage.service';
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/naming-convention */
 //import { CartService } from './../../services/cart.service';
 
-import { CartsService } from './../../carts/carts.service';
+//import { CartsService } from './../../carts/carts.service';
 import { Review } from './../../components/reviews/reviews.model';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ProductsService } from './../products.service';
-import { Product } from './../products.model';
 import { AnimationController, IonContent } from '@ionic/angular';
-import { Carts } from 'src/app/carts/carts.model';
+import { Carts } from './../../carts/carts.model';
 import { ActivatedRoute } from '@angular/router';
+import { ProductService } from 'src/app/services/product.service';
+import { CartService } from './../../services/cart.service';
+import { CartsService } from 'src/app/carts/carts.service';
 
 
 @Component({
@@ -18,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './product-detail.page.html',
   styleUrls: ['./product-detail.page.scss'],
 })
+
 export class ProductDetailPage implements OnInit, AfterViewInit {
 
   @ViewChild(IonContent, { static: false }) content: IonContent;
@@ -25,30 +30,39 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
   animator: any;
   animatorDuration = 800;
   totalCartQty = 0;
-  cartItem: Carts;
+  cartItem: Cart;
   products: Product[];
   singleProduct: Product;
   rating = 4;
   segment = 'description';
   reviews: Review[];
 
+  slug = 'red-light-green-light-premium-covers-available-for-all-the-phone-models-7593';
+  tryProduct: Product;
+
   slideOpts = {
-    initialSlide: 1,
+    initialSlide: 0,
     slidesPerView: 1,
     speed: 400
   };
   constructor(
     private animationCtrl: AnimationController,
-    private productService: ProductsService,
+    private cartService: CartService,
     private cartsService: CartsService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private productService: ProductService
     ) { }
 
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(data => {
       console.log('activated route : ', data.slug);
-      this.getSingleProduct(data.slug);
+      // this.getSingleProduct(data.slug);
+
+      this.productService.fetchSingleProduct(data.slug).subscribe( product => {
+        console.log('product detail : ', product);
+        this.singleProduct = product;
+      });
     });
     console.log(' on init');
 
@@ -108,9 +122,9 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
    * fetch single product
    */
   getSingleProduct(product_slug) {
-    this.products = this.productService.products.filter(product => product.slug === product_slug);
-    console.log('product : ', this.products);
-    this.singleProduct = this.products[0];
+    // this.products = this.productsService.products.filter(product => product.slug === product_slug);
+    // console.log('product : ', this.products);
+    // this.singleProduct = this.products[0];
 
   }
 
@@ -174,6 +188,37 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
   }
 
 
+
+
+
+  /**
+   * increase cart item by 1 on click add to cart button
+   * calls cartsService f(addCartItem)
+   * update cartService carted amount
+   */
+  cartAdder() {
+    this.totalCartQty += 1;
+    this.cartItem = {
+      id: null,
+      product_id: this.singleProduct.id,
+      product_title: this.singleProduct.title,
+      product_description: this.singleProduct.description,
+      unitPrice: this.singleProduct.productPrice,
+      qty: this.totalCartQty,
+      mainImage: this.singleProduct.mainImage,
+      image: [this.singleProduct.mainImage]
+    };
+    this.cartService.addTOCart(this.cartItem);
+  }
+
+
+  /**
+   * controls the cart quantity of single product
+   */
+  cartQuantityController(product_id) {
+    this.totalCartQty = this.cartsService.getCartQuantityByProduct(product_id);
+  }
+
   /**
    * define animation controls on click add to cart button
    */
@@ -185,32 +230,6 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
     .fromTo('top', '80%', '2%')
     .fromTo('right', '10%', '12px')
     .fromTo('opacity', '0.2', '1');
-  }
-
-
-  /**
-   * increase cart item by 1 on click add to cart button
-   * calls cartsService f(addCartItem)
-   * update cartService carted amount
-   */
-  cartAdder() {
-    this.totalCartQty += 1;
-    this.cartItem = {
-      product_id: this.singleProduct.id,
-      product_title: this.singleProduct.title,
-      product_image: this.singleProduct.images[0],
-      unit_price: parseInt(this.singleProduct.sale_price, 10),
-      qty: this.totalCartQty
-    };
-    this.cartsService.addCartItem(this.cartItem);
-  }
-
-
-  /**
-   * controls the cart quantity of single product
-   */
-  cartQuantityController(product_id) {
-    this.totalCartQty = this.cartsService.getCartQuantityByProduct(product_id);
   }
 
 

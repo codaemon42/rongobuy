@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountPage implements OnInit {
 
-  constructor() { }
+  isLogin = true;
+
+  constructor(
+  ) { }
 
   ngOnInit() {
 
@@ -15,6 +19,7 @@ export class AccountPage implements OnInit {
 
   onSendOTP(event) {
     console.log(event);
+    this.isLogin = false;
   }
 
 

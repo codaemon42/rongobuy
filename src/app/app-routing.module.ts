@@ -33,6 +33,14 @@ const routes: Routes = [
   {
     path: 'phone-customizer',
     loadChildren: () => import('./phone-customizer/phone-customizer.module').then( m => m.PhoneCustomizerPageModule)
+  },
+  {
+    path: 'search',
+    loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
+  },
+  {
+    path: 'review/:productId',
+    loadChildren: () => import('./review/review.module').then( m => m.ReviewPageModule)
   }
   // {
   //   path: 'home',
@@ -50,10 +58,6 @@ const routes: Routes = [
   //   path: 'shop',
   //   loadChildren: () => import('./shop/shop.module').then( m => m.ShopPageModule)
   // },
-  // {
-  //   path: 'search',
-  //   loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
-  // }
 ];
 @NgModule({
   imports: [

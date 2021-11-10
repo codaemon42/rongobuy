@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start" style="display: block; text-align: center;">
+      <ion-button (click)="confirmPreview(true)" slot="start" color="success"><ion-icon slot="icon-only" name="checkmark"></ion-icon></ion-button>
+    </ion-buttons>
+
+    <ion-title class="ion-text-center">{{ title }}</ion-title>
+
+    <ion-buttons slot="end" style="display: block; text-align: center;">
+      <ion-button (click)="confirmPreview(false)" slot="end" color="danger"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content color="dark">
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col>
+        <div class="text-box">
+          <span
+            [ngStyle]="{
+            'color': styleParams.color,
+            'font-size.px': styleParams.font.size,
+            'font-weight': styleParams.font.weight,
+            'transform': 'scale('+styleParams.transform.scale+') rotate('+styleParams.transform.rotate+'deg)'
+          }"
+          > {{ text }} </span>
+        </div>
+
+        <div class="text-input">
+          <ion-input placeholder="Write something ... " autofocus="true" type="text" [(ngModel)]="text"></ion-input>
+        </div>
+
+        <div class="text-transforms">
+          <div class="color-picker">
+            <span>Text Color</span>
+            <p-colorPicker [(ngModel)]="styleParams.color"></p-colorPicker>
+          </div>
+          <ion-list>
+            <ion-item>
+              <ion-note slot="start">Font Size</ion-note>
+              <ion-range (ionChange)="fontSize($event.detail.value)" [value]="styleParams.font.size" min="1" max="40" color="warning" pin="true"></ion-range>
+            </ion-item>
+
+            <ion-item>
+              <ion-note slot="start">Font Weight</ion-note>
+              <ion-range (ionChange)="fontWeight($event.detail.value)" [value]="styleParams.font.weight" snaps="true" step="100" min="200" max="800" color="warning" pin="true"></ion-range>
+            </ion-item>
+
+            <ion-item>
+              <ion-note slot="start">Zoom</ion-note>
+              <ion-range (ionChange)="scale($event.detail.value)" [value]="styleParams.transform.scale*10" step="1" min="0" max="80" color="warning" pin="true"></ion-range>
+            </ion-item>
+
+            <ion-item>
+              <ion-note slot="start">Rotate</ion-note>
+              <ion-range (ionChange)="rotate($event.detail.value)" [value]="styleParams.transform.rotate" snaps="true" min="-360" max="360" color="warning" pin="true"></ion-range>
+            </ion-item>
+
+          </ion-list>
+        </div>
+        <!-- <h5>overlay</h5>
+              <p-colorPicker [(ngModel)]="styleParams.color"></p-colorPicker> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <p id="preview"></p>
+
+</ion-content>

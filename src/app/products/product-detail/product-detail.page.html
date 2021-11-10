@@ -12,27 +12,31 @@
       </ion-buttons>
     </ion-toolbar>
 
-  <ion-grid>
+  <ion-grid *ngIf="singleProduct">
     <ion-row>
       <ion-col class="title-wrapper ion-text-center" size="12" style="z-index: 15; margin-top: -20px">
         <ion-text color="light" class="title ion-text-center">{{ singleProduct.title }}</ion-text>
       </ion-col>
     </ion-row>
-  </ion-grid>
     <ion-row class="upper-part">
       <ion-col size="2"></ion-col>
       <ion-col size="10">
         <ion-slides pager="true" [options]="slideOpts">
-          <ion-slide *ngFor="let image of singleProduct.images">
-            <ion-img [src]="image"></ion-img>
+          <!-- <ion-slide *ngFor="let image of singleProduct.images"> -->
+          <ion-slide>
+            <ion-img [src]="singleProduct.mainImage"></ion-img>
           </ion-slide>
+          <ion-slide>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/_aCeAMrh-wo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </ion-slide>
+
         </ion-slides>
       </ion-col>
     </ion-row>
     <ion-row class="bottom-part">
       <ion-col size="6" style="height:min-content">
-        <ion-chip class="regular-price" color="primary" ><del>BDT {{singleProduct.regular_price}}</del></ion-chip>
-        <ion-chip class="regular-price" color="success" >BDT {{singleProduct.sale_price}}</ion-chip>
+        <!-- <ion-chip class="regular-price" color="primary" ><del>BDT {{singleProduct.regular_price}}</del></ion-chip> -->
+        <ion-chip class="regular-price" color="success" >BDT {{singleProduct.productPrice}}</ion-chip>
       </ion-col>
       <ion-col size="6" class="ion-text-right ion-padding-right" style="height:min-content">
         <ion-chip color="success" class="stock">In stock</ion-chip>
@@ -77,6 +81,7 @@
         </ion-text>
       </ion-col>
     </ion-row>
+  </ion-grid>
 
 
 

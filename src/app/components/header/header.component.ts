@@ -1,3 +1,5 @@
+import { Product } from './../../models/product.model';
+import { ProductsService } from './../../services/products.service';
 import { MenuController, NavController } from '@ionic/angular';
 /* eslint-disable max-len */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
@@ -9,10 +11,36 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Input() searchText = 'search in Products...';
-  @Output() searchTextFound = new EventEmitter<string>();
-  logo = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=4vf2J_gHjV4AX9Iw4WH&_nc_ht=scontent.fdac22-1.fna&oh=cc8086e722ec06839a2993d3ac1852a3&oe=6180485F';
+  @Input() searchId = 'products';
+  @Input() searchData;
+  @Input() showSearch = false;
+  @Input() display = true;
+  @Output() searchTextFound = new EventEmitter<Product[]>();
+  @Output() searchedText = new EventEmitter<string>();
+  @Output() isLoadingSearch = new EventEmitter<boolean>();
+  searchShow = false;
+  isLoading = false;
+  logo = 'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=taviAIunbeMAX9EWmHu&_nc_ht=scontent-hkt1-1.xx&oh=a3196443215ad709d2188624635b516d&oe=61A7D55F';
+  searchedProducts: Product[];
 
-  constructor(private menu: MenuController, private nav: NavController ) { }
+  searchResult = {
+    height: 300,
+    display: 'block',
+    overflow: 'scroll'
+  };
+  searchResultData;
+
+  toolbarStyle = {
+    paddingBottom: 0,
+    borderRadius: {
+      topLeft: 0,
+      topRight: 0,
+      bottomLeft: 0,
+      bottomRight: 0,
+    }
+  };
+
+  constructor(private menu: MenuController, private nav: NavController, private productsService: ProductsService ) { }
 
   ngOnInit() {}
 
@@ -23,11 +51,71 @@ export class HeaderComponent implements OnInit {
   }
 
   onSearch(event){
-    this.searchTextFound.emit(event.target.value);
+    console.log('search text', event.detail.value);
+    if ( event.detail.value === '') {
+      this.searchShow = false;
+      this.isLoading = false;
+      this.isLoadingSearch.emit(false);
+      this.searchTextFound.emit(null);
+    }
+    else {
+      if( this.searchId === 'products' ) {
+        console.log('products');
+        this.searchedText.emit(event);
+        this.productsService.fetchProductsBySearch(event.detail.value).subscribe(res=>{
+          console.log('data from search : ', res.data.data);
+          this.searchShow = true;
+          this.isLoading = false;
+          this.isLoadingSearch.emit(false);
+          this.searchTextFound.emit(res.data.data);
+          this.searchResultData = res.data.data;
+        });
+      }
+      else if ( this.searchId === 'categories' ) {
+        console.log('categories');
+        this.productsService.fetchProductsBySearch(event.detail.value).subscribe(res=>{
+          console.log('data from search : ', res.data.data);
+          this.searchShow = true;
+          this.isLoading = false;
+          this.isLoadingSearch.emit(false);
+          this.searchTextFound.emit(res.data.data);
+          this.searchResultData = res.data.data;
+        });
+      }
+      else {
+        console.log(this.searchId);
+        this.productsService.fetchProductsBySearch(event.detail.value).subscribe(res=>{
+          console.log('data from search : ', res.data.data);
+          this.searchShow = true;
+          this.isLoading = false;
+          this.isLoadingSearch.emit(false);
+          this.searchTextFound.emit(res.data.data);
+          this.searchResultData = res.data.data;
+        });
+      }
+    }
+
   }
 
   onCartClicked(){
+    if(!this.showSearch) {
     console.log('cart clicked');
-    this.nav.navigateForward('/carts');
+      this.toolbarStyle.paddingBottom = 20;
+      this.toolbarStyle.borderRadius.bottomLeft = 30;
+      this.toolbarStyle.borderRadius.bottomRight = 30;
+    }
+    else {
+      this.toolbarStyle.paddingBottom = 0;
+      this.toolbarStyle.borderRadius.bottomLeft = 0;
+      this.toolbarStyle.borderRadius.bottomRight = 0;
+    }
+      this.showSearch = !this.showSearch;
+    //this.nav.navigateForward('/carts');
+  }
+
+  onKeyInput(event){
+    this.isLoadingSearch.emit(true);
+      this.isLoading = true;
+      this.searchShow = false;
   }
 }

@@ -1,3 +1,4 @@
+import { Device } from '@ionic-native/device/ngx';
 /* eslint-disable max-len */
 import { Component } from '@angular/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
@@ -12,13 +13,16 @@ import { MenuService } from './services/menu.service';
 export class AppComponent {
   menus: any;
   logo = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=4vf2J_gHjV4AX9Iw4WH&_nc_ht=scontent.fdac22-1.fna&oh=cc8086e722ec06839a2993d3ac1852a3&oe=6180485F';
-
+  name: any;
+  osVersion: string = "";
+  uuid: string = "";
   constructor(
     private menuCtrl: MenuController,
     private menuService: MenuService,
     private platform: Platform,
     private statusBar: StatusBar,
-    private nav: NavController
+    private nav: NavController,
+    private device: Device
     ) {
       this.initializeApp();
   }
@@ -30,6 +34,11 @@ export class AppComponent {
 
         // set status bar to white
         this.statusBar.backgroundColorByHexString('#000');
+
+        this.osVersion = this.device.version;
+        this.uuid = this.device.uuid;
+        this.name = this.device.isVirtual;
+        console.log(this.osVersion, this.uuid, this.name);
 
       });
 

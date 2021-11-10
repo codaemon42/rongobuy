@@ -1,4 +1,9 @@
-<app-header (searchTextFound)="onSearch($event)" [searchText]="catSearchPlaceholder ? catSearchPlaceholder : 'search in All category'"></app-header>
+<app-header
+  (searchTextFound)="onSearch($event)"
+  [searchText]="catSearchPlaceholder ? catSearchPlaceholder : 'search in All category'"
+  [searchId]="catSearchId ? catSearchId : 'categories'"
+  [searchData]="searchData"
+></app-header>
 
 <ion-content>
   <!-- <ion-grid class="ion-no-padding">
@@ -65,20 +70,75 @@
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size="12" sizeSm="12" sizeMd="4" sizeLg="3">
-        <p-panelMenu [model]="items" [style]="{'width':'100%'}"></p-panelMenu>
+        <!-- <p-panelMenu [model]="items" [style]="{'width':'100%'}"></p-panelMenu> -->
+        <p-slideMenu [menuWidth]="280" [model]="items" [style]="{'width':'100%'}" [viewportHeight]="250"></p-slideMenu>
       </ion-col>
       <ion-col size="12" sizeSm="12" sizeMd="8" sizeLg="9">
         <ion-grid class="ion-no-padding">
-          <ion-row class="ion-no-padding">
+          <ion-row *ngIf="isLoading">
+            <ion-col size="12">
+              <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px;">
+                <ion-spinner color="warning"></ion-spinner>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <!-- <ion-row *ngIf="isPhoneCover">
+            <ion-col size="10" sizeSm="10" sizeMd="6" sizeLg="6" offset="1" offsetSm="1" offsetMd="3" offsetLg="3">
+              <app-phone-selector (modelSelected)="onSelectModel($event)"></app-phone-selector>
+            </ion-col>
+          </ion-row>
+
+          <app-phone-display
+            *ngIf="isPhoneCover && !isLoading"
+            [categoryImages]="categoryImages"
+            [backgroundImage]="mockImage"
+            (selectedBackground)="onClickProduct($event)"
+          ></app-phone-display> -->
+
+
+            <!-- <ion-col size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let image of categoryImages; let i = index" (click)="onClickProduct(i)">
+              <ion-card>
+                <ion-img
+                  [ngStyle]="{
+                    'margin-bottom.px': 20,
+                    'background-image': 'url('+image+')',
+                    'background-size.%': 100,
+                    'background-repeat': 'no-repeat',
+                    'background-position-x.px': 0,
+                    'background-position-y.px': 0
+                  }"
+                  src="../../assets/phone-cover/samsung/A5-2017.png"></ion-img>
+              </ion-card>
+            </ion-col> -->
+
+          <ion-row *ngIf="!isPhoneCover && !isLoading" class="ion-no-padding">
               <!-- <app-product></app-product> -->
-              <ion-col [routerLink]="['/products', product.slug]" size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
+
+              <ion-col [routerLink]="['/products', product.slug]" size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let product of products; let i = index" (click)="onClickProduct(i)">
                 <ion-card>
-                  <ion-img [src]="product.featured_image"></ion-img>
-                  <div class="rb-mini-product-list ion-text-right">
-                    <ion-chip class="ion-text-right">{{ product.title }}</ion-chip>
+                  <ion-img [src]="product.mainImage"></ion-img>
+                  <div class="rb-product-title">
+                    <ion-note color="medium" class="ion-text-right">{{ product.title }}</ion-note>
                   </div>
                 </ion-card>
               </ion-col>
+
+              <!-- <ion-col size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let image of categoryImages; let i = index" (click)="onClickProduct(i)">
+                <ion-card>
+                  <ion-img
+                  [ngStyle]="{
+                    'margin-bottom.px': 20,
+                    'background-image': 'url('+image+')',
+                    'background-size.%': 100,
+                    'background-repeat': 'no-repeat',
+                    'background-position-x.px': 0,
+                    'background-position-y.px': 0
+                  }"
+                   src="../../assets/phone-cover/samsung/A5-2017.png"></ion-img>
+
+                </ion-card>
+              </ion-col> -->
 
       <!--
               <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
@@ -107,7 +167,6 @@
                   </div>
                 </ion-card>
               </ion-col> -->
-
 
               <!-- footer void -->
               <div class="rb-footer-void"></div>

@@ -7,18 +7,18 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col>
+      <ion-col size="12" sizeSm="6" sizeMd="6">
         <div class="checkout">
           <form [formGroup]="checkoutForm">
             <div class="name-section">
-              <ion-input formControlName="name" placeholder="Full Name"></ion-input>
+              <ion-input class="rb-input-shadow" formControlName="name" placeholder="Full Name"></ion-input>
                <ion-note *ngIf="checkoutForm.controls.phone.invalid && (checkoutForm.controls.phone.dirty || checkoutForm.controls.phone.touched)" color="danger" slot="end">valid phone number required !</ion-note>
-              <ion-input maxLength="11" formControlName="phone" placeholder="Phone number"></ion-input>
+              <ion-input class="rb-input-shadow" maxLength="11" formControlName="phone" placeholder="Phone number"></ion-input>
               <ion-note *ngIf="checkoutForm.controls.email.invalid && (checkoutForm.controls.email.dirty || checkoutForm.controls.email.touched)" color="danger" slot="end">valid email address required !</ion-note>
-              <ion-input formControlName="email" type="email" placeholder="email"></ion-input>
+              <ion-input class="rb-input-shadow" formControlName="email" type="email" placeholder="email"></ion-input>
             </div>
             <div class="address-section">
-              <ion-input formControlName="address" placeholder="house, street, local Address"></ion-input>
+              <ion-input class="rb-input-shadow" formControlName="address" placeholder="house, street, local Address"></ion-input>
             </div>
           </form>
           <p-dropdown (onChange)="onChangeArea()" [options]="area" [(ngModel)]="selectedArea" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Area">
@@ -29,7 +29,44 @@
                     </div>
                 </ng-template>
           </p-dropdown>
+        </div>
+      </ion-col>
+      <ion-col size="12" sizeSm="6" sizeMd="6">
+        <form [formGroup]="giftForm">
+          <ion-list>
+            <ion-item>
+              <ion-checkbox (ionChange)="sendAsGift($event)" [checked]="sendGift" mode="ios" color="warning" ></ion-checkbox>
+              <ion-label color="dark"> Send as gift </ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-grid *ngIf="sendGift" class="ion-no-padding">
+            <ion-row class="gift-box-wrapper">
+              <ion-label color="tertiary">Gift message</ion-label>
+              <ion-col size="12" class="gift-box">
+                <ion-textarea formControlName="message" class="rb-gift-textarea" placeholder="write something..." autofocus="true"></ion-textarea>
+              </ion-col>
+              <ion-col size="2" class="gift-box">
+                <p class="gift-box-text" >From</p>
+              </ion-col>
+              <ion-col size="10" class="gift-box">
+                  <ion-input formControlName="sender"></ion-input>
+              </ion-col>
+              <ion-col>
+                <ion-list>
+                  <ion-item>
+                    <ion-checkbox (ionChange)="sendAsGift($event)" [checked]="sendGift" mode="ios" color="warning" ></ion-checkbox>
+                    <ion-label color="dark"> add special packaging </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
 
+          <!-- ddd -->
+
+          <!-- ddd -->
+        </form>
+        <div>
           <div class="payment-section">
             <div class="order-review-section">
               <div class="order-amount-section">

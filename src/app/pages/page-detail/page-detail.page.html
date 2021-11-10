@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <app-header (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)"></app-header>
+    <!-- <ion-title>{{ title }}</ion-title> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- search result section -->
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngIf="isLoadingSearch" size="2" sizeSm="2" sizeMd="2" sizeLg="2" offset="5" offsetSm="5" offsetMd="5" offsetLg="5">
+        <ion-spinner color="warning"></ion-spinner>
+      </ion-col>
+      <ion-col *ngIf="searchData" size="12" sizeSm="12" sizeMd="10" sizeLg="8" offsetMd="1" offsetLg="2">
+        <app-search-results [data]="searchData"></app-search-results>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- search result section ends -->
+
+  <!-- main page -->
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngIf="page">
+
+        <!-- page title -->
+        <h2 style="color: #888" class="ion-text-center">{{ page.title }}</h2>
+
+        <!-- page content section -->
+        <span id="page-content"></span>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- main page -->
+
+</ion-content>

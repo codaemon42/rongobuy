@@ -4,7 +4,7 @@ $ionInputColor: #4c4a4a;
 
 :host ::ng-deep .p-dropdown {
     width: 100%;
-    border-radius: 20px;
+    border-radius: 4px;
     box-shadow: 0 8px 8px 0 $boxShadow;
     padding-left: 20px;
     border: none;
@@ -24,14 +24,41 @@ ion-content{
     }
 }
 
+.gift-box-wrapper{
+  box-shadow: inset 0px 0px 12px 6px #00000012;
+  margin: 10px 0;
+  padding: 10px 5px;
+  border-radius: 5px;
+
+  .gift-box {
+    border: 1px solid #00000024;
+    padding: 0;
+    border-radius: 2px;
+
+    .rb-gift-textarea{
+      //border: 1px solid #888;
+      margin: 0;
+    }
+    ion-input{
+      line-height: 2;
+    }
+    .gift-box-text{
+      text-align: center;
+      font-weight: bold;
+      color: #888;
+    }
+  }
+}
+
+
+
+// .rb-gift-input{
+//   border: 1px solid #888;
+//   border-radius: none;
+// }
+
 //#F5F4F9
-
-.checkout {
-  //margin: 20px;
-
-
   .payment-section{
-    margin-top: 40px;
     border: 1px solid #5effb4;
     padding: 10px;
     border-radius: 10px;
@@ -95,6 +122,12 @@ ion-content{
     }
   }
 
+.checkout {
+  //margin: 20px;
+
+
+
+
 
   ion-button{
     margin-top: 20px;
@@ -102,11 +135,11 @@ ion-content{
   }
 }
 
-ion-input{
+.rb-input-shadow{
   --padding-start: 20px;
   --padding-end: 10px;
   margin: 10px 10px 10px auto;
-  border-radius: 20px;
+  border-radius: 4px;
   box-shadow: 0 8px 8px 0 $boxShadow;
   border-top: 0.5px solid $borderTop;
   color: $ionInputColor;

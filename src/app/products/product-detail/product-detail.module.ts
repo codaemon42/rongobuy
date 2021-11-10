@@ -9,6 +9,7 @@ import {RatingModule} from 'primeng/rating';
 import { ProductDetailPageRoutingModule } from './product-detail-routing.module';
 import { ProductDetailPage } from './product-detail.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     IonicModule,
     RatingModule,
     ComponentsModule,
+    HttpClientModule,
     ProductDetailPageRoutingModule
   ],
   declarations: [ProductDetailPage]

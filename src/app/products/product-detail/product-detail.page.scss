@@ -1,5 +1,18 @@
+//$backgroundLayer: linear-gradient(90deg, rgba(255,123,0,1) 0%, rgba(237,255,0,0.9416900549282213) 100%);
+$backgroundLayer: #ffd700;
+
+  // ion-slides{
+  //   border-radius: 50px;
+
+  //   ion-slide {
+  //     padding-top: 25px;
+  //     padding-bottom: 25px;
+  //   }
+  // }
 ion-content{
-  --background: linear-gradient(90deg, rgba(255,123,0,1) 0%, rgba(237,255,0,0.9416900549282213) 100%);
+  --background: #ffd700;
+
+
 
   .cart-badge{
     position: absolute;
@@ -7,7 +20,7 @@ ion-content{
     right: 10px;
   }
     ion-toolbar{
-      --background: linear-gradient(90deg, rgba(255,123,0,1) 0%, rgba(237,255,0,0.9416900549282213) 100%);
+      --background: #ffd700;
     }
 
     .fullscreen{

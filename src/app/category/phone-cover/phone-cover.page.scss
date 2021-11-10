@@ -1,0 +1,18 @@
+
+:host ::ng-deep .p-dropdown {
+    width: 100%;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.24);
+    border-top: 0.5px solid rgb(221, 221, 221);
+}
+
+ion-card{
+  &:hover{
+    box-shadow: 0 5px 8px #00000045;
+  }
+  .subtitle {
+    color: #888;
+    font-weight: bold;
+    padding: 3px;
+    font-size: 14px;
+  }
+}

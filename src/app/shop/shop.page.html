@@ -1,4 +1,4 @@
-<app-header searchText="Search any products..."></app-header>
+<app-header [display]="false" (searchedText)="searchedTextMethod($event)" (searchTextFound)="onSearch($event)" searchText="Search any products..."></app-header>
 
 <ion-content>
   <ion-grid class="ion-no-padding">
@@ -7,11 +7,11 @@
         <ion-grid class="ion-no-padding">
           <ion-row class="ion-no-padding">
               <!-- <app-product></app-product> -->
-              <ion-col size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
+              <ion-col size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let product of products; let i = index" (click)="onClickProduct(i)">
                 <ion-card>
-                  <ion-img [src]="product.featured_image"></ion-img>
-                  <div class="rb-mini-product-list ion-text-right">
-                    <ion-chip class="ion-text-right">{{ product.title }}</ion-chip>
+                  <img decoding="async" [src]="product.mainImage">
+                  <div class="rb-product-title">
+                    <ion-note color="medium" class="ion-text-right">{{ product.title }}</ion-note>
                   </div>
                 </ion-card>
               </ion-col>

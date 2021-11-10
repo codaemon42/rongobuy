@@ -14,26 +14,10 @@ $borderTop: #0808080a;
     border-right: 0;
 }
 
-// .phone-model{
-//   z-index: 20;
-//   padding: 20px;
-//   position: absolute;
-//   width: 100%;
-//   background: #fff;
-// }
 .phone-model{
   margin: 10px 20px 0 20px;
 }
 
-// .customizer-options{
-//   width: 100%;
-//   background: #fff;
-//   height: 300px;
-//   padding: 20px;
-//   margin-top: 546px;
-//   z-index: 999;
-//   position: absolute;
-// }
 
 .customize-section{
   margin-top: 25px;
@@ -59,9 +43,13 @@ $borderTop: #0808080a;
   .upload-btn{
     position: absolute;
     left: 42%;
-    top: 50%;
+    // top: 50%;
   }
 
+}
+
+.textContext:hover {
+  border: 1px solid #666;
 }
 
 :host ::ng-deep .p-speeddial {
@@ -71,36 +59,11 @@ $borderTop: #0808080a;
 
 .card{
   height: 80px;
+  z-index: 123;
+  position: relative;
 }
 
 #imgg{
   display: block;
   width: 200px;
 }
-// .logo-img{
-//   position: absolute;
-//   width: 100px;
-//   top: 300px;
-//   left: 33%;
-//   z-index: 999;
-// }
-
-
-
-
-// .selectDisable {
-//     -webkit-user-select: none;
-//     -khtml-user-select: none;
-//     -moz-user-select: none;
-//     -o-user-select: none;
-//     user-select: none;
-// }
-
-
-/* Customization section
-background-position-x: 50%;
-background-position-y: 50%;
-background-image: url('https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=4vf2J_gHjV4AX9Iw4WH&_nc_ht=scontent.fdac22-1.fna&oh=cc8086e722ec06839a2993d3ac1852a3&oe=6180485F');
-background-repeat: no-repeat;
-background-size: 100%;
-*/

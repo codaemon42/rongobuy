@@ -1,0 +1,18 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let phoneCover of categoryImages; let i = index" (click)="onClickProduct(i)">
+      <ion-card>
+        <ion-img
+          [ngStyle]="{
+            'margin-bottom.px': 20,
+            'background-image': 'url('+phoneCover.image+')',
+            'background-size.%': 100,
+            'background-repeat': 'no-repeat',
+            'background-position-x.px': 0,
+            'background-position-y.px': 0
+          }"
+          [src]="backgroundImage"></ion-img>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>

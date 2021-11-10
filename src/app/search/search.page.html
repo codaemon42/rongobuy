@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>search</ion-title>
+    <ion-searchbar (ionChange)="onSearch($event)" autofocus debounce="300" showCancelButton="focus" animated [placeholder]="searchText"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 

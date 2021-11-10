@@ -1,6 +1,48 @@
-<ion-tabs>
+<ion-tabs class="desktop" *ngIf="desktop">
 
-  <ion-icon name="add" class="icon-button inner-center-btn"></ion-icon>
+  <ion-tab-bar slot="top" class="bottom-tab-bar">
+
+    <ion-tab-button tab="home">
+      <ion-icon name="home"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="category"  class="inner-left-btn">
+      <ion-icon name="apps-sharp"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Category</ion-label>
+    </ion-tab-button>
+
+    <!-- <ion-tab-button tab="search" class="rb-tab-middle">
+      <ion-icon name="ellipse" class="icon-button"></ion-icon>
+      <ion-label>Search</ion-label>
+    </ion-tab-button> -->
+
+    <ion-tab-button class="button-center">
+      <ion-img style="width:150px" src="../../assets/icon/icon.png"></ion-img>
+    </ion-tab-button>
+
+
+    <ion-tab-button tab="shop" class="inner-right-btn">
+      <ion-icon name="shirt"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Shop</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="account">
+      <ion-icon name="person"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Account</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+
+</ion-tabs>
+
+<ion-tabs class="mobile" *ngIf="!desktop">
+
+  <!-- <ion-icon name="add" class="icon-button inner-center-btn"></ion-icon> -->
+  <ion-img
+    style="border-radius: 50%;"
+    src="../../assets/icon/icon.gif"
+    class="icon-button inner-center-btn"></ion-img>
 
   <ion-tab-bar slot="bottom" class="bottom-tab-bar">
 
@@ -36,3 +78,4 @@
   </ion-tab-bar>
 
 </ion-tabs>
+

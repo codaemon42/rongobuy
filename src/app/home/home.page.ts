@@ -1,16 +1,16 @@
 import { HomepageService } from './../services/homepage/homepage.service';
 import { AuthService } from './../services/auth.service';
 import { Device } from '@ionic-native/device/ngx';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MiniProduct } from '../components/product/product.model';
+import { ColorsService } from '../services/colors/colors.service';
+import { BreakpointObserverService } from '../services/breakpoint.service';
+import { IonSlides, Platform } from '@ionic/angular';
+import { StorageService } from '../services/storage.service';
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable curly */
 /* eslint-disable object-shorthand */
 /* eslint-disable max-len */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MiniProduct } from '../components/product/product.model';
-import { PhoneCoverService } from '../services/phone-cover/phone-cover.service';
-import { ColorsService } from '../services/colors/colors.service';
-import { BreakpointObserverService } from '../services/breakpoint.service';
-import { IonSlides, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +25,7 @@ export class HomePage implements OnInit {
   slideOpts;
   emergencyCatSlider;
   catSlider;
+  catSlider2;
   sliderEl;
   emergencyInfo;
   miniProducts: MiniProduct[];
@@ -40,8 +41,11 @@ export class HomePage implements OnInit {
     private authService: AuthService,
     private colorsService: ColorsService,
     private brkPointService: BreakpointObserverService,
-    private homepageService: HomepageService
-  ) { }
+    private homepageService: HomepageService,
+  ) {
+
+   }
+
 
   ngOnInit() {
     this.platform.ready().then(res=>{
@@ -54,7 +58,7 @@ export class HomePage implements OnInit {
     this.sizeController();
     //this.colorsService.getColors();
 
-    this.authService.loginWithOtp();
+    //this.authService.loginWithOtp();
     // const httpOptions = {
     //   headers: new HttpHeaders({
     //     'Content-Type':  'application/json',
@@ -253,6 +257,37 @@ export class HomePage implements OnInit {
           // when window width is >= 640px
           980: {
             slidesPerView: 3.9,
+            spaceBetween: 40
+          }
+      }
+    };
+
+    this.catSlider2 = {
+      initialSlide: 0,
+      speed: 400,
+      loop: true,
+      slidesPerView: 1.9,
+      spaceBetween: 1,
+      autoplay:1000,
+      breakpoints: {
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1.9,
+            spaceBetween: 10
+          },
+          // when window width is >= 480px
+          480: {
+            slidesPerView: 2.3,
+            spaceBetween: 30
+          },
+          // when window width is >= 640px
+          768: {
+            slidesPerView: 2.9,
+            spaceBetween: 40
+          },
+          // when window width is >= 640px
+          980: {
+            slidesPerView: 2.9,
             spaceBetween: 40
           }
       }

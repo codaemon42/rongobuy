@@ -11,7 +11,44 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="isLoading">
+      <ion-col size="12">
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!isLoading">
+      <ion-col *ngIf="orderDetail" size="12" sizeSM="12" sizeMd="6" sizeLg="4">
+        <div class="card">
+            <div class="header">
+              <ion-chip color="tertiary">#{{orderDetail.data.orderId}}</ion-chip>
+              <div class="date"> 12-10-2021 </div>
+            </div>
+            <div class="content">
+              <div class="status">
+                status: {{orderDetail.data.status}}
+              </div>
+              <div class="total">
+                Total: BDT {{orderDetail.data.orderPrice}}
+              </div>
+            </div>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="orderDetail" size="12" sizeSM="12" sizeMd="6" sizeLg="4">
+        <span *ngIf="orderDetail.success">
+          <div class="card-2" *ngFor="let orderItem of orderDetail.data.orderItems; let i = index">
+            <img [src]="orderItem.image">
+            <ion-label class="detail">
+              <h3 class="title">{{ orderItem.productTitle }}</h3>
+              <p class="price">Total: {{ orderItem.price }}</p>
+              <p class="price">Quantity: {{ orderItem.quantity }}</p>
+            </ion-label>
+          </div>
+        </span>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="false">
       <ion-col size="12" sizeSM="12" sizeMd="6" sizeLg="4">
         <div class="card">
           <h5 class="ion-text-center">Order Status</h5>

@@ -3,6 +3,7 @@ import { ProductsService } from './../../services/products.service';
 import { MenuController, NavController } from '@ionic/angular';
 /* eslint-disable max-len */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { BreakpointObserverService } from 'src/app/services/breakpoint.service';
 
 @Component({
   selector: 'app-header',
@@ -39,10 +40,13 @@ export class HeaderComponent implements OnInit {
       bottomRight: 0,
     }
   };
+  desktop = false;
 
-  constructor(private menu: MenuController, private nav: NavController, private productsService: ProductsService ) { }
+  constructor(private menu: MenuController, private nav: NavController, private productsService: ProductsService, private brkPointObs: BreakpointObserverService ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getSize();
+  }
 
   openMenu() {
     this.menu.enable(true, 'custom');
@@ -117,5 +121,17 @@ export class HeaderComponent implements OnInit {
     this.isLoadingSearch.emit(true);
       this.isLoading = true;
       this.searchShow = false;
+  }
+
+    getSize() {
+    this.brkPointObs.size.subscribe(data=>{
+      console.log('size : ', data);
+      if( data === 'xl' || data === 'lg' ) {
+        this.desktop = true;
+      } else {
+        this.desktop  = false;
+      }
+    });
+    //console.log('window : ', window.innerWidth);
   }
 }

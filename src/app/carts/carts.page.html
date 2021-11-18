@@ -7,51 +7,40 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col size="12" sizeSm="6" sizeMd="6" sizeLg="4">
-        <div class="card" *ngFor="let cartItem of carts; let i = index">
-          <img [src]="cartItem.product_image">
-          <ion-label class="detail">
-            <h3 class="title">{{ cartItem.product_title }}</h3>
-            <p class="price">{{ cartItem.unit_price }}</p>
-            <p class="price">
-              <ion-icon class="delete"  name="trash"></ion-icon>
-              <!-- <ion-buttons>
-                <ion-button>
-                  <ion-icon name="trash"></ion-icon>
-                </ion-button>
-              </ion-buttons> -->
-            </p>
-          </ion-label>
-          <div class="actions">
-              <ion-icon name="add" (click)="increaseCart(i)"></ion-icon>
-            <ion-label>{{ cartItem.qty }}</ion-label>
-              <ion-icon name="remove" (click)="decreaseCart(i)"></ion-icon>
+      <ion-col size="12" sizeSm="6" sizeMd="6" sizeLg="4" *ngIf="cartDetails">
+        <span *ngIf="cartDetails.success">
+          <div class="card" *ngFor="let cartItem of cartDetails.data.product; let i = index">
+            <img [src]="cartItem.productImage">
+            <ion-label class="detail">
+              <h3 class="title">{{ cartItem.productTitle }}</h3>
+              <p class="price">{{ cartItem.discountedPrice }}</p>
+              <p class="price">
+                <ion-icon (click)="onDeleteCartItem(cartItem.id)" class="delete"  name="trash"></ion-icon>
+                <!-- <ion-buttons>
+                  <ion-button>
+                    <ion-icon name="trash"></ion-icon>
+                  </ion-button>
+                </ion-buttons> -->
+              </p>
+            </ion-label>
+            <div class="actions">
+                <ion-icon name="add" (click)="increaseCart(cartItem.productId, 1)"></ion-icon>
+              <ion-label>{{ cartItem.quantity }}</ion-label>
+                <ion-icon name="remove" (click)="decreaseCart(cartItem.productId, -1)"></ion-icon>
+            </div>
           </div>
+        </span>
+        <span *ngIf="!cartDetails.success">
+          <div class="empty-box">
+            <ion-icon class="empty-cart-icon" color="medium" name="document"></ion-icon>
+            <ion-label color="medium">{{cartDetails.message}}</ion-label>
+          </div>
+        </span>
+      </ion-col>
+      <ion-col size="12" sizeSm="6" sizeMd="6" sizeLg="4" *ngIf="!cartDetails">
+        <div class="empty-box">
+          <ion-spinner color="warning"></ion-spinner>
         </div>
-        <!-- <div class="card">
-          <img src="../../assets/images/productone.png">
-          <ion-label class="detail">
-            <h3 class="title">product one</h3>
-            <p class="price"> BDT 320 </p>
-          </ion-label>
-          <div class="actions">
-              <ion-icon name="add"></ion-icon>
-            <ion-label>1</ion-label>
-              <ion-icon name="remove"></ion-icon>
-          </div>
-        </div>
-        <div class="card">
-          <img src="../../assets/images/productone.png">
-          <ion-label class="detail">
-            <h3 class="title">product one</h3>
-            <p class="price"> BDT 320 </p>
-          </ion-label>
-          <div class="actions">
-              <ion-icon name="add"></ion-icon>
-            <ion-label>1</ion-label>
-              <ion-icon name="remove"></ion-icon>
-          </div>
-        </div> -->
       </ion-col>
 
       <ion-col>
@@ -61,12 +50,12 @@
       <!-- <p-divider [layout]="layout"></p-divider> -->
 
       <ion-col size="12" sizeSm="4" sizeMd="4" sizeLg="6">
-        <div class="proceed">
+        <div class="proceed" *ngIf="cartDetails">
           <div class="total-section">
             <span class="total-text"> Total </span>
-            <span class="total"> BDT {{ subTotal }}</span>
+            <span class="total"> BDT {{ cartDetails.data.subtotal }}</span>
           </div>
-          <ion-button color="warning" (click)="onCart()" > Next </ion-button>
+          <ion-button color="warning" (click)="onProceedCheckout()" > Proceed Checkout </ion-button>
         </div>
       </ion-col>
     </ion-row>

@@ -1,3 +1,6 @@
+import { SkuPriceList } from './../../models/sku.model';
+import { AccountService } from './../../account/account.service';
+import { Subscription } from 'rxjs';
 import { Cart } from './../../models/cart.model';
 import { Product } from '../../models/product.model';
 
@@ -8,13 +11,11 @@ import { Product } from '../../models/product.model';
 
 //import { CartsService } from './../../carts/carts.service';
 import { Review } from './../../components/reviews/reviews.model';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { AnimationController, IonContent } from '@ionic/angular';
-import { Carts } from './../../carts/carts.model';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AnimationController, IonContent, NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
-import { CartService } from './../../services/cart.service';
-import { CartsService } from 'src/app/carts/carts.service';
+import { CartService } from '../../services/cart.service';
 
 
 @Component({
@@ -23,13 +24,13 @@ import { CartsService } from 'src/app/carts/carts.service';
   styleUrls: ['./product-detail.page.scss'],
 })
 
-export class ProductDetailPage implements OnInit, AfterViewInit {
+export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(IonContent, { static: false }) content: IonContent;
   product_slug: string;
   animator: any;
   animatorDuration = 800;
-  totalCartQty = 0;
+  totalCartQty: number;
   cartItem: Cart;
   products: Product[];
   singleProduct: Product;
@@ -45,24 +46,29 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
     slidesPerView: 1,
     speed: 400
   };
+
+  selectedAttr: any[] = [];
+
+  selectedSKUProduct: SkuPriceList;
+
+  cartQtySub: Subscription;
+
   constructor(
     private animationCtrl: AnimationController,
+    private nav: NavController,
     private cartService: CartService,
-    private cartsService: CartsService,
     private activatedRoute: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private accountService: AccountService
     ) { }
 
 
   ngOnInit() {
+    this.totalCartQty = 0;
+    this.cartQuantityController();
     this.activatedRoute.params.subscribe(data => {
       console.log('activated route : ', data.slug);
-      // this.getSingleProduct(data.slug);
-
-      this.productService.fetchSingleProduct(data.slug).subscribe( product => {
-        console.log('product detail : ', product);
-        this.singleProduct = product;
-      });
+      this.getSingleProduct(data.slug);
     });
     console.log(' on init');
 
@@ -103,9 +109,11 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
         review: 'this is the description of the review given'
       },
     ];
-
-
   }
+
+  // ionViewWillEnter(){
+  //   this.cartQuantityController();
+  // }
 
   ngAfterViewInit(){
     // scroll to top
@@ -113,19 +121,22 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
       console.log('after view init');
   }
 
-  ionViewWillEnter(){
-   this.cartQuantityController(this.singleProduct.id);
-  }
 
-
-  /**
-   * fetch single product
-   */
   getSingleProduct(product_slug) {
-    // this.products = this.productsService.products.filter(product => product.slug === product_slug);
-    // console.log('product : ', this.products);
-    // this.singleProduct = this.products[0];
-
+    this.productService.fetchSingleProduct(product_slug).subscribe( product => {
+      console.log('product detail : ', product);
+      this.singleProduct = product;
+      this.selectedSKUProduct = this.singleProduct.skuModule.skuPriceList[0];
+      const propValues = this.singleProduct.skuModule.skuPriceList[0].skuPropValIds;
+      this.singleProduct.skuModule.productSKUPropertyList.map(res=>{
+        res.skuPropertyValues.map(pVal=>{
+          pVal['active'] = false;
+          if( this.inCommaArray(pVal.propertyValueId, propValues) ) {
+            pVal['active'] = true;
+          }
+        });
+      });
+    });
   }
 
 
@@ -159,19 +170,79 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
     this.animation();
     this.animator.play();
 
-    setTimeout(()=>{
-        this.cartAdder();
-    }, this.animatorDuration);
-
-    //this.cartService.addTOCart();
+    if( this.accountService.isLoggedIn() ) {
+      this.cartAdder();
+    } else {
+      this.nav.navigateForward('tabs/carts');
+    }
 
     console.log('carted');
+  }
+
+  buyNow() {
+    this.addToCart();
+    this.nav.navigateForward('carts');
+  }
+
+  genarateSKU(skuModule) {
+    const productSKUPropertyList = skuModule.productSKUPropertyList; // Attributes
+    const skuPriceList = skuModule.skuPriceList; // products
+
+    const newAttributeProductArray = [];
+
+  }
+
+  getAttr(attrIndex, attrValIndex, propertyValueId) {
+    this.selectedAttr = [];
+    const selectedPropertyValIds = [];
+    this.singleProduct.skuModule.productSKUPropertyList.map((property, index)=>{
+      if(attrIndex === index){
+        property.skuPropertyValues.map((value, valIndex)=>{
+          value['active']=false;
+          if(valIndex === attrValIndex && value.propertyValueId === propertyValueId) {
+            value['active']=true;
+            selectedPropertyValIds.push(value.propertyValueId);
+          }
+        });
+      } else {
+        property.skuPropertyValues.map((value, valIndex)=>{
+          if(value['active']) {
+            selectedPropertyValIds.push(value.propertyValueId);
+          }
+        });
+      }
+    });
+    console.log('selectedPropertyValIds : ', selectedPropertyValIds.toString());
+  this.getSelectedProduct(selectedPropertyValIds.toString());
+    console.log('selected attr  :', this.singleProduct.skuModule.productSKUPropertyList);
+  }
+
+  getSelectedProduct(propValIds) {
+    this.singleProduct.skuModule.skuPriceList.map((item, index )=> {
+      if(item.skuPropValIds === propValIds) {
+        this.selectedSKUProduct = item;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.cartQtySub.unsubscribe();
   }
 
 
 
 
+
+
   // helper
+
+  inCommaArray( value, stringComma ) {
+    if ( stringComma.split(',').indexOf(value) === -1 ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   /**
    * scroll to a point
@@ -198,25 +269,19 @@ export class ProductDetailPage implements OnInit, AfterViewInit {
    */
   cartAdder() {
     this.totalCartQty += 1;
-    this.cartItem = {
-      id: null,
-      product_id: this.singleProduct.id,
-      product_title: this.singleProduct.title,
-      product_description: this.singleProduct.description,
-      unitPrice: this.singleProduct.productPrice,
-      qty: this.totalCartQty,
-      mainImage: this.singleProduct.mainImage,
-      image: [this.singleProduct.mainImage]
-    };
-    this.cartService.addTOCart(this.cartItem);
+    console.log('product-detail cartAdder');
+    const skuId = `${this.singleProduct.id}-green`;
+    this.cartService.addTOCart(this.singleProduct.id, this.selectedSKUProduct.SkuId).subscribe();
   }
 
 
   /**
    * controls the cart quantity of single product
    */
-  cartQuantityController(product_id) {
-    this.totalCartQty = this.cartsService.getCartQuantityByProduct(product_id);
+  cartQuantityController() {
+    this.cartQtySub = this.cartService.cartTotalItems.subscribe(res => {
+      this.totalCartQty = res;
+    });
   }
 
   /**

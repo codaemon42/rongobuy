@@ -1,8 +1,8 @@
 <ion-list *ngIf="data" lines="inset">
   <div *ngIf="data.length > 0">
-    <ion-item *ngFor="let product of data">
-      <ion-img class="mainImage" [src]="product.mainImage"></ion-img>
-      <ion-label>{{ product.title }}</ion-label>
+    <ion-item *ngFor="let product of data" [routerLink]="['/', 'products', product.slug]" >
+        <ion-img class="mainImage" [src]="product.mainImage"></ion-img>
+        <ion-label>{{ product.title }}</ion-label>
     </ion-item>
   </div>
   <div *ngIf="data.length === 0">

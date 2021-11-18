@@ -1,5 +1,8 @@
+import { OrderSingleRes } from './../../models/orders.model';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import {PrimeIcons} from 'primeng/api';
+import { OrderService } from 'src/app/services/orders/order.service';
 
 @Component({
   selector: 'app-order-details',
@@ -7,10 +10,29 @@ import {PrimeIcons} from 'primeng/api';
   styleUrls: ['./order-details.page.scss'],
 })
 export class OrderDetailsPage implements OnInit {
+
+  orderId = null;
+  orderDetail: OrderSingleRes;
+  isLoading = true;
+
+
   events1;
-  constructor() { }
+  constructor(
+    private router: ActivatedRoute,
+    private orderService: OrderService
+  ) { }
 
   ngOnInit() {
+    this.isLoading = true;
+    this.router.params.subscribe(orderRoute => {
+      this.orderId = orderRoute.id;
+      console.log('order id : ', orderRoute.id );
+      this.orderService.fetchSingleOrder(orderRoute.id).subscribe(orderSingleRes => {
+        this.orderDetail = orderSingleRes;
+        this.isLoading = false;
+        console.log('this.orderDetail : ',this.orderDetail);
+      });
+    });
         this.events1 = [
       {
         status: 'Ordered',
@@ -58,5 +80,13 @@ export class OrderDetailsPage implements OnInit {
       }
     ];
   }
+
+  // ionViewWillEnter(){
+
+  // }
+
+  // getOrderDetail() {
+
+  // }
 
 }

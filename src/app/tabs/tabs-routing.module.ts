@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, CanActivate } from '@angular/router';
+import { AccountGuard } from '../account/account.guard';
 import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
@@ -7,18 +8,6 @@ const routes: Routes = [
     path: 'tabs',
     component: TabsPage,
     children: [
-      // {
-      //   path: 'tab1',
-      //   loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
-      // },
-      // {
-      //   path: 'tab2',
-      //   loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
-      // },
-      // {
-      //   path: 'tab3',
-      //   loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
-      // },
       {
         path: 'home',
         loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
@@ -32,8 +21,14 @@ const routes: Routes = [
         loadChildren: () => import('../search/search.module').then(m => m.SearchPageModule)
       },
       {
-        path: 'shop',
-        loadChildren: () => import('../shop/shop.module').then(m => m.ShopPageModule)
+        path: 'carts',
+        loadChildren: () => import('../carts/carts.module').then(m => m.CartsPageModule),
+        canActivate:[AccountGuard]
+      },
+      {
+        path: 'wishlist',
+        loadChildren: () => import('../wishlist/wishlist.module').then(m => m.WishlistPageModule),
+        canActivate:[AccountGuard],
       },
       {
         path: 'account',
@@ -44,6 +39,18 @@ const routes: Routes = [
         redirectTo: '/tabs/home',
         pathMatch: 'full'
       }
+      // {
+      //   path: 'tab1',
+      //   loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+      // },
+      // {
+      //   path: 'tab2',
+      //   loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+      // },
+      // {
+      //   path: 'tab3',
+      //   loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+      // },
     ]
   },
   {

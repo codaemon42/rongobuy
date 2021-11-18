@@ -47,7 +47,7 @@
           <ion-list lines="none">
             <ion-item
               *ngFor="let subMenu of menu.children; let si = index"
-              (click)="onClickMenu(si)"
+              (click)="onClickMenuSub(i, si)"
               menuclose
               [hidden]="!menu.show"
               [routerLink]="subMenu.route"
@@ -59,6 +59,12 @@
           </ion-list>
         </ion-menu-toggle>
       </div>
+      <div *ngIf="accountService.isLoggedIn()" class="main-menu-item">
+        <ion-item lines="none" (click)="logOut()">
+          <ion-icon color="dark" name="log-out" slot="start"></ion-icon>
+          Log Out
+        </ion-item>
+      </div>
       </ion-list>
     </ion-content>
   </ion-menu>
@@ -66,13 +72,6 @@
   <ion-router-outlet id="main"></ion-router-outlet>
 
   <!-- footer void -->
-  <ion-list>
-    <ion-item>
-        <ion-label> verison {{osVersion}}</ion-label>
-      <ion-label>uuid {{uuid}}</ion-label>
-      <ion-label>virtual {{name}}</ion-label>
-    </ion-item>
-  </ion-list>
 
   <div class="rb-footer-void"></div>
 </ion-app>

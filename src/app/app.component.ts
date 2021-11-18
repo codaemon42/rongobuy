@@ -4,6 +4,8 @@ import { Component } from '@angular/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { MenuService } from './services/menu.service';
+import { AccountService } from './account/account.service';
+import { LoadingService } from './services/controllers/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +24,9 @@ export class AppComponent {
     private platform: Platform,
     private statusBar: StatusBar,
     private nav: NavController,
-    private device: Device
+    private device: Device,
+    private accountService: AccountService,
+    private loadingService: LoadingService
     ) {
       this.initializeApp();
   }
@@ -68,11 +72,16 @@ export class AppComponent {
     if( this.menus[index].children.length > 0 ) {
       console.log('entered');
       this.menus[index].show = !this.menus[index].show;
+
     }
     else{
       this.closeMenu();
       this.nav.navigateForward(this.menus[index].route);
     }
+  }
+
+  onClickMenuSub(i, si) {
+    this.nav.navigateForward(this.menus[i].children[si].route);
   }
 
   menuIcon(index) {
@@ -84,6 +93,15 @@ export class AppComponent {
     }
     if (this.menus[index].children.length === 0 && !this.menus[index].show){ // forward
       return 'caret-forward';
+    }
+  }
+
+  async logOut(){
+    const loading = await this.loadingService.loader('Logging out ...', 2000);
+    if(loading) {
+      this.accountService.logOut();
+      this.closeMenu();
+      this.nav.navigateForward('tabs/home');
     }
   }
 }

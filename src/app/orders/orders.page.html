@@ -7,7 +7,26 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col>
+      <ion-col *ngFor="let order of orders">
+        <div class="card">
+            <div class="header">
+              <ion-chip color="tertiary">#{{order.orderId}}</ion-chip>
+              <div class="date"> 12-10-2021 </div>
+            </div>
+            <div class="content">
+              <div class="status">
+                status: {{order.status}}
+              </div>
+              <div class="total">
+                Total: BDT {{order.orderPrice}}
+              </div>
+            </div>
+            <div class="actions">
+              <ion-button expand="block" color="secondary" [routerLink]="['/', 'all','orders', order.id]"> View Details </ion-button>
+            </div>
+        </div>
+      </ion-col>
+      <!-- <ion-col>
         <div class="card">
             <div class="header">
               <ion-chip color="tertiary">#12341</ion-chip>
@@ -44,26 +63,7 @@
               <ion-button expand="block" color="secondary" [routerLink]="['new']"> View Details </ion-button>
             </div>
         </div>
-      </ion-col>
-      <ion-col>
-        <div class="card">
-            <div class="header">
-              <ion-chip color="tertiary">#12341</ion-chip>
-              <div class="date"> 12-10-2021 </div>
-            </div>
-            <div class="content">
-              <div class="status">
-                status: processing
-              </div>
-              <div class="total">
-                Total: BDT 2000
-              </div>
-            </div>
-            <div class="actions">
-              <ion-button expand="block" color="secondary" [routerLink]="['new']"> View Details </ion-button>
-            </div>
-        </div>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
   </ion-grid>
 </ion-content>

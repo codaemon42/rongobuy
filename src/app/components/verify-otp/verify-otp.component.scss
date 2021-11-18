@@ -20,6 +20,13 @@
   padding: 20px;
   margin-top: 150px;
 
+  .resend-otp{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
   ion-input{
     border-radius: 15px;
     background: #fff;
@@ -28,4 +35,8 @@
   ion-button{
     --border-radius: 15px;
   }
+}
+
+:host ::ng-deep .otp-input:focus-visible {
+  outline: 2px solid var(--ion-color-success);
 }

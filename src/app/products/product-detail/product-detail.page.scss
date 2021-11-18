@@ -150,3 +150,45 @@ ion-content{
     }
 
 }
+
+.attr-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: flex-start;
+
+  .attr-name {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+
+  .activeBody {
+    background: var(--ion-color-warning);
+    color: var(--ion-color-warning-contrast) !important;
+    box-shadow: 0 4px 4px #000000eb;
+  }
+
+  .attr-content {
+    margin: 5px;
+    font-size: 10px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--ion-color-warning);
+    border-radius: 5px;
+    cursor: pointer;
+
+    .attrValName {
+      color: var(--ion-color-dark);
+      font-weight: bold;
+    }
+
+    .active {
+      box-shadow: inset 0 55px 8px #fa9c096b;
+    }
+  }
+
+}
+

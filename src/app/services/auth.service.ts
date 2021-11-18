@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs';
 import { CartService } from './cart.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -7,36 +8,45 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
 
+  _referrer = new BehaviorSubject<string>('');
+
   constructor(
     private http: HttpClient,
     private cartService: CartService
   ) { }
 
-  loginWithOtp(phone='01767000000') {
-    const url = 'http://auth.rongobuy.com/api/auth/v1/send-otp';
-    const body = {
-      mobile: phone
-    };
-    this.http.post(url, body).subscribe( resData => {
-      console.log('resData : ', resData);
-      return resData;
-    });
+  get referrer() {
+    return this._referrer.asObservable();
+  }
 
-    setTimeout(()=>{
-      this.checkOTP();
-    },3000);
+  addReferrer(referrer='/tabs/home') {
+    this._referrer.next(referrer);
+  }
+
+  loginWithOtp(phone='01767000000') {
+    return new Promise(resolve=>{
+      const url = 'http://auth.rongobuy.com/api/auth/v1/send-otp';
+      const body = {
+        mobile: phone
+      };
+      this.http.post<any>(url, body).subscribe( resData => {
+        console.log('sms api call login : ', resData);
+        resolve(resData);
+      });
+    });
   }
 
   checkOTP(phone='01767000000', code='111111') {
-    const url = 'http://auth.rongobuy.com/api/auth/v1/check-otp';
-    const body = {
-      mobile: '01767000000',
-      otp: '111111'
-    };
-    this.http.post<any>(url, body).subscribe(resData => {
-      console.log('otp verified : ', resData);
-
-      this.mockAddCart(resData.data.access_token);
+    return new Promise(resolve=>{
+      const url = 'http://auth.rongobuy.com/api/auth/v1/check-otp';
+      const body = {
+        mobile: phone,
+        otp: code
+      };
+      this.http.post<any>(url, body).subscribe(resData => {
+        console.log('otp verified : ', resData);
+        resolve(resData);
+      });
     });
   }
 

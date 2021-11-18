@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AccountGuard } from '../account/account.guard';
 
 import { PagesPage } from './pages.page';
 
@@ -10,7 +11,8 @@ const routes: Routes = [
   },
   {
     path: 'about-us',
-    loadChildren: () => import('./about-us/about-us.module').then( m => m.AboutUsPageModule)
+    loadChildren: () => import('./about-us/about-us.module').then( m => m.AboutUsPageModule),
+    canActivate: [AccountGuard]
   },
   {
     path: 'order-tracking',

@@ -34,8 +34,8 @@ export class LoginComponent implements OnInit {
 
   onReqOTP(){
     console.log(this.loginForm);
-    if(this.loginForm.valid) {
-      this.authService.loginWithOtp()
+    if(this.loginForm.valid && this.loginForm.value.phone.length === 11) {
+      //this.authService.loginWithOtp();
       this.rbOTPSend.emit({
         success: true,
         phone: this.loginForm.value.phone

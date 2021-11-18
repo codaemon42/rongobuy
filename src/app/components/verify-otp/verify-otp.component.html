@@ -9,11 +9,26 @@
       </div>
       <div class="login-content">
         <div class="login-section">
-          <form [formGroup]="otpForm" (ngSubmit)="onVerifyOTP()">
+          <ng-otp-input style="text-align: center;"
+            #ngOtpInput
+            (onInputChange)="onOtpChange($event)"
+            [config]="{
+              length: 6,
+              allowNumbersOnly: true,
+              disableAutoFocus: false,
+              inputClass: 'otp-class',
+              containerClass: 'otp-wrapper'
+              }"></ng-otp-input>
+              <div class="resend-otp">
+                <ion-button (click)="rbOTPResend.emit()" size="small">resend</ion-button>
+                <div class="counter">OTP expires in <span>{{counter}}</span> seconds</div>
+              </div>
+              <ion-button (click)="onVerifyOTP()" [disabled]="!invalid" type="submit" color="warning" expand="block">Verify OTP</ion-button>
+          <!-- <form [formGroup]="otpForm" (ngSubmit)="onVerifyOTP()">
             <ion-note color="danger" slot="end" *ngIf="invalid" >{{ message }}</ion-note>
-            <ion-input maxlength="6" (ionChange)="inputChanged()" type="text" formControlName="phone" class="ion-margin-bottom ion-text-center" placeholder="OTP Code"></ion-input>
+            <ion-input maxlength="6" (ionChange)="inputChanged()" type="text" formControlName="code" class="ion-margin-bottom ion-text-center" placeholder="OTP Code"></ion-input>
             <ion-button type="submit" color="warning" expand="block">Verify OTP</ion-button>
-          </form>
+          </form> -->
         </div>
       </div>
     </ion-col>

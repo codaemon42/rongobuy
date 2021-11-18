@@ -22,14 +22,14 @@ export class MenuService {
         id: '2',
         icon: 'apps',
         title: 'Orders',
-        route: '/orders',
+        route: 'all/orders',
         show: false,
         children: [
           {
             id: '2',
             icon: 'apps',
             title: 'Orders',
-            route: '/orders',
+            route: 'all/orders',
             children: [
               {
                 id: '3',

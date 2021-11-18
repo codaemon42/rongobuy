@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -20,17 +20,11 @@ export class StorageService {
 
   // Create and expose methods that users of this service can
   // call, for example:
-  public set(key: string, value: any) {
-    this._storage.set(key, value).then(data=>{
-      console.log(data);
-    });
+  async set(key: string, value: any) {
+    return await this.storage.set(key, value);
   }
 
-    get(key){
-      this.storage.get(key).then(data=>{
-        console.log(data);
-        return data;
-      });
-
+    async get(key){
+      return await this.storage.get(key);
     }
 }

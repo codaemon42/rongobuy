@@ -1,3 +1,4 @@
+import { CartRes } from './../models/cart.model';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
@@ -5,6 +6,8 @@ import { AlertController, LoadingController, NavController, ToastController } fr
 import { CartsService } from '../carts/carts.service';
 import { ShippingArea } from '../models/shipping.model';
 import { ShippingService } from '../services/shipping.service';
+import { CartService } from '../services/cart.service';
+import { OrderService } from '../services/orders/order.service';
 
 
 @Component({
@@ -48,12 +51,16 @@ export class CheckoutPage implements OnInit {
     })
   });
   sendGift = false;
+  cartDetails: CartRes;
+  cartLoading = true;
   constructor(
     private nav: NavController,
     private shippingService: ShippingService,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    private cartsService: CartsService
+    private cartsService: CartsService,
+    private cartService: CartService,
+    private orderService: OrderService
     ) { }
 
   ngOnInit() {
@@ -65,7 +72,22 @@ export class CheckoutPage implements OnInit {
     this.subTotal = this.cartsService.subTotal();
     this.calcGrandTotal();
     this.dynamicForm();
-        this.area = this.shippingService.getArea();
+    this.area = this.shippingService.getArea();
+    this.cartServiceInit();
+  }
+
+  ionViewWillEnter(){
+    this.cartServiceInit();
+  }
+
+  cartServiceInit() {
+    this.cartLoading = true;
+    this.cartService.fetchCartObj().subscribe(res=>{
+      this.cartLoading = false;
+    });
+    this.cartService.cartDetails.subscribe(res=>{
+      this.cartDetails = res;
+    });
   }
 
 
@@ -82,18 +104,21 @@ export class CheckoutPage implements OnInit {
     }).then(el=>{
       el.present();
 
-      setTimeout(()=>{
+      this.orderService.addOrder(1).subscribe(res=>{
         this.loadingCtrl.dismiss();
-
+        this.nav.navigateForward('/all/orders');
         this.toastCtrl.create({
           message: 'Order placed successfully',
           color: 'success',
-          duration: 5000,
+          duration: 3000,
           position: 'top'
         }).then(toastEl=>{
           toastEl.present();
         });
-      }, 3000);
+      });
+
+      // setTimeout(()=>{
+      // }, 3000);
     });
   }
 

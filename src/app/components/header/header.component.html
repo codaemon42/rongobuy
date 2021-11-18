@@ -18,8 +18,9 @@
       <!-- <ion-avatar class="rb-logo-center">
         <img src="../../../assets/icon/icon.png">
       </ion-avatar> -->
-
-        <ion-img class="rb-logo-center" src="../../../assets/logo/logo.gif"></ion-img>
+        <div *ngIf="!desktop">
+          <ion-img class="rb-logo-center" src="../../../assets/logo/logo.gif"></ion-img>
+        </div>
 
 
       <ion-buttons slot="end">

@@ -35,14 +35,35 @@
     </ion-row>
     <ion-row class="bottom-part">
       <ion-col size="6" style="height:min-content">
-        <!-- <ion-chip class="regular-price" color="primary" ><del>BDT {{singleProduct.regular_price}}</del></ion-chip> -->
-        <ion-chip class="regular-price" color="success" >BDT {{singleProduct.productPrice}}</ion-chip>
+        <ion-chip *ngIf="selectedSKUProduct.discount" class="regular-price" color="primary" ><del>BDT {{selectedSKUProduct.price}}</del></ion-chip>
+        <ion-chip class="regular-price" color="success" >BDT {{selectedSKUProduct.discountPrice}}</ion-chip>
+        <ion-chip class="regular-price" color="success" >BDT {{selectedSKUProduct.SkuId}}</ion-chip>
       </ion-col>
       <ion-col size="6" class="ion-text-right ion-padding-right" style="height:min-content">
         <ion-chip color="success" class="stock">In stock</ion-chip>
         <div class="rating">
           <p-rating [(ngModel)]="rating" readonly="true" [cancel]="false"></p-rating>
         </div>
+      </ion-col>
+      <ion-col>
+        <div class="attr-container" *ngFor="let attr of singleProduct.skuModule.productSKUPropertyList; let attrIndex = index">
+          <div class="attr-name">
+            {{attr.skuPropertyName}}
+          </div>
+          <div
+            (click)="getAttr(attrIndex, attrValIndex, attrValues.propertyValueId)"
+            [ngClass]="{'activeBody': attrValues['active']}"
+            class="attr-content"
+            *ngFor="let attrValues of attr.skuPropertyValues; let attrValIndex = index">
+            <!-- <div> propertyValueId: {{attrValues.propertyValueId}} </div>
+            <div> propertyValueName: {{attrValues.propertyValueName}} </div> -->
+              <ion-img
+                style="width: 50px; height:50px; border: 1px solid rgba(51, 51, 51, 0.363); border-radius: 5px;"
+                [src]="attrValues.skuPropertyImagePathSmall"></ion-img>
+                <div class="attrValName">{{attrValues.propertyValueName}}</div>
+          </div>
+        </div>
+        <!-- <ion-button (click)="genarateSKU(singleProduct.skuModule)">Gen sku</ion-button> -->
       </ion-col>
       <ion-col class="description">
         <ion-segment color="medium" value="description" (ionChange)="segmentChanged($event)">
@@ -90,7 +111,7 @@
   <ion-grid class="ion-no-padding">
     <ion-row class="actions">
       <ion-col size="6">
-          <ion-button color="warning" expand="full" class="buy-now" [routerLink]="['/checkout']">Buy Now</ion-button>
+          <ion-button color="warning" expand="full" class="buy-now" (click)="buyNow()">Buy Now</ion-button>
       </ion-col>
       <ion-col size="6">
           <div class="square"></div>

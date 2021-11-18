@@ -20,6 +20,8 @@ import { ReviewsComponent } from './reviews/reviews.component';
 import { CustomizationReviewComponent } from './customization-review/customization-review.component';
 import {ColorPickerModule} from 'primeng/colorpicker';
 import { DropdownModule } from 'primeng/dropdown';
+import { NgOtpInputModule } from  'ng-otp-input';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -39,12 +41,14 @@ import { DropdownModule } from 'primeng/dropdown';
   ],
   imports: [
     CommonModule,
+    RouterModule,
     IonicModule,
     FormsModule,
     InputTextModule,
     ReactiveFormsModule,
     ColorPickerModule,
-    DropdownModule
+    DropdownModule,
+    NgOtpInputModule,
   ],
   exports: [
     HeaderComponent,

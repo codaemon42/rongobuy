@@ -18,13 +18,18 @@
     </ion-tab-button> -->
 
     <ion-tab-button class="button-center">
-      <ion-img style="width:150px" src="../../assets/icon/icon.png"></ion-img>
+      <ion-img style="width:150px" src="../../assets/logo/logo.gif"></ion-img>
     </ion-tab-button>
 
 
-    <ion-tab-button tab="shop" class="inner-right-btn">
-      <ion-icon name="shirt"></ion-icon>
-      <ion-label *ngIf="showTabTitle">Shop</ion-label>
+    <ion-tab-button tab="wishlist" class="inner-right-btn">
+      <ion-icon name="heart"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Wishlist</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="carts">
+      <ion-icon name="cart"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Cart</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="account">
@@ -39,10 +44,10 @@
 <ion-tabs class="mobile" *ngIf="!desktop">
 
   <!-- <ion-icon name="add" class="icon-button inner-center-btn"></ion-icon> -->
-  <ion-img
+  <!-- <ion-img
     style="border-radius: 50%;"
     src="../../assets/icon/icon.gif"
-    class="icon-button inner-center-btn"></ion-img>
+    class="icon-button inner-center-btn"></ion-img> -->
 
   <ion-tab-bar slot="bottom" class="bottom-tab-bar">
 
@@ -61,13 +66,17 @@
       <ion-label>Search</ion-label>
     </ion-tab-button> -->
 
-    <ion-tab-button class="button-center">
+    <!-- <ion-tab-button class="button-center">
       <div></div>
+    </ion-tab-button> -->
+        <ion-tab-button tab="wishlist" class="inner-right-btn">
+      <ion-icon name="heart"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Wishlist</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="shop" class="inner-right-btn">
-      <ion-icon name="shirt"></ion-icon>
-      <ion-label *ngIf="showTabTitle">Shop</ion-label>
+    <ion-tab-button tab="carts" class="inner-right-btn">
+      <ion-icon name="cart"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Cart</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="account">

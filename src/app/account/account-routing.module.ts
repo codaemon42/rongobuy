@@ -7,6 +7,18 @@ const routes: Routes = [
   {
     path: '',
     component: AccountPage
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+  },
+  {
+    path: 'address',
+    loadChildren: () => import('./address/address.module').then( m => m.AddressPageModule)
+  },
+  {
+    path: 'balance',
+    loadChildren: () => import('./balance/balance.module').then( m => m.BalancePageModule)
   }
 ];
 

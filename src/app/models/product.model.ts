@@ -27,7 +27,7 @@ export interface Product {
         codAvailable: number;
         status: string;
         discountPrice: number;
-        skuModule: Sku[];
+        skuModule: Sku;
         deliveryModule: Delivery;
         returnAndWarrantyModule: [
             {

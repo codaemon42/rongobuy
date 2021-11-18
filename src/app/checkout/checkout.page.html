@@ -66,15 +66,18 @@
 
           <!-- ddd -->
         </form>
-        <div>
+        <div >
           <div class="payment-section">
-            <div class="order-review-section">
+            <div *ngIf="cartLoading" class="order-amount-section">
+              <ion-spinner color="warning"></ion-spinner>
+            </div>
+            <div *ngIf="!cartLoading" class="order-review-section">
               <div class="order-amount-section">
                 <div class="total-ordered-amount-text">
                   Sub-total
                 </div>
                 <div class="total-ordered-amount">
-                  BDT {{subTotal}}
+                  BDT {{cartDetails.data.subtotal}}
                 </div>
               </div>
 
@@ -83,7 +86,7 @@
                   Shipping cost
                 </div>
                 <div class="shipping-total">
-                  BDT {{selectedArea.cost}}
+                  BDT {{cartDetails.data.shippingTotal}}
                 </div>
               </div>
 
@@ -92,7 +95,7 @@
                   Grand Total
                 </div>
                 <div class="grand-total-amount">
-                  BDT {{grandTotal}}
+                  BDT {{cartDetails.data.grandTotal}}
                 </div>
               </div>
             </div>

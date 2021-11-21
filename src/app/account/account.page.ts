@@ -17,11 +17,12 @@ import { StorageService } from '../services/storage.service';
 export class AccountPage implements OnInit {
 
   isLogin = true;
+  enableResend = false;
   phoneNumber;
   loginEvent;
   referrer: string;
-  counter = 120;
-  refCounter = 120;
+  counter = 100;
+  refCounter = 100;
   timer;
   userLoggedIn = false;
   bgContent = 'https://media.rongobuy.com/p/product/wyg3ubxo4kmnq2h0d9i5fpascj16tv.png';
@@ -52,6 +53,7 @@ export class AccountPage implements OnInit {
   }
 
   onSendOTP(event) {
+    this.enableResend = false;
     this.loadingCtrl.create({message: 'Sending OTP ...', mode: 'ios'}).then(el=>el.present());
     console.log(event);
     this.loginEvent = event;
@@ -101,6 +103,7 @@ export class AccountPage implements OnInit {
   }
 
   onOTPResend() {
+    this.enableResend = false;
     console.log('resend');
     this.stopOTPCountdown();
     //this.startOTPCountdown();
@@ -123,6 +126,7 @@ export class AccountPage implements OnInit {
       console.log(this.counter);
       this.counter--;
       if(this.counter <= 0) {
+        this.enableResend = true;
         this.counter = this.refCounter;
         clearInterval(this.timer);
       }

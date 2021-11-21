@@ -1,7 +1,21 @@
-
-export interface Address {
-    id: boolean;
+export interface AddressRes {
+    success: boolean;
+    data: {
+      count: number;
+      perPage: number;
+      prevPage: number;
+      nextPage: number;
+      totalPage: number;
+      data: AddressSingle[];
+    };
+    message: string;
+}
+export interface AddressSingle {
+    id: number;
     customerId: boolean;
+    name: string;
+    phone: string;
+    email: string;
     address: string;
     division: string;
     city: string;
@@ -9,22 +23,23 @@ export interface Address {
     additional: string;
     type: string;
     default: string;
+    created_at: string;
+    updated_at: string;
 }
-
-export interface AddressRes {
+export interface AddressSingleRes {
     success: boolean;
-    data: {
-        id: boolean;
-        customerId: boolean;
-        address: string;
-        division: string;
-        city: string;
-        area: string;
-        additional: string;
-        type: string;
-        default: string;
-        created_at: string;
-        updated_at: string;
-    };
+    data: AddressSingle;
     message: string;
+}
+export interface AddressAdd {
+    name: string;
+    phone: string;
+    email: string;
+    address: string;
+    division: string;
+    city: string;
+    area: string;
+    additional: string;
+    type: string;
+    default: string;
 }

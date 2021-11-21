@@ -8,46 +8,10 @@
 
   <ion-grid *ngIf="!isDisplay" class="ion-no-padding">
     <ion-row>
-      <ion-col size="6" sizeSm="6" sizeMd="3" (click)="onSelectImage()">
+      <ion-col size="6" sizeSm="6" sizeMd="3" (click)="onSelectImage(cat.slug)" *ngFor="let cat of phoneCoverCatChild">
         <ion-card>
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/10/Cat_Iphone_12.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Iphone 12</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="6" sizeSm="6" sizeMd="3" (click)="onSelectImage()">
-        <ion-card class="ion-no-padding">
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/10/Cat_iphone_12_Pro.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Iphone 12 Pro</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="6" sizeSm="6" sizeMd="3" (click)="onSelectImage()">
-        <ion-card>
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2021/10/Cat_Iphone_13.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Iphone 13</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="6" sizeSm="6" sizeMd="3" (click)="onSelectImage()">
-        <ion-card>
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2021/10/Cat_Iphone_13.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Iphone 13</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-
-      <ion-col size="6" sizeSm="6" sizeMd="3" (click)="onSelectImage()">
-        <ion-card class="ion-no-padding">
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/10/Cat_iphone_12_Pro.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Iphone 12 Pro</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="6" sizeSm="6" sizeMd="3" (click)="onSelectImage()">
-        <ion-card>
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2021/10/Cat_Iphone_13.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Iphone 13</ion-card-subtitle>
+          <ion-img [src]="cat.image"></ion-img>
+          <ion-card-subtitle class="subtitle ion-text-center">{{cat.categoryName}}</ion-card-subtitle>
         </ion-card>
       </ion-col>
     </ion-row>
@@ -56,7 +20,7 @@
   <ion-grid *ngIf="isDisplay">
     <ion-row>
       <ion-col>
-        <app-phone-display [categoryImages]="phoneCovers" backgroundImage="../../../assets/phone-cover/iphone.png"></app-phone-display>
+        <app-phone-display [categoryImages]="phoneCovers" [backgroundImage]="backgroundImage" (selectedBackground)="onSelectProductModel($event)"></app-phone-display>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -43,8 +43,10 @@ export class AccountService {
 
   async logIn(token){
     this._userIsAuthenticated = true;
-    this.storeToken(token);
+    this._userToken = token;
+    //await this.storeToken(token);
     await this.storageService.set('_userIsAuthenticated', true);
+    await this.storageService.set('_userToken', token);
   }
 
   async logOut(){
@@ -53,6 +55,7 @@ export class AccountService {
   }
 
   async storeToken(token) {
+    await this.storageService.set('_userToken', token);
     await this.storageService.set('_userToken', token);
   }
 

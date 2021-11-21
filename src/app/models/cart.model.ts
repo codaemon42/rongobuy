@@ -40,6 +40,7 @@ export interface CartProduct {
     productId: number;
     productTitle: string;
     productImage: string;
+    backgroundImage: string;
     quantity: number;
     orginalPrice: number;
     countedPrice: number;

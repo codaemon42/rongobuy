@@ -8,51 +8,22 @@
 
   <ion-grid class="ion-no-padding">
     <ion-row>
-      <ion-col size="12" sizeSm="12" sizeMd="6" offsetMd="3">
-        <app-phone-selector (hideOverlay)="onHiddenOverlay($event)" (modelSelected)="onSelectModel($event)"></app-phone-selector>
+      <ion-col *ngIf="!phoneCoverCat">
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col (click)="onRoute()" size="3" sizeSm="3" sizeMd="3" >
+    <ion-row *ngIf="phoneCoverCat">
+      <!-- <ion-col size="12" sizeSm="12" sizeMd="6" offsetMd="3">
+        <app-phone-selector (hideOverlay)="onHiddenOverlay($event)" (modelSelected)="onSelectModel($event)"></app-phone-selector>
+      </ion-col> -->
+    </ion-row>
+    <ion-row *ngIf="phoneCoverCat">
+      <ion-col (click)="onRoute(brand.slug)" size="3" sizeSm="3" sizeMd="3" *ngFor="let brand of phoneCoverCat.child" >
         <ion-card>
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/04/apple.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Apple</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="3" sizeSm="3" sizeMd="3" >
-        <ion-card class="ion-no-padding">
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/04/huawei_logo.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Huawei</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="3" sizeSm="3" sizeMd="3" >
-        <ion-card>
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/04/mi_logo.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Xiaomi</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="3" sizeSm="3" sizeMd="3" >
-        <ion-card>
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/04/mi_logo.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Xiaomi</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-
-      <ion-col size="3" sizeSm="3" sizeMd="3" >
-        <ion-card class="ion-no-padding">
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/04/huawei_logo.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Huawei</ion-card-subtitle>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="3" sizeSm="3" sizeMd="3" >
-        <ion-card>
-          <ion-img src="https://www.yourprint.in/wp-content/uploads/2020/04/apple.jpg"></ion-img>
-          <ion-card-subtitle class="subtitle ion-text-center">Apple</ion-card-subtitle>
+          <ion-img [src]="brand.image"></ion-img>
+          <ion-card-subtitle class="subtitle ion-text-center">{{brand.categoryName}}</ion-card-subtitle>
         </ion-card>
       </ion-col>
     </ion-row>

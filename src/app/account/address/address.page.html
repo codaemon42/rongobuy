@@ -5,38 +5,44 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="tabs/home"></ion-back-button>
     </ion-buttons>
+
+    <ion-title class="ion-text-center">Address</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/', 'tabs', 'account', 'address', 'add-address']">
+        <ion-icon slot="icon-only" color="success" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
 
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="addressLoading">
       <ion-col size="12" sizeSm="12" sizeMd="6" offsetMd="3">
-        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-          <ion-input formControlName="name" type="text" placeholder="Full Name"></ion-input>
-          <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
-          <div class="birthday">
-            <ion-icon color="medium" name="calendar"></ion-icon>
-            <ion-datetime formControlName="birthDate" mode="ios" displayFormat="DD MMMM,YYYY" pickerFormat="DD MMM YYYY" placeholder="Select Birth date"></ion-datetime>
-          </div>
-          <ion-list class="gender">
-            <ion-radio-group formControlName="gender" mode="ios">
-              <ion-list-header>
-                <ion-label>Gender</ion-label>
-              </ion-list-header>
-
-              <ion-item lines="none">
-                <ion-label>Male</ion-label>
-                <ion-radio color="danger" slot="end" value="male"></ion-radio>
-              </ion-item>
-
-              <ion-item lines="none">
-                <ion-label>Female</ion-label>
-                <ion-radio color="danger" slot="end" value="female"></ion-radio>
-              </ion-item>
-            </ion-radio-group>
-          </ion-list>
-          <ion-button type="submit" class="update-btn" expand="full" color="success">Update</ion-button>
-        </form>
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!addressLoading">
+      <ion-col *ngFor="let address of addresses" size="12" sizeSm="12" sizeMd="6" offsetMd="3">
+        <ion-card [ngClass]="{'active': address.default==='1'}">
+          <ion-card-header class='card-header'>
+            {{address.type}}
+            <span *ngIf="address.default==='1'"> (Default Address) </span>
+            <ion-buttons>
+              <ion-button (click)="onEdit(address)" color="danger">
+                <ion-icon name="create"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-label>
+              <p>{{address.name}} : {{address.phone}}</p>
+              <p>{{address.address}}, {{address.city}}, {{address.area}}, {{address.division}}</p>
+            </ion-label>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -9,7 +9,7 @@ const routes: Routes = [
     component: PhoneCoverPage
   },
   {
-    path: 'phone-cover-detail',
+    path: 'phone-cover-detail/:slug',
     loadChildren: () => import('./phone-cover-detail/phone-cover-detail.module').then( m => m.PhoneCoverDetailPageModule)
   }
 ];

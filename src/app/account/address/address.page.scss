@@ -23,3 +23,19 @@
     box-shadow: 0 8px 8px #0000002b;
   }
 
+  .active {
+    border: 1px solid var(--ion-color-danger);
+  }
+
+.card-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.spinner{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

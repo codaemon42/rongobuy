@@ -7,7 +7,7 @@
     </ion-buttons>
   </ion-toolbar>
     <app-login *ngIf="isLogin && !userLoggedIn" (rbOTPSend)="onSendOTP($event)"></app-login>
-    <app-verify-otp *ngIf="!isLogin && !userLoggedIn" (rbOTPVerify)="onVerifyOTP($event)" (rbOTPResend)="onOTPResend()" [counter]="counter"></app-verify-otp>
+    <app-verify-otp *ngIf="!isLogin && !userLoggedIn" (rbOTPVerify)="onVerifyOTP($event)" (rbOTPResend)="onOTPResend()" [counter]="counter" [enableResend]="enableResend"></app-verify-otp>
     <div *ngIf="userLoggedIn" class="already-logged-in">
       <ion-grid class="ion-no-padding">
         <ion-row>

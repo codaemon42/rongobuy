@@ -24,12 +24,21 @@ export interface ProductListResponse {
 export class ProductsService {
 
   private _product = new BehaviorSubject<Product[]>(null);
+  private _selectedProductBackground = new BehaviorSubject<string>(null);
 
   constructor( private http: HttpClient) { }
 
 
   get products() {
     return this._product.asObservable();
+  }
+
+  get selectedProductBackground() {
+    return this._selectedProductBackground.asObservable();
+  }
+
+  addSelectedProductBackground(image) {
+    this._selectedProductBackground.next(image);
   }
 
   fetchProductsByCat(slug) {

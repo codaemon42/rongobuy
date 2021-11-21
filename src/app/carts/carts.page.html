@@ -10,7 +10,13 @@
       <ion-col size="12" sizeSm="6" sizeMd="6" sizeLg="4" *ngIf="cartDetails">
         <span *ngIf="cartDetails.success">
           <div class="card" *ngFor="let cartItem of cartDetails.data.product; let i = index">
-            <img [src]="cartItem.productImage">
+            <img [ngStyle]="{
+            'background-image': 'url('+cartItem.backgroundImage+')',
+            'background-size.%': 100,
+            'background-repeat': 'no-repeat',
+            'background-position-x.px': 0,
+            'background-position-y.px': 0
+            }" [src]="cartItem.productImage">
             <ion-label class="detail">
               <h3 class="title">{{ cartItem.productTitle }}</h3>
               <p class="price">{{ cartItem.discountedPrice }}</p>

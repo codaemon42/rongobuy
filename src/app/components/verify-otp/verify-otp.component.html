@@ -20,10 +20,10 @@
               containerClass: 'otp-wrapper'
               }"></ng-otp-input>
               <div class="resend-otp">
-                <ion-button (click)="rbOTPResend.emit()" size="small">resend</ion-button>
-                <div class="counter">OTP expires in <span>{{counter}}</span> seconds</div>
+                <div class="counter">OTP resend in <span>{{counter}}</span> seconds</div>
               </div>
-              <ion-button (click)="onVerifyOTP()" [disabled]="!invalid" type="submit" color="warning" expand="block">Verify OTP</ion-button>
+              <ion-button *ngIf="enableResend" (click)="rbOTPResend.emit()" color="primary" expand="block">resend</ion-button>
+              <ion-button *ngIf="!enableResend" (click)="onVerifyOTP()" [disabled]="!invalid" type="submit" color="warning" expand="block">Verify OTP</ion-button>
           <!-- <form [formGroup]="otpForm" (ngSubmit)="onVerifyOTP()">
             <ion-note color="danger" slot="end" *ngIf="invalid" >{{ message }}</ion-note>
             <ion-input maxlength="6" (ionChange)="inputChanged()" type="text" formControlName="code" class="ion-margin-bottom ion-text-center" placeholder="OTP Code"></ion-input>

@@ -7,6 +7,7 @@ import {MenuItem} from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Product } from '../models/product.model';
 import { ProductsService } from '../services/products.service';
+import { Category } from '../models/category.model';
 
 @Component({
   selector: 'app-category',
@@ -41,6 +42,12 @@ export class CategoryPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.categoryService.fetchCategories().subscribe();
+    this.categoryService.categories.subscribe(categories=>{
+      this.items = this.mapCats(categories);
+      this.menuIterator(this.items);
+      console.log('cat.items : ', this.items);
+    });
     this.categoryImages = this.categoryService.images;
     this.productSub = this.productsService.products.subscribe(res => {
       this.products = res;
@@ -48,106 +55,26 @@ export class CategoryPage implements OnInit, OnDestroy {
     this.productsService.fetchProductsByCat('Bags-and-Travel').subscribe(()=>{
       this.isLoading = false;
     });
-    this.items = [
-            {
-              id: 'categories',
-              label: 'Categories',
-              escape: false
-            },
-            {
-              id: 'men',
-              label: 'Men',
-              escape: false,
-              items: [{
-                      id: 't-shirt',
-                      label: 'T-Shirt',
-                      items: [
-                          {
-                            id: 'customized',
-                            label: 'Customized',
-                          },
-                          {id: 'pre-made', label: 'Pre Made'}
-                      ]
-                  },
-                  {id: 'shirt', label: 'Shirt'},
-                  {separator: true},
-                  {id: 'pant', label: 'Pant'}
-              ]
-            },
-            {
-              id: 'women',
-              label: 'Women',
-              escape: false,
-              items: [{
-                      id: 't-shirt',
-                      label: 'T-Shirt',
-                      items: [
-                          {
-                            id: 'customized',
-                            label: 'Customized'
-                          },
-                          {id: 'pre-made', label: 'Pre Made'}
-                      ]
-                  },
-                  {id: 'shirt', label: 'Shirt'},
-                  {separator: true},
-                  {id: 'pant', label: 'Pant'}
-              ]
-          },
-            {
-              id: 'accessories',
-              label: 'Accessories',
-              escape: false,
-              items: [{
-                      id: 'phone-cover',
-                      label: 'Phone Cover',
-                      command: (event) => {
-                        this.menuHandler(event.item);
-                      },
-                      items: [
-                          {
-                            id: 'iphone',
-                            label: 'iphone',
-                            command: (event) => this.menuHandler(event.item)
-                          },
-                          {id: 'pre-made', label: 'Pre Made', command: (event) => this.menuHandler(event.item)}
-                      ]
-                  },
-                  {id: 'shirt', label: 'Shirt', command: (event) => this.menuHandler(event.item)},
-                  {separator: true},
-                  {id: 'pant', label: 'Pant', command: (event) => this.menuHandler(event.item)}
-              ]
-          }
-      ];
-      this.menuIterator(this.items);
-
-    // this.miniProducts = [
-    //   {
-    //     id: '2',
-    //     title: 'Product One',
-    //     slug: 'product-slug-1',
-    //     featured_image: this.pImage,
-    //   },
-    //   {
-    //     id: '2',
-    //     title: 'Product One',
-    //     slug: 'product-slug-2',
-    //     featured_image: this.pImage,
-    //   },
-    //   {
-    //     id: '2',
-    //     title: 'Product One',
-    //     slug: 'product-slug-3',
-    //     featured_image: this.pImage,
-    //   },
-    //   {
-    //     id: '2',
-    //     title: 'Product One',
-    //     slug: 'product-slug-4',
-    //     featured_image: this.pImage,
-    //   },
-    // ];
   }
+
+mapCats(categories: Category[]) {
+  const cats = [];
+  categories.map(cat=>{
+    const category = {
+      id: cat.slug,
+      label: cat.categoryName,
+      escape: false,
+    };
+    if(cat.child.length > 0) {
+      category['items'] = this.mapCats(cat.child);
+      cats.push(category);
+      return cats;
+    } else {
+      cats.push(category);
+    }
+  });
+  return cats;
+}
 
   menuIterator(items) {
     items.map(item=>{
@@ -183,7 +110,7 @@ export class CategoryPage implements OnInit, OnDestroy {
   }
   fetchProductByCat(slug) {
     console.log('naim');
-    this.productsService.fetchProductsByCat('Bags-and-Travel').subscribe(()=>{
+    this.productsService.fetchProductsByCat(slug).subscribe(()=>{
       this.isLoading = false;
       return true;
     });
@@ -207,3 +134,102 @@ export class CategoryPage implements OnInit, OnDestroy {
     this.productSub.unsubscribe();
   }
 }
+// this.items = [
+    //         {
+    //           id: 'categories',
+    //           label: 'Categories',
+    //           escape: false
+    //         },
+    //         {
+    //           id: 'men',
+    //           label: 'Men',
+    //           escape: false,
+    //           items: [{
+    //                   id: 't-shirt',
+    //                   label: 'T-Shirt',
+    //                   items: [
+    //                       {
+    //                         id: 'customized',
+    //                         label: 'Customized',
+    //                       },
+    //                       {id: 'pre-made', label: 'Pre Made'}
+    //                   ]
+    //               },
+    //               {id: 'shirt', label: 'Shirt'},
+    //               {separator: true},
+    //               {id: 'pant', label: 'Pant'}
+    //           ]
+    //         },
+    //         {
+    //           id: 'women',
+    //           label: 'Women',
+    //           escape: false,
+    //           items: [{
+    //                   id: 't-shirt',
+    //                   label: 'T-Shirt',
+    //                   items: [
+    //                       {
+    //                         id: 'customized',
+    //                         label: 'Customized'
+    //                       },
+    //                       {id: 'pre-made', label: 'Pre Made'}
+    //                   ]
+    //               },
+    //               {id: 'shirt', label: 'Shirt'},
+    //               {separator: true},
+    //               {id: 'pant', label: 'Pant'}
+    //           ]
+    //       },
+    //         {
+    //           id: 'accessories',
+    //           label: 'Accessories',
+    //           escape: false,
+    //           items: [{
+    //                   id: 'phone-cover',
+    //                   label: 'Phone Cover',
+    //                   command: (event) => {
+    //                     this.menuHandler(event.item);
+    //                   },
+    //                   items: [
+    //                       {
+    //                         id: 'iphone',
+    //                         label: 'iphone',
+    //                         command: (event) => this.menuHandler(event.item)
+    //                       },
+    //                       {id: 'pre-made', label: 'Pre Made', command: (event) => this.menuHandler(event.item)}
+    //                   ]
+    //               },
+    //               {id: 'shirt', label: 'Shirt', command: (event) => this.menuHandler(event.item)},
+    //               {separator: true},
+    //               {id: 'pant', label: 'Pant', command: (event) => this.menuHandler(event.item)}
+    //           ]
+    //       }
+    //   ];
+      // this.menuIterator(this.items);
+
+    // this.miniProducts = [
+    //   {
+    //     id: '2',
+    //     title: 'Product One',
+    //     slug: 'product-slug-1',
+    //     featured_image: this.pImage,
+    //   },
+    //   {
+    //     id: '2',
+    //     title: 'Product One',
+    //     slug: 'product-slug-2',
+    //     featured_image: this.pImage,
+    //   },
+    //   {
+    //     id: '2',
+    //     title: 'Product One',
+    //     slug: 'product-slug-3',
+    //     featured_image: this.pImage,
+    //   },
+    //   {
+    //     id: '2',
+    //     title: 'Product One',
+    //     slug: 'product-slug-4',
+    //     featured_image: this.pImage,
+    //   },
+    // ];

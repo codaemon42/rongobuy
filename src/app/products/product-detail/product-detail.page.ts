@@ -1,3 +1,4 @@
+import { WishlistService } from './../../services/wishlist/wishlist.service';
 import { SkuPriceList } from './../../models/sku.model';
 import { AccountService } from './../../account/account.service';
 import { Subscription } from 'rxjs';
@@ -16,6 +17,9 @@ import { AnimationController, IonContent, NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { CartService } from '../../services/cart.service';
+import { ToastService } from 'src/app/services/controllers/toast.service';
+import { ProductsService } from 'src/app/services/products.service';
+import { Wishlist } from 'src/app/models/wishlist.model';
 
 
 @Component({
@@ -53,13 +57,22 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   cartQtySub: Subscription;
 
+  disableCartButtons = false;
+
+  backGroundImage = null;
+
+  wishlistColor = false;
+
   constructor(
     private animationCtrl: AnimationController,
     private nav: NavController,
     private cartService: CartService,
+    private wishlistService: WishlistService,
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
-    private accountService: AccountService
+    private productsService: ProductsService,
+    private accountService: AccountService,
+    private toastService: ToastService
     ) { }
 
 
@@ -70,6 +83,11 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
       console.log('activated route : ', data.slug);
       this.getSingleProduct(data.slug);
     });
+    this.productsService.selectedProductBackground.subscribe(res=>{
+      this.backGroundImage = res;
+      console.log('this.backGroundImage : ', this.backGroundImage);
+    });
+
     console.log(' on init');
 
     this.reviews = [
@@ -184,6 +202,18 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     this.nav.navigateForward('carts');
   }
 
+  addToWishlist() {
+    this.wishlistColor = !this.wishlistColor;
+    this.wishlistService.addToWishlist(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage).subscribe(res=>{
+      if(res.success){
+        this.toastService.toast('added to wishlist', 'success', 2000);
+      } else {
+        this.wishlistColor = !this.wishlistColor;
+        this.toastService.toast(res.message, 'danger', 2000);
+      }
+    });
+  }
+
   genarateSKU(skuModule) {
     const productSKUPropertyList = skuModule.productSKUPropertyList; // Attributes
     const skuPriceList = skuModule.skuPriceList; // products
@@ -194,27 +224,70 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   getAttr(attrIndex, attrValIndex, propertyValueId) {
     this.selectedAttr = [];
-    const selectedPropertyValIds = [];
-    this.singleProduct.skuModule.productSKUPropertyList.map((property, index)=>{
-      if(attrIndex === index){
-        property.skuPropertyValues.map((value, valIndex)=>{
-          value['active']=false;
-          if(valIndex === attrValIndex && value.propertyValueId === propertyValueId) {
-            value['active']=true;
-            selectedPropertyValIds.push(value.propertyValueId);
+    this.checkAvailability(attrIndex, attrValIndex, propertyValueId).then(resp=>{
+      const promised: any = resp;
+      if(promised.success){
+        this.disableCartButtons = false;
+        this.singleProduct.skuModule.productSKUPropertyList.map((property, index)=>{
+          if(attrIndex === index){
+            property.skuPropertyValues.map((value, valIndex)=>{
+              value['active']=false;
+              if(valIndex === attrValIndex && value.propertyValueId === propertyValueId) {
+                value['active']=true;
+              }
+            });
           }
         });
+            console.log('selectedPropertyValIds : ', promised.selectedPropertyValIds);
+            this.getSelectedProduct(promised.selectedPropertyValIds);
+            console.log('selected attr  :', this.singleProduct.skuModule.productSKUPropertyList);
+
       } else {
-        property.skuPropertyValues.map((value, valIndex)=>{
-          if(value['active']) {
-            selectedPropertyValIds.push(value.propertyValueId);
-          }
+        // toast
+        this.disableCartButtons = true;
+        this.toastService.toast('sorry this variation not available...', 'danger', 2000);
+      }
+    });
+
+  }
+
+  checkAvailability(attrIndex, attrValIndex, propertyValueId) {
+    return new Promise( resolve=>{
+      const selectedPropertyValIds = [];
+      this.singleProduct.skuModule.productSKUPropertyList.map((property, index)=>{
+        if(attrIndex === index){
+          property.skuPropertyValues.map((value, valIndex)=>{
+              value['active']=false;
+            if(valIndex === attrValIndex && value.propertyValueId === propertyValueId) {
+              value['active']=true;
+              selectedPropertyValIds.push(value.propertyValueId);
+            }
+          });
+        } else {
+          property.skuPropertyValues.map((value, valIndex)=>{
+            if(value['active']) {
+              selectedPropertyValIds.push(value.propertyValueId);
+            }
+          });
+        }
+      });
+
+      const propValIds = selectedPropertyValIds.toString();
+
+      const data = this.singleProduct.skuModule.skuPriceList.filter(skuProduct=> skuProduct.skuPropValIds === propValIds);
+      if(data.length > 0) {
+        resolve({
+          success: true,
+          selectedPropertyValIds: propValIds
+        });
+      } else {
+        resolve({
+          success: false,
+          selectedPropertyValIds: propValIds
         });
       }
     });
-    console.log('selectedPropertyValIds : ', selectedPropertyValIds.toString());
-  this.getSelectedProduct(selectedPropertyValIds.toString());
-    console.log('selected attr  :', this.singleProduct.skuModule.productSKUPropertyList);
+
   }
 
   getSelectedProduct(propValIds) {
@@ -271,7 +344,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     this.totalCartQty += 1;
     console.log('product-detail cartAdder');
     const skuId = `${this.singleProduct.id}-green`;
-    this.cartService.addTOCart(this.singleProduct.id, this.selectedSKUProduct.SkuId).subscribe();
+    this.cartService.addTOCart(this.singleProduct.id, this.selectedSKUProduct.SkuId, 1, this.backGroundImage).subscribe();
+    console.log(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage);
   }
 
 

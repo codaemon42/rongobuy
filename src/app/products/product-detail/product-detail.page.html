@@ -5,6 +5,12 @@
       <ion-badge class="cart-badge" color="warning">{{ totalCartQty }}</ion-badge>
     </ion-fab-button>
   </ion-fab>
+
+  <ion-fab style="bottom: 60px" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="light" (click)="addToWishlist()">
+      <ion-icon [color]="wishlistColor ? 'danger' : 'medium'" name="heart"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   <ion-grid class="fullscreen ion-no-padding">
     <ion-toolbar>
       <ion-buttons slot="start">
@@ -24,11 +30,23 @@
         <ion-slides pager="true" [options]="slideOpts">
           <!-- <ion-slide *ngFor="let image of singleProduct.images"> -->
           <ion-slide>
-            <ion-img [src]="singleProduct.mainImage"></ion-img>
+            <img
+              [ngStyle]="{
+                'margin-top.px': 10,
+                'border-radius.px': 10,
+                'box-shadow': '0px 8px 8px rgba(4, 4, 4, 0.11)',
+                'max-height.%': 90,
+                'background-image': 'url('+backGroundImage+')',
+                'background-size.%': 100,
+                'background-repeat': 'no-repeat',
+                'background-position-x.px': 0,
+                'background-position-y.px': 0
+              }"
+             [src]="singleProduct.mainImage">
           </ion-slide>
-          <ion-slide>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/_aCeAMrh-wo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </ion-slide>
+          <!-- <ion-slide>
+
+          </ion-slide> -->
 
         </ion-slides>
       </ion-col>
@@ -58,6 +76,7 @@
             <!-- <div> propertyValueId: {{attrValues.propertyValueId}} </div>
             <div> propertyValueName: {{attrValues.propertyValueName}} </div> -->
               <ion-img
+
                 style="width: 50px; height:50px; border: 1px solid rgba(51, 51, 51, 0.363); border-radius: 5px;"
                 [src]="attrValues.skuPropertyImagePathSmall"></ion-img>
                 <div class="attrValName">{{attrValues.propertyValueName}}</div>
@@ -104,6 +123,14 @@
     </ion-row>
   </ion-grid>
 
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" sizeSm="12" sizeMd="6">
+        <iframe width="100%" height="315" src="https://www.youtube.com/embed/_aCeAMrh-wo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 
 
   </ion-grid>
@@ -111,11 +138,11 @@
   <ion-grid class="ion-no-padding">
     <ion-row class="actions">
       <ion-col size="6">
-          <ion-button color="warning" expand="full" class="buy-now" (click)="buyNow()">Buy Now</ion-button>
+          <ion-button [disabled]="disableCartButtons" color="warning" expand="full" class="buy-now" (click)="buyNow()">Buy Now</ion-button>
       </ion-col>
       <ion-col size="6">
           <div class="square"></div>
-          <ion-button color="danger" expand="full" class="add-to-cart" (click)="addToCart()">Add to cart</ion-button>
+          <ion-button [disabled]="disableCartButtons" color="danger" expand="full" class="add-to-cart" (click)="addToCart()">Add to cart</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

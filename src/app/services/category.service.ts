@@ -1,9 +1,16 @@
+import { environment } from './../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { Category } from '../models/category.model';
+import { take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
+
+  _categories = new BehaviorSubject<Category[]>([]);
 
   images = [
     'https://images.unsplash.com/photo-1612012460576-5d51b5b04b00?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8d2FsbHBhcGVyJTIwZm9yJTIwbW9iaWxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80',
@@ -18,5 +25,28 @@ export class CategoryService {
     'https://i.pinimg.com/originals/76/35/04/763504bd750c39bd9f3a053c70ebcf1b.jpg'
   ];
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
+
+  get categories() {
+    return this._categories.asObservable();
+  }
+
+  fetchCategories() {
+    return this.http.get<Category[]>(`${environment.url.base}/all-category`).pipe(
+      take(1),
+      tap(categories=>{
+        console.log('categories : ', categories);
+        this._categories.next(categories);
+      })
+    );
+  }
+
+  fetchChildCat(parentId) {
+    return this.http.post<{success: boolean;data: Category[];message: string}>(`${environment.url.base}/get-category`,{parentId}).pipe(
+      take(1),
+      tap(res=>res.data)
+    );
+  }
 }

@@ -27,6 +27,10 @@ export class OrderService {
     return this.http.get<OrdersRes>(`${environment.url.base}/order/all?status=pending`, headerOps).pipe(
       take(1),
       tap(orderRes => {
+        const data: any = orderRes.data;
+        if(!orderRes.success && data === 401) {
+          this.accountService.logOut();
+        }
         const orders = orderRes.data.data;
         this._orders.next(orders);
       })

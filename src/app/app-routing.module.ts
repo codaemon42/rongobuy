@@ -54,7 +54,16 @@ const routes: Routes = [
     path: 'wishlist',
     loadChildren: () => import('./wishlist/wishlist.module').then( m => m.WishlistPageModule),
     canActivate:[AccountGuard]
+  },
+  {
+    path: 'account',
+    loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule)
+  },
+  {
+    path: 'custom-checkout',
+    loadChildren: () => import('./custom-checkout/custom-checkout.module').then( m => m.CustomCheckoutPageModule)
   }
+
   // {
   //   path: 'home',
   //   loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)

@@ -16,3 +16,10 @@ ion-card{
     font-size: 14px;
   }
 }
+
+.spinner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

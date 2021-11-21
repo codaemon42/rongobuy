@@ -1,38 +1,58 @@
-import { Component, OnInit } from '@angular/core';
+import { EditAddressPage } from './edit-address/edit-address.page';
+import { ModalController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { AddressSingle } from 'src/app/models/address.model';
+import { AddressService } from 'src/app/services/address/address.service';
 
 @Component({
   selector: 'app-address',
   templateUrl: './address.page.html',
   styleUrls: ['./address.page.scss'],
 })
-export class AddressPage implements OnInit {
-  profileForm: FormGroup;
+export class AddressPage implements OnInit, OnDestroy {
 
-  defaultGender = 'female';
+  addresses: AddressSingle[] = [];
+  addressSub: Subscription;
+  addressLoading = true;
 
-  constructor() { }
+  constructor(
+    private addressService: AddressService,
+    private modalCtrl: ModalController
+  ) { }
 
   ngOnInit() {
-    this.profileForm = new FormGroup({
-      name: new FormControl(null, {
-        updateOn: 'change'
-      }),
-      email: new FormControl(null,{
-        updateOn: 'change',
-      }),
-      birthDate: new FormControl(null, {
-        updateOn: 'change'
-      }),
-      gender: new FormControl(this.defaultGender, {
-        updateOn: 'change'
-      })
+    this.getAddress();
+    this.addressSub = this.addressService.address.subscribe(addresses=>{
+      this.addresses = addresses;
     });
   }
 
-  updateProfile() {
-    console.log(this.profileForm.value);
+  getAddress() {
+    this.addressLoading = true;
+    this.addressService.fetchAddress().subscribe(res=>{
+      this.addressLoading = false;
+    });
   }
 
+  onEdit(address) {
+    this.modalCtrl.create({
+      component: EditAddressPage,
+      componentProps: {
+        defaultValues: address
+      }
+    }).then(el => el.present());
+  }
+
+
+  // ionViewWillEnter(){
+  //   this.getAddress();
+  // }
+
+  ngOnDestroy() {
+    this.addressSub.unsubscribe();
+
+  }
 
 }

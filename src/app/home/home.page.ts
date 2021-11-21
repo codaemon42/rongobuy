@@ -1,3 +1,4 @@
+import { Category } from 'src/app/models/category.model';
 import { HomepageService } from './../services/homepage/homepage.service';
 import { AuthService } from './../services/auth.service';
 import { Device } from '@ionic-native/device/ngx';
@@ -7,6 +8,7 @@ import { ColorsService } from '../services/colors/colors.service';
 import { BreakpointObserverService } from '../services/breakpoint.service';
 import { IonSlides, Platform } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
+import { CategoryService } from '../services/category.service';
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable curly */
 /* eslint-disable object-shorthand */
@@ -35,6 +37,8 @@ export class HomePage implements OnInit {
   colors: any[];
   mobileView = true;
   showSearch = false;
+
+  phoneCategories: Category[];
   constructor(
     private device: Device,
     private platform: Platform,
@@ -42,6 +46,7 @@ export class HomePage implements OnInit {
     private colorsService: ColorsService,
     private brkPointService: BreakpointObserverService,
     private homepageService: HomepageService,
+    private categoryService: CategoryService
   ) {
 
    }
@@ -56,6 +61,10 @@ export class HomePage implements OnInit {
     this.setColors();
     this.setHomePage();
     this.sizeController();
+
+    this.categoryService.fetchChildCat(4).subscribe(res=>{
+      this.phoneCategories = res.data;
+    });
     //this.colorsService.getColors();
 
     //this.authService.loginWithOtp();

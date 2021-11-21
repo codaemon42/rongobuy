@@ -5,4 +5,6 @@ export interface Category {
   slug: string;
   leaf: number;
   var: number;
+  image: string;
+  child: Category[];
 }

@@ -54,6 +54,10 @@ export class CartService {
       take(1),
       tap(cartRes => {
         console.log('cartRes', cartRes);
+        const data: any = cartRes.data;
+        if(!cartRes.success && data === 401) {
+          this.accountService.logOut();
+        }
         // this._cartObj.next(cartRes.data.product);
         this._cartDetails.next(cartRes);
         this._cartTotalItems.next(cartRes.data.totalItem ? cartRes.data.totalItem : 0);
@@ -78,7 +82,9 @@ export class CartService {
             if(res.id === id) {
               // detail.data.subtotal
               console.log('res id : ', res.id);
-              details.data.subtotal = details.data.subtotal ? details.data.subtotal-(res.discountedPrice) : 0;
+              details.data.subtotal = details.data.subtotal ? details.data.subtotal-res.discountedPrice : 0;
+              details.data.grandTotal = details.data.grandTotal ? details.data.grandTotal-res.discountedPrice : 0;
+              console.log('grand total change : ', details);
               const nextTotalItems = details.data.totalItem ? details.data.totalItem-res.quantity : 0;
               details.data.totalItem = nextTotalItems;
               this._cartTotalItems.next(nextTotalItems);
@@ -92,34 +98,29 @@ export class CartService {
           console.log('next deleted details : ', details);
           this._cartDetails.next(details);
         });
-    return this.http.post<CartAddRes>(`${environment.url.base}/cart/delete/${id}`, null, httpOptions).pipe(
-      take(1),
-      tap(newCartItemRes => {
-          //this.fetchCartObj().subscribe();
+        return this.http.post<CartAddRes>(`${environment.url.base}/cart/delete/${id}`, null, httpOptions).pipe(
+          take(1),
+          tap(newCartItemRes => {
+              //this.fetchCartObj().subscribe();
 
-      }),
-    );
+          }),
+        );
   }
 
-  addTOCart(productId, skuId, quantity=1){
+  addTOCart(productId, skuId, quantity=1, backgroundImage=null){
     const token = this.accountService.userToken;
     const httpOptions = {
       headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`})
     };
-    return this.http.post<any>(`${environment.url.base}/cart/add`, {productId, skuId, quantity}, httpOptions).pipe(
+    return this.http.post<any>(`${environment.url.base}/cart/add`, {productId, skuId, quantity, backgroundImage}, httpOptions).pipe(
       take(1),
       tap(newCartItemRes => {
         let details;
         this.cartDetails.pipe(take(1)).subscribe(detail => {
           details = detail;
           console.log('cart added : ', detail);
-
-          // const cartProduct = detail.data.product.filter(res=> res.productId === productId);
-          // console.log('cartProduct : ', cartProduct);
-          // const unitPrice = (cartProduct[0].discountedPrice/cartProduct[0].quantity);
-          // details.data.subtotal += unitPrice;
 
           details.data.product.concat(newCartItemRes.data);
 
@@ -131,36 +132,6 @@ export class CartService {
         });
       }),
     );
-    // let genericId;
-    // const newCart = new Cart(
-    //   null,
-    //   cartItem.product_id,
-    //   cartItem.product_title,
-    //   cartItem.product_description,
-    //   cartItem.unitPrice,
-    //   cartItem.qty,
-    //   cartItem.mainImage,
-    //   cartItem.image
-    // );
-    // //console.log(newCart);
-    // let cart;
-    // return this.cartObj.pipe(
-    //   switchMap(resData => {
-    //     cart = resData;
-    //     genericId = Math.round(Math.random()*10);
-    //     return this.cartObj;
-    //   }),
-    //   take(1),
-    //   delay(2000),
-    //   tap( cartItems => {
-    //     newCart.id = genericId;
-    //     this._cartObj.next(cartItems.concat(newCart));
-    //   })
-    // );
-    // .subscribe(data => {
-    //   cart = data;
-    // });
-      // return this._cartObj.next(cart.concat(newCart));
   }
 
 }

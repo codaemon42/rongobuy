@@ -10,6 +10,7 @@ export class VerifyOtpComponent implements OnInit {
   @Output() rbOTPVerify = new EventEmitter<{success: boolean; code: string}>();
   @Output() rbOTPResend = new EventEmitter();
   @Input() counter;
+  @Input() enableResend;
   @ViewChild('ngOtpInput') ngOtpInputRef: any;
   invalid = false;
   message: string;

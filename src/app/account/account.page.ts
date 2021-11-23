@@ -54,14 +54,14 @@ export class AccountPage implements OnInit {
 
   onSendOTP(event) {
     this.enableResend = false;
-    this.loadingCtrl.create({message: 'Sending OTP ...', mode: 'ios'}).then(el=>el.present());
     console.log(event);
     this.loginEvent = event;
     this.phoneNumber = event.phone;
     if(event.success) {
+      this.loadingCtrl.create({message: 'Sending OTP ...', mode: 'ios'}).then(el=>el.present());
       this.authService.loginWithOtp(event.phone).then( res =>{
-        this.loadingCtrl.dismiss();
-        const resp: any = res;
+          const resp: any = res;
+          this.loadingCtrl.dismiss();
         if(resp.success) {
           this.toastService.toast(`OTP has been sent to ${event.phone}`, 'success', 2000);
           console.log('success login submit');
@@ -76,7 +76,7 @@ export class AccountPage implements OnInit {
       });
     } else {
       this.isLogin = true;
-      this.toastService.toast('invalid phone number', undefined, 2000);
+      this.toastService.toast('invalid phone number', 'danger', 2000);
     }
   }
 

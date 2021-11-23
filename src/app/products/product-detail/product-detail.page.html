@@ -60,7 +60,7 @@
       <ion-col size="6" class="ion-text-right ion-padding-right" style="height:min-content">
         <ion-chip color="success" class="stock">In stock</ion-chip>
         <div class="rating">
-          <p-rating [(ngModel)]="rating" readonly="true" [cancel]="false"></p-rating>
+          <p-rating [(ngModel)]="singleProduct.review.avarage" [readonly]="true" [cancel]="false"></p-rating>
         </div>
       </ion-col>
       <ion-col>
@@ -103,7 +103,7 @@
                     <ion-icon name="person"></ion-icon>{{ review.user_name }}
                   </div>
                   <div class="ratinng">
-                    <p-rating [(ngModel)]="review.rating" readonly="true" [cancel]="false"></p-rating>
+                    <p-rating [(ngModel)]="review.rating" [readonly]="true" [cancel]="false"></p-rating>
                   </div>
                 </div>
 

@@ -7,6 +7,13 @@ ion-content{
       --background: rgb(255, 252, 244);
     }
 
+    .spinner{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
 
     .card{
       display: flex;

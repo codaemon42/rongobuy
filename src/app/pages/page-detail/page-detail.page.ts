@@ -36,15 +36,16 @@ export class PageDetailPage implements OnInit {
 
   // content loading method
   loadContent(slug) {
+    this.pageService.fetchPage(slug).subscribe((data)=>{
+      console.log('fetch : ', data);
+    });
     this.pageService.page.subscribe(data=>{
       this.page = data;
       console.log('page-detail : ',this.page);
       document.getElementById('page-content').innerHTML = this.page.content;
     });
 
-    this.pageService.fetchPage(slug).subscribe((data)=>{
-      console.log('fetch : ', data);
-    });
+
   }
 
   // app header methods

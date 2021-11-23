@@ -15,12 +15,23 @@
         </ion-fab-button>
       </ion-fab>
 
-  <!-- slider banner section -->
-	<ion-slides pager="true" scrollbar="true" [options]="slideOpts">
-		<ion-slide *ngFor="let slide of sliderEl;let i=index" (click)="sliderNavigate(i)">
-			<ion-img src="../../assets/slides/one.jpg"></ion-img>
-		</ion-slide>
-	</ion-slides>
+  <!-- slider 1 section -->
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col *ngIf="sliderEl">
+        <ion-slides [ngClass]="{'slider-margin': !mobileView}" pager="true" scrollbar="true" [options]="slideOpts">
+          <ion-slide *ngFor="let slide of sliderEl.sectioncontent;let i=index" (click)="sliderNavigate(i)">
+            <ion-img [src]="slide.imageUrl+'_1500x600.jpg'"></ion-img>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+      <ion-col *ngIf="!sliderEl">
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 	<!-- <ion-list>
 		<ion-item-sliding>
@@ -56,6 +67,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
   <ion-grid *ngIf="mobileView">
     <ion-row>
       <ion-col>
@@ -77,15 +89,15 @@
   <!-- category sections -->
   <ion-grid>
     <ion-row>
-      <ion-col class="poster-wrapper" size="4">
+      <ion-col [routerLink]="['/', 'phone-customizer']" class="poster-wrapper" size="4">
         <ion-img src="../../assets/bg/poster.png"></ion-img>
         <ion-label class="poster-label">Customize</ion-label>
       </ion-col>
-      <ion-col class="poster-wrapper" size="4">
+      <ion-col [routerLink]="['/', 'category', 'phone-cover']" class="poster-wrapper" size="4">
         <ion-img src="../../assets/bg/poster.png"></ion-img>
         <ion-label class="poster-label"> Men Cover </ion-label>
       </ion-col>
-      <ion-col class="poster-wrapper" size="4">
+      <ion-col [routerLink]="['/', 'category', 'phone-cover']" class="poster-wrapper" size="4">
         <ion-img src="../../assets/bg/poster.png"></ion-img>
         <ion-label class="poster-label"> Women Cover </ion-label>
       </ion-col>
@@ -102,6 +114,7 @@
         <ion-label class="ion-text-center" color="dark">Starts from 299 Taka</ion-label>
       </ion-col>
     </ion-row>
+
     <ion-row>
       <ion-col size="11" offset="0.5">
         <ion-slides #categorySlide class="cat-slider" pager="true" scrollbar="false" [options]="catSlider" (ionSlidesDidLoad)="catSliderLoaded($event)" (ionSlideNextStart)="catSliderLoaded($event)">
@@ -159,13 +172,6 @@
   </ion-grid>
   <!-- Popular category --/>
 
-  <!-- <ion-grid>
-    <ion-row>
-
-    </ion-row>
-  </ion-grid> -->
-
-
   <!-- product section -->
     <!-- skeleton -->
   <div *ngIf="!miniProducts">
@@ -175,65 +181,194 @@
       </div>
     </div>
   </div>
+
+
+  <!-- slider 2 section -->
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngIf="sliderEl2" size="11" offset="0.5">
+        <ion-slides class="cat-slider-2" pager="true" scrollbar="false" [options]="catSlider">
+          <ion-slide *ngFor="let slide of sliderEl2.sectioncontent; let i = index">
+            <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
+              <ion-img [src]="slide.imageUrl"></ion-img>
+            </ion-card>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+      <ion-col *ngIf="!sliderEl2">
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- banner 3:1 -->
+  <div *ngIf="banner" class="banner31-containter">
+    <div *ngIf="banner.isActive" class="banner31-row">
+      <div class="banner31-col-60">
+        <img [src]="banner.sectioncontent[0].imageUrl">
+      </div>
+      <div class="banner31-col-40">
+        <img [src]="banner.sectioncontent[1].imageUrl">
+        <img [src]="banner.sectioncontent[2].imageUrl">
+      </div>
+    </div>
+  </div>
+  <!-- <ion-grid *ngIf="banner">
+    <ion-row *ngIf="banner.isActive">
+      <ion-col size="8" style="padding: 10px 0">
+        <img [src]="banner.sectioncontent[0].imageUrl">
+      </ion-col>
+      <ion-col size="4">
+        <ion-row class="ion-no-padding">
+          <ion-col class="ion-no-padding">
+            <img [src]="banner.sectioncontent[1].imageUrl">
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-no-padding">
+          <ion-col class="ion-no-padding">
+            <img [src]="banner.sectioncontent[2].imageUrl">
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid> -->
+  <ion-grid *ngIf="!banner">
+    <ion-row>
+      <ion-col>
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- banner 2 section -->
   <ion-grid class="ion-no-padding">
     <ion-row>
-        <ion-col size="12">
-          <ion-img src="https://tipsmake.com/data/images/collection-of-the-most-beautiful-fashion-banners-picture-11-dtRdChJbJ.jpg"></ion-img>
-        </ion-col>
+      <ion-col *ngIf="banner2" size="11" offset="0.5">
+        <ion-slides pager="true" scrollbar="false" [options]="catSlider2">
+          <ion-slide *ngFor="let slide of banner2.sectioncontent; let i = index">
+            <ion-card class="ion-no-margin" [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
+              <ion-img [src]="slide.imageUrl"></ion-img>
+            </ion-card>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+      <ion-col *ngIf="!sliderEl2">
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-        <ion-col size="12">
-          <ion-img src="https://image.shutterstock.com/image-photo/summer-sale-happy-young-woman-260nw-1123345376.jpg"></ion-img>
-        </ion-col>
-        <ion-col>
-          <ion-row></ion-row>
+
+<!-- banner 3 section -->
+  <ion-grid *ngIf="!banner3">
+    <ion-row>
+      <ion-col>
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="banner3">
+    <ion-row *ngIf="banner3.isActive">
+        <ion-col size="12" *ngFor="let banner of banner3.sectioncontent">
+          <ion-img [src]="banner.imageUrl"></ion-img>
         </ion-col>
     </ion-row>
     <ion-row class="ion-no-padding">
-        <!-- <app-product></app-product> -->
-        <ion-col [routerLink]="['/products', product.slug]" size="12" sizeSm="12" sizeMd="6" sizeLg="3" *ngFor="let product of miniProducts; let i = index" (click)="onClickProduct(i)">
-          <ion-card>
-            <ion-img [src]="product.featured_image"></ion-img>
-            <div class="rb-mini-product-list ion-text-right">
-              <ion-chip class="ion-text-right">{{ product.title }}</ion-chip>
-            </div>
-          </ion-card>
-        </ion-col>
-
-
-<!--
-        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
-          <ion-card>
-            <ion-img [src]="pImage"></ion-img>
-            <div class="rb-mini-product-list ion-text-right">
-              <ion-chip class="ion-text-right">Product Name 2</ion-chip>
-            </div>
-          </ion-card>
-        </ion-col>
-
-        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
-          <ion-card>
-            <ion-img [src]="pImage"></ion-img>
-            <div class="rb-mini-product-list ion-text-right">
-              <ion-chip class="ion-text-right">Product Name 2</ion-chip>
-            </div>
-          </ion-card>
-        </ion-col>
-
-        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="3">
-          <ion-card>
-            <ion-img [src]="pImage"></ion-img>
-            <div class="rb-mini-product-list ion-text-right">
-              <ion-chip class="ion-text-right">Product Name 2</ion-chip>
-            </div>
-          </ion-card>
-        </ion-col> -->
-
-
         <!-- footer void -->
         <div class="rb-footer-void"></div>
 
     </ion-row>
   </ion-grid>
 
+  <ion-grid class="footer">
+    <ion-row>
+      <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+        <ion-list>
+          <ion-list-header>Customer Care</ion-list-header>
+          <ion-item [routerLink]="['/', '']" color="dark">
+            <ion-label>Terms & Conditions</ion-label>
+          </ion-item>
+          <ion-item color="dark">
+            <ion-label>Contact Us</ion-label>
+          </ion-item>
+          <ion-item color="dark">
+            <ion-label>Return and Refund policy</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+        <ion-list>
+          <ion-list-header>Rongobuy</ion-list-header>
+          <ion-item color="dark">
+            <ion-label>About Us</ion-label>
+          </ion-item>
+          <ion-item color="dark">
+            <ion-label>Privacy Policy</ion-label>
+          </ion-item>
+          <ion-item color="dark">
+            <ion-label>Career</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+        <ion-list>
+          <ion-list-header>Connect with us</ion-list-header>
+          <ion-item color="dark">
+            <ion-buttons>
+              <ion-button>
+                <a href="https://www.facebook.com/rongobuy/" target="_blank" rel="noopener">
+                  <ion-icon color="light" slot="icon-only" name="logo-facebook"></ion-icon>
+                </a>
+              </ion-button>
+            </ion-buttons>
+            <ion-label >160K people like this</ion-label>
+          </ion-item>
+          <ion-item color="dark">
+            <ion-buttons>
+              <ion-button>
+                <a href="https://www.instagram.com/rongobuy/" target="_blank" rel="noopener">
+                  <ion-icon color="light" slot="icon-only" name="logo-instagram"></ion-icon>
+                </a>
+              </ion-button>
+              <ion-button>
+                <a href="https://www.pinterest.com/rongobuy/" target="_blank" rel="noopener">
+                  <ion-icon color="light" slot="icon-only" name="logo-pinterest"></ion-icon>
+                </a>
+              </ion-button>
+              <ion-button>
+                <a href="https://www.linkedin.com/company/rongobuy/" target="_blank" rel="noopener">
+                  <ion-icon color="light" slot="icon-only" name="logo-linkedin"></ion-icon>
+                </a>
+              </ion-button>
+              <ion-button>
+                <a href="https://twitter.com/rongobuy/" target="_blank" rel="noopener">
+                  <ion-icon color="light" slot="icon-only" name="logo-twitter"></ion-icon>
+                </a>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6" offset="3">
+        <ion-note>© All Rights Reserved | Rongobuy private Limited</ion-note>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <p  class="deal-link-text"
+    (click)="openAppUrl('facebook', 'Rongobuy-112507684561517', '112507684561517')">CHECK OUT fb</p>
+
+
 
 </ion-content>
+
+

@@ -1,10 +1,10 @@
 import { environment } from './../../../environments/environment';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Order, OrderAddRes, OrderSingleRes, OrdersRes } from '../../models/orders.model';
 import { AccountService } from 'src/app/account/account.service';
-import { take, tap } from 'rxjs/operators';
+import { catchError, take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +50,10 @@ export class OrderService {
   addOrder(shippingAddressId, gift=0, message='', from='') {
     const headerOps = this.headerOptions();
     const body = {
-      shippingAddressId
+      shippingAddressId,
+      gift,
+      message,
+      from
     };
     return this.http.post<OrderAddRes>(`${environment.url.base}/order/place`, body, headerOps).pipe(
       take(1),
@@ -60,6 +63,25 @@ export class OrderService {
           return res;
         });
       })
+    );
+  }
+
+  addCustomOrder(shippingAddressId, text='', gift=0, message='', from='') {
+    const headerOps = this.headerOptions();
+    const body = {
+      shippingAddressId,
+      text,
+      gift,
+      message,
+      from
+    };
+    console.log('custom order body : ', body, text.length);
+    return this.http.post<any>(`${environment.url.base}/order/custom`, body, headerOps).pipe(
+      take(1),
+      tap(order=>{
+        console.log('custom order : ', order);
+      }),
+      catchError(err => of('error', err))
     );
   }
 

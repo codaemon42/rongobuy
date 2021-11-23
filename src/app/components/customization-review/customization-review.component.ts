@@ -1,5 +1,7 @@
+import { CustomOrderPage } from './../../phone-customizer/custom-order/custom-order.page';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { present } from '@ionic/core/dist/types/utils/overlays';
 
 @Component({
   selector: 'app-customization-review',
@@ -32,6 +34,14 @@ export class CustomizationReviewComponent implements OnInit {
       confirm,
       buy: true
     });
+
+    this.modalCtrl.create({
+      component: CustomOrderPage,
+      componentProps: {
+        text: this.dataUrl,
+      },
+      cssClass: 'preview-modal'
+    }).then(el=>el.present());
   }
 
 }

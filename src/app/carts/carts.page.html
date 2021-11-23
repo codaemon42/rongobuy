@@ -54,6 +54,13 @@
       </ion-col>
 
       <!-- <p-divider [layout]="layout"></p-divider> -->
+      <ion-col size="12" sizeSm="4" sizeMd="4" sizeLg="6">
+        <form class="coupon-form" [formGroup]="couponForm" (ngSubmit)="applyCoupon()">
+          <ion-input formControlName="coupon" type="text" placeholder="coupon code"></ion-input>
+          <ion-button color="warning" type="submit">apply</ion-button>
+        </form>
+      </ion-col>
+
 
       <ion-col size="12" sizeSm="4" sizeMd="4" sizeLg="6">
         <div class="proceed" *ngIf="cartDetails">

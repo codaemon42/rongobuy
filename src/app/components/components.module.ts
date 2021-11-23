@@ -26,18 +26,13 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    HeaderComponent,
     FooterComponent,
     ProductComponent,
     SignupComponent,
-    LoginComponent,
-    VerifyOtpComponent,
     YoutubeComponent,
     CustomizationReviewComponent,
     TextEditorScreenComponent,
-    SearchResultsComponent,
-    PhoneSelectorComponent,
-    PhoneDisplayComponent
+    PhoneSelectorComponent
   ],
   imports: [
     CommonModule,
@@ -48,21 +43,15 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     ColorPickerModule,
     DropdownModule,
-    NgOtpInputModule,
   ],
   exports: [
-    HeaderComponent,
     FooterComponent,
     ProductComponent,
     SignupComponent,
-    LoginComponent,
-    VerifyOtpComponent,
     YoutubeComponent,
     CustomizationReviewComponent,
     TextEditorScreenComponent,
-    SearchResultsComponent,
-    PhoneSelectorComponent,
-    PhoneDisplayComponent
+    PhoneSelectorComponent
   ]
 })
 export class ComponentsModule { }

@@ -1,3 +1,4 @@
+import { MediaService } from './../services/media/media.service';
 
 import { textEditor, TextEditorScreenComponent } from './../components/text-editor-screen/text-editor-screen.component';
 import { AfterViewInit } from '@angular/core';
@@ -99,6 +100,7 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
   };
 
 
+
   constructor(
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
@@ -106,7 +108,8 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
     private platform: Platform,
     private transfer: FileTransfer,
     private file: File,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private mediaService: MediaService
   ) { }
 
   ngOnInit() {
@@ -222,11 +225,20 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
         console.log(' blob file data url : ', blob);
         this.img = this.sanitizer.bypassSecurityTrustUrl(objectURL);
       });
+      this.domToImage.toPng(this.screen.nativeElement).then( dataUrl => {
+        console.log('png : ',dataUrl);
+        this.mediaService.addMediaString(dataUrl).subscribe(res=>{
+          console.log('media uploder : ', res);
+        });
+      });
       this.domToImage.toSvg(this.screen.nativeElement).then( dataUrl => {
         console.log('data  : ',dataUrl);
         //this.img = dataUrl;
         this.loadingCtrl.dismiss();
         const start = 'data:image/svg+xml;charset=utf-8,'.length + 1;
+        const preview = dataUrl.slice(start+1 ,dataUrl.length);
+        const svg = new Blob([preview], {type:"image/svg+xml;charset=utf-8"});
+        console.log('svg blob : ', svg);
 
         this.modal({dataUrl}).then(data => {
           if ( data['confirm'] ) {
@@ -362,7 +374,8 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
       component: CustomizationReviewComponent,
       componentProps: props,
       animated: true,
-      swipeToClose: true,
+      swipeToClose: false,
+      keyboardClose: false,
       cssClass: 'preview-modal'
     });
 

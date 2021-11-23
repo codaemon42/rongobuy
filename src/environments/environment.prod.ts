@@ -1,3 +1,6 @@
 export const environment = {
-  production: true
+  production: true,
+  url: {
+    base: 'http://public.rongobuy.com/api/v1'
+  }
 };

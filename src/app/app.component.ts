@@ -18,6 +18,7 @@ export class AppComponent {
   name: any;
   osVersion: string = "";
   uuid: string = "";
+  isLoggedIn = false;
   constructor(
     private menuCtrl: MenuController,
     private menuService: MenuService,
@@ -32,6 +33,12 @@ export class AppComponent {
   }
 
   initializeApp() {
+      // if(this.accountService.isLoggedIn()){
+      //   this.isLoggedIn = true;
+      // } else {
+      //   this.isLoggedIn = false;
+      // }
+      this.isLoggedIn = this.accountService.isLoggedIn();
       this.platform.ready().then(() => {
         // let status bar overlay webview
         this.statusBar.overlaysWebView(true);

@@ -12,8 +12,9 @@ import { CartService } from '../services/cart.service';
 })
 export class WishlistPage implements OnInit {
 
-  wishlists: Wishlist[];
+  wishlists: Wishlist[] = [];
   wishlistSub: Subscription;
+  isLoading = true;
 
   constructor(
     private wishlistService: WishlistService,
@@ -22,9 +23,18 @@ export class WishlistPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.wishlistService.fetchWishlist().subscribe();
+    this.wishlistService.fetchWishlist().subscribe(res=>{
+      this.isLoading = false;
+    });
     this.wishlistSub = this.wishlistService.wishlist.subscribe(wishlists=>{
       this.wishlists = wishlists;
+    });
+  }
+
+  ionViewWillEnter(){
+    this.isLoading = true;
+    this.wishlistService.fetchWishlist().subscribe(res=>{
+      this.isLoading = false;
     });
   }
 

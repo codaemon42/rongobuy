@@ -1,3 +1,4 @@
+import { HeaderModule } from './../components/modules/header/header.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +19,7 @@ import { CategoryPage } from './category.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ComponentsModule,
+    HeaderModule,
     PanelMenuModule,
     SlideMenuModule,
     CategoryPageRoutingModule

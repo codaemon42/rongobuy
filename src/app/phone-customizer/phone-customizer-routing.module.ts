@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: PhoneCustomizerPage
+  },
+  {
+    path: 'custom-order',
+    loadChildren: () => import('./custom-order/custom-order.module').then( m => m.CustomOrderPageModule)
   }
 ];
 

@@ -134,6 +134,10 @@ export class CheckoutPage implements OnInit, OnDestroy {
     this.sendGift = !this.sendGift;
   }
 
+  onChangePayment(payment) {
+    console.log('onchangepayment : ', payment);
+  }
+
 
 
   ngOnDestroy() {

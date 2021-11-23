@@ -1,0 +1,186 @@
+<ion-header>
+  <ion-toolbar color="warning" class="ion-text-center">
+    <ion-title>Checkout</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <!-- address section -->
+    <ion-row *ngIf="addressLoading">
+      <ion-col size="12" sizeSm="12" sizeMd="6" offsetMd="3">
+        <div class="spinner">
+          <ion-spinner color="warning"></ion-spinner>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!addressLoading && selectedAddress">
+      <ion-col size="12" sizeSm="12" sizeMd="6" offsetMd="3">
+        <ion-list>
+          <ion-radio-group #address color="warning" [value]="selectedAddress.id" (ionChange)="onSelectAddress(address.value)">
+            <ion-list-header>
+              <ion-label>
+                Select Address
+              </ion-label>
+            </ion-list-header>
+
+            <ion-item *ngFor="let address of addresses">
+              <ion-radio color="warning" [value]="address.id"></ion-radio>
+              <ion-label class="address">
+                <p> {{address.name}} : {{address.phone}}</p>
+                <p> {{address.address}}, {{address.city}}, {{address.area}}, {{address.division}}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item (click)="addNewAddress()">
+              <ion-buttons>
+                <ion-button>
+                  <ion-icon slot="icon-only" color="tertiary" name="add"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+              <ion-label color="tertiary" class="address"> Add different address</ion-label>
+            </ion-item>
+
+          </ion-radio-group>
+
+        </ion-list>
+        <!-- <ion-card [ngClass]="{'active': address.default==='1'}">
+          <ion-card-header class='card-header'>
+            <ion-checkbox [checked]="address.default==='1'" [value]="address.id"></ion-checkbox>
+            {{address.type}}
+            <span *ngIf="address.default==='1'"> (Default Address) </span>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-label>
+              <p>{{address.name}} : {{address.phone}}</p>
+              <p>{{address.address}}, {{address.city}}, {{address.area}}, {{address.division}}</p>
+            </ion-label>
+          </ion-card-content>
+        </ion-card> -->
+      </ion-col>
+    </ion-row>
+    <!-- address section ends -->
+    <ion-row>
+      <!-- <ion-col size="12" sizeSm="6" sizeMd="6">
+        <div class="checkout">
+          <form [formGroup]="checkoutForm">
+            <div class="name-section">
+              <ion-input class="rb-input-shadow" formControlName="name" placeholder="Full Name"></ion-input>
+               <ion-note *ngIf="checkoutForm.controls.phone.invalid && (checkoutForm.controls.phone.dirty || checkoutForm.controls.phone.touched)" color="danger" slot="end">valid phone number required !</ion-note>
+              <ion-input class="rb-input-shadow" maxLength="11" formControlName="phone" placeholder="Phone number"></ion-input>
+              <ion-note *ngIf="checkoutForm.controls.email.invalid && (checkoutForm.controls.email.dirty || checkoutForm.controls.email.touched)" color="danger" slot="end">valid email address required !</ion-note>
+              <ion-input class="rb-input-shadow" formControlName="email" type="email" placeholder="email"></ion-input>
+            </div>
+            <div class="address-section">
+              <ion-input class="rb-input-shadow" formControlName="address" placeholder="house, street, local Address"></ion-input>
+            </div>
+          </form>
+          <p-dropdown (onChange)="onChangeArea()" [options]="area" [(ngModel)]="selectedArea" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Area">
+                <ng-template pTemplate="selectedItem">
+                    <div class="country-item country-item-value"  *ngIf="selectedArea">
+
+                        <div>{{selectedArea.name}}</div>
+                    </div>
+                </ng-template>
+          </p-dropdown>
+        </div>
+      </ion-col> -->
+      <ion-col size="12" sizeSm="6" sizeMd="6">
+        <form [formGroup]="giftForm">
+          <ion-list>
+            <ion-item>
+              <ion-checkbox (ionChange)="sendAsGift($event)" [checked]="sendGift" mode="ios" color="warning" ></ion-checkbox>
+              <ion-label color="dark"> Send as gift </ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-grid *ngIf="sendGift" class="ion-no-padding">
+            <ion-row class="gift-box-wrapper">
+              <ion-label color="tertiary">Gift message</ion-label>
+              <ion-col size="12" class="gift-box">
+                <ion-textarea formControlName="message" class="rb-gift-textarea" placeholder="write something..." autofocus="true"></ion-textarea>
+              </ion-col>
+              <ion-col size="2" class="gift-box">
+                <p class="gift-box-text" >From</p>
+              </ion-col>
+              <ion-col size="10" class="gift-box">
+                  <ion-input formControlName="sender"></ion-input>
+              </ion-col>
+              <!-- <ion-col>
+                <ion-list>
+                  <ion-item>
+                    <ion-checkbox (ionChange)="sendAsGift($event)" [checked]="sendGift" mode="ios" color="warning" ></ion-checkbox>
+                    <ion-label color="dark"> add special packaging </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-col> -->
+            </ion-row>
+          </ion-grid>
+
+          <!-- ddd -->
+
+          <!-- ddd -->
+        </form>
+        <div >
+          <div class="payment-section">
+            <div *ngIf="cartLoading" class="order-amount-section">
+              <div class="spinner">
+                <ion-spinner color="warning"></ion-spinner>
+              </div>
+            </div>
+            <div *ngIf="!cartLoading" class="order-review-section">
+              <div class="order-amount-section">
+                <div class="total-ordered-amount-text">
+                  Sub-total
+                </div>
+                <div class="total-ordered-amount">
+                  BDT {{cartDetails.data.subtotal}}
+                </div>
+              </div>
+
+              <div class="shipping-cost-section">
+                <div class="shipping-label">
+                  Shipping cost
+                </div>
+                <div class="shipping-total">
+                  BDT {{cartDetails.data.shippingTotal}}
+                </div>
+              </div>
+
+              <div class="grand-total-section">
+                <div class="grand-total-label">
+                  Grand Total
+                </div>
+                <div class="grand-total-amount">
+                  BDT {{cartDetails.data.grandTotal}}
+                </div>
+              </div>
+            </div>
+            <div class="payment-method-section">
+              <ion-list>
+                <ion-radio-group #payment color="warning" value="cod" (ionChange)="onChangePayment(payment)">
+                  <ion-list-header>
+                    <ion-label>
+                      Select Payment Method
+                    </ion-label>
+                  </ion-list-header>
+
+                  <ion-item>
+                    <ion-radio color="warning" value="cod"></ion-radio>
+                    <ion-label>Cash on delivery</ion-label>
+                  </ion-item>
+
+                  <!-- <ion-item>
+                    <ion-radio color="warning" value="sslcommerz"></ion-radio>
+                    <ion-label>SSLCOMMERZ (pay online)</ion-label>
+                  </ion-item> -->
+                </ion-radio-group>
+              </ion-list>
+            </div>
+          </div>
+          <ion-button [disabled]="cartLoading && addressLoading" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

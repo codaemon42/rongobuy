@@ -3,6 +3,7 @@ import { environment } from './../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Homepage, HomepageRes } from 'src/app/models/homepage.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 
 export class HomepageService {
 
-  private _homepage = new BehaviorSubject<any[]>([]);
+  private _homepage = new BehaviorSubject<Homepage[]>([]);
 
   constructor(
     private http: HttpClient
@@ -21,7 +22,7 @@ export class HomepageService {
   }
 
   fetchHomePage() {
-    return this.http.get<any>(`${environment.url.base}/homepage`).pipe(
+    return this.http.get<HomepageRes>(`${environment.url.base}/homepage`).pipe(
       take(1),
       tap(res => {
         console.log('homepage : ', res);

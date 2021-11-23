@@ -1,3 +1,4 @@
+import { LoginModule } from './../components/modules/login/login.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +15,7 @@ import { ComponentsModule } from '../components/components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    ComponentsModule,
+    LoginModule,
     AccountPageRoutingModule
   ],
   declarations: [AccountPage]

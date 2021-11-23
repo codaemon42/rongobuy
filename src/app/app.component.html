@@ -59,7 +59,7 @@
           </ion-list>
         </ion-menu-toggle>
       </div>
-      <div *ngIf="accountService.isLoggedIn()" class="main-menu-item">
+      <div *ngIf="isLoggedIn" class="main-menu-item">
         <ion-item lines="none" (click)="logOut()">
           <ion-icon color="dark" name="log-out" slot="start"></ion-icon>
           Log Out

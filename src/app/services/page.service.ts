@@ -1,3 +1,5 @@
+import { PageRes } from './../models/page.model';
+import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -20,18 +22,10 @@ export class PageService {
   }
 
   fetchPage(slug){
-    return this.http.get(`http://public.rongobuy.com/api/v1/details/Bags-and-Travel`).pipe(
+    return this.http.get<PageRes>(`${environment.url.base}/single-page/${slug}`).pipe(
       take(1),
-      tap((resData)=>{
-        const newPage = {
-          id: 2,
-          slug: slug,
-          title: slug,
-          content: `<h3>This is the ${slug} page content</h3>`,
-          mainImage: 'mainImage'
-        };
-        console.log('newPage : ', newPage);
-        this._page.next(newPage);
+      tap((pageRes)=>{
+        this._page.next(pageRes.data);
       })
     );
   }

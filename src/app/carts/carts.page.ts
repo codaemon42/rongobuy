@@ -1,3 +1,4 @@
+import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CartRes } from './../models/cart.model';
 import { CartsService } from './carts.service';
@@ -5,6 +6,8 @@ import { BreakpointObserverService } from './../services/breakpoint.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { CartService } from '../services/cart.service';
+import { ToastService } from '../services/controllers/toast.service';
+import { CouponService } from '../services/coupon/coupon.service';
 
 @Component({
   selector: 'app-carts',
@@ -18,17 +21,44 @@ export class CartsPage implements OnInit, OnDestroy {
   cartDetails: CartRes = null;
   cartSub: Subscription;
 
+  couponForm: FormGroup;
+
   constructor(
     private breakpoint: BreakpointObserverService,
     private nav: NavController,
     private cartService: CartService,
-    private cartsService: CartsService
+    private cartsService: CartsService,
+    private couponService: CouponService,
+    private toastService: ToastService
     ) {
       this.carts = this.cartsService.carts;
      }
 
   ngOnInit() {
     this.getLayout();
+    this.couponInit();
+  }
+  couponInit() {
+    this.couponForm = new FormGroup({
+      coupon: new FormControl(null, {
+        updateOn: 'change'
+      })
+    });
+  }
+
+  applyCoupon() {
+    if(!this.couponForm.valid) {
+      this.toastService.toast('coupon is not valid');
+    } else {
+      this.couponService.applyCoupon(this.couponForm.value.coupon).subscribe(res=>{
+        console.log('got the coupon res : ', res);
+        if(!res.success){
+          this.toastService.toast(res.message);
+        } else {
+          this.toastService.toast('coupon successfully applied', 'success');
+        }
+      });
+    }
   }
   ionViewWillEnter(){
     console.log('cart view will enter');

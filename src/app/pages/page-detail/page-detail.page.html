@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <app-header (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)"></app-header>
-    <!-- <ion-title>{{ title }}</ion-title> -->
+    <ion-title>{{ page.pageTitle }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -25,7 +25,7 @@
       <ion-col *ngIf="page">
 
         <!-- page title -->
-        <h2 style="color: #888" class="ion-text-center">{{ page.title }}</h2>
+        <h2 style="color: #888" class="ion-text-center">{{ page.pageTitle }}</h2>
 
         <!-- page content section -->
         <span id="page-content"></span>

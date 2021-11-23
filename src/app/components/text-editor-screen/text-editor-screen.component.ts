@@ -72,23 +72,23 @@ export class TextEditorScreenComponent implements OnInit {
 
   fontSize(event) {
     console.log(event);
-    this.styleParams.font.size = event;
+    this.styleParams.font.size = event.detail.value;
   }
 
   fontWeight(event) {
     console.log(event);
-    this.styleParams.font.weight = event;
+    this.styleParams.font.weight = event.detail.value;
   }
 
   scale(event) {
     console.log(event);
-    this.styleParams.transform.scale = event/10;
+    this.styleParams.transform.scale = event.detail.value/10;
     console.log(event/10);
   }
 
   rotate(event) {
     console.log(event);
-    this.styleParams.transform.rotate = event;
+    this.styleParams.transform.rotate = event.detail.value;
   }
 
 }

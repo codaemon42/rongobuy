@@ -38,22 +38,22 @@
           <ion-list>
             <ion-item>
               <ion-note slot="start">Font Size</ion-note>
-              <ion-range (ionChange)="fontSize($event.detail.value)" [value]="styleParams.font.size" min="1" max="40" color="warning" pin="true"></ion-range>
+              <ion-range (ionChange)="fontSize($event)" [value]="styleParams.font.size" min="1" max="40" color="warning" pin="true"></ion-range>
             </ion-item>
 
             <ion-item>
               <ion-note slot="start">Font Weight</ion-note>
-              <ion-range (ionChange)="fontWeight($event.detail.value)" [value]="styleParams.font.weight" snaps="true" step="100" min="200" max="800" color="warning" pin="true"></ion-range>
+              <ion-range (ionChange)="fontWeight($event)" [value]="styleParams.font.weight" snaps="true" step="100" min="200" max="800" color="warning" pin="true"></ion-range>
             </ion-item>
 
             <ion-item>
               <ion-note slot="start">Zoom</ion-note>
-              <ion-range (ionChange)="scale($event.detail.value)" [value]="styleParams.transform.scale*10" step="1" min="0" max="80" color="warning" pin="true"></ion-range>
+              <ion-range (ionChange)="scale($event)" [value]="styleParams.transform.scale*10" step="1" min="0" max="80" color="warning" pin="true"></ion-range>
             </ion-item>
 
             <ion-item>
               <ion-note slot="start">Rotate</ion-note>
-              <ion-range (ionChange)="rotate($event.detail.value)" [value]="styleParams.transform.rotate" snaps="true" min="-360" max="360" color="warning" pin="true"></ion-range>
+              <ion-range (ionChange)="rotate($event)" [value]="styleParams.transform.rotate" snaps="true" min="-360" max="360" color="warning" pin="true"></ion-range>
             </ion-item>
 
           </ion-list>

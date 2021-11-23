@@ -1,14 +1,17 @@
+import { Subscription } from 'rxjs';
 import { Category } from 'src/app/models/category.model';
 import { HomepageService } from './../services/homepage/homepage.service';
 import { AuthService } from './../services/auth.service';
 import { Device } from '@ionic-native/device/ngx';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MiniProduct } from '../components/product/product.model';
 import { ColorsService } from '../services/colors/colors.service';
 import { BreakpointObserverService } from '../services/breakpoint.service';
 import { IonSlides, Platform } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { CategoryService } from '../services/category.service';
+import { Homepage } from '../models/homepage.model';
+import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser/ngx';
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable curly */
 /* eslint-disable object-shorthand */
@@ -19,7 +22,7 @@ import { CategoryService } from '../services/category.service';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   @ViewChild('categorySlide') categorySlide: IonSlides;
   logo = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=4vf2J_gHjV4AX9Iw4WH&_nc_ht=scontent.fdac22-1.fna&oh=cc8086e722ec06839a2993d3ac1852a3&oe=6180485F';
   image = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/243141730_1930955927087406_8439625270110780804_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=666b5a&_nc_ohc=zAXTa3xu9zgAX-Mzz2d&_nc_ht=scontent.fdac22-1.fna&oh=4c6324ea350ce5d6bdcb6adc428527bd&oe=617ED4F1';
@@ -28,17 +31,25 @@ export class HomePage implements OnInit {
   emergencyCatSlider;
   catSlider;
   catSlider2;
-  sliderEl;
+
   emergencyInfo;
   miniProducts: MiniProduct[];
   searchData;
   isLoadingSearch = false;
-  homepage: any[];
   colors: any[];
   mobileView = true;
   showSearch = false;
 
   phoneCategories: Category[];
+  homepage: Homepage[];
+  homepageSub: Subscription;
+
+  sliderEl: Homepage = null;
+  sliderEl2: Homepage = null;
+  banner: Homepage = null;
+  banner2: Homepage = null;
+  banner3: Homepage = null;
+
   constructor(
     private device: Device,
     private platform: Platform,
@@ -46,7 +57,8 @@ export class HomePage implements OnInit {
     private colorsService: ColorsService,
     private brkPointService: BreakpointObserverService,
     private homepageService: HomepageService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private inAppBrowser: InAppBrowser
   ) {
 
    }
@@ -57,7 +69,6 @@ export class HomePage implements OnInit {
       console.log('Device UUID is: ' + this.device);
     });
 
-
     this.setColors();
     this.setHomePage();
     this.sizeController();
@@ -67,16 +78,6 @@ export class HomePage implements OnInit {
     });
     //this.colorsService.getColors();
 
-    //this.authService.loginWithOtp();
-    // const httpOptions = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type':  'application/json',
-    //     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5teXZhbHVlZmlyc3QuY29tL3BzbXMiLCJzdWIiOiJyb25nb2J1eWh0cGludCIsImV4cCI6MTYzNjcwNzA2M30.5PQ5BB4oJewuzUS4E59jGHlU24wjFzA6aDBX5Mk5iRQ'
-    //   })
-    // };
-    // this.http.post('https://http.myvfirst.com/smpp/sendsms?username=rongobuyhtpint&password=3o^sIp@RyR%\&to=8801884462875&from=8804445632712&text=message&dlr-mask=19&dlr-url', '', httpOptions).subscribe(data => {
-    //   console.log('sms response : ', data);
-    // });
     this.slideOpts = {
       grabCursor: true,
       cubeEffect: {
@@ -275,51 +276,32 @@ export class HomePage implements OnInit {
       initialSlide: 0,
       speed: 400,
       loop: true,
-      slidesPerView: 1.9,
-      spaceBetween: 1,
-      autoplay:1000,
+      slidesPerView: 1,
+      spaceBetween: 10,
+      autoplay: 1000,
       breakpoints: {
           // when window width is >= 320px
           320: {
-            slidesPerView: 1.9,
+            slidesPerView: 1,
             spaceBetween: 10
           },
           // when window width is >= 480px
           480: {
-            slidesPerView: 2.3,
-            spaceBetween: 30
+            slidesPerView: 1,
+            spaceBetween: 10
           },
           // when window width is >= 640px
           768: {
-            slidesPerView: 2.9,
+            slidesPerView: 1.9,
             spaceBetween: 40
           },
           // when window width is >= 640px
           980: {
-            slidesPerView: 2.9,
+            slidesPerView: 1.9,
             spaceBetween: 40
           }
       }
     };
-
-
-    this.sliderEl = [
-      {
-        image: this.image,
-        type: 'category',
-        itemSlug: 'phone-cover'
-      },
-      {
-        image: this.image,
-        type: 'category',
-        itemSlug: 'phone-cover'
-      },
-      {
-        image: this.image,
-        type: 'product',
-        itemSlug: 'realme-7pro'
-      }
-    ];
 
     this.emergencyInfo = [
       {
@@ -415,10 +397,15 @@ export class HomePage implements OnInit {
   }
 
   setHomePage() {
-    this.homepageService.homepage.subscribe(res => {
-      this.homepage = res;
-    });
     this.homepageService.fetchHomePage().subscribe();
+    this.homepageSub = this.homepageService.homepage.subscribe(res => {
+      this.homepage = res;
+      this.sliderEl = this.homepage.find(homepage => homepage.sectionTitle === 'slider');
+      this.sliderEl2 = this.homepage.find(homepage => homepage.sectionTitle === 'Slider 2');
+      this.banner = this.homepage.find(homepage => homepage.sectionTitle === 'Banner');
+      this.banner2 = this.homepage.find(homepage => homepage.sectionTitle === 'Banner 2');
+      this.banner3 = this.homepage.find(homepage => homepage.sectionTitle === 'Banner 3');
+    });
   }
 
   sizeController() {
@@ -436,5 +423,69 @@ export class HomePage implements OnInit {
     console.log('catslide : ', event);
 
   }
+
+  ngOnDestroy() {
+    this.homepageSub.unsubscribe();
+  }
+
+
+  //fb page
+  openAppUrl(app: string, name: string, id?: string) {
+    switch (app) {
+        case 'facebook':
+            this.launchApp(
+              'fb://', 'com.facebook.orca',
+              'http://m.me/' + name,
+              'http://m.me/' + name,
+              'https://www.facebook.com/' + name);
+            break;
+        case 'instagram':
+            this.launchApp(
+              'instagram://',
+              'com.instagram.android',
+              'instagram://user?username=' + name,
+              'instagram://user?username=' + name,
+              'https://www.instagram.com/' + name);
+            break;
+        case 'twitter':
+            this.launchApp(
+              'twitter://', 'com.twitter.android',
+              'twitter://user?screen_name=' + name,
+              'twitter://user?screen_name=' + name,
+              'https://twitter.com/' + name);
+            break;
+        default:
+            break;
+      }
+  }
+
+private launchApp(iosApp: string, androidApp: string, appUrlIOS: string, appUrlAndroid: string, webUrl: string) {
+    let app: string;
+    let appUrl: string;
+    // check if the platform is ios or android, else open the web url
+    if (this.platform.is('ios')) {
+      app = iosApp;
+      appUrl = appUrlIOS;
+      const browser: InAppBrowserObject = this.inAppBrowser.create(appUrl, '_system');
+    } else if (this.platform.is('android')) {
+      app = androidApp;
+      appUrl = appUrlAndroid;
+      const browser: InAppBrowserObject = this.inAppBrowser.create(appUrl, '_system');
+    } else {
+      const browser: InAppBrowserObject = this.inAppBrowser.create(webUrl, '_system');
+      return;
+    }
+
+    // this.appAvailability.check(app).then(
+    //     () => {
+    //         // success callback, the app exists and we can open it
+    //         const browser: InAppBrowserObject = this.inAppBrowser.create(appUrl, '_system');
+    //     },
+    //     () => {
+    //         // error callback, the app does not exist, open regular web url instead
+    //         const browser: InAppBrowserObject = this.inAppBrowser.create(webUrl, '_system');
+    //     }
+    // );
+}
 
 }

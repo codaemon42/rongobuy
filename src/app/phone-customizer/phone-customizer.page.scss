@@ -67,3 +67,7 @@ $borderTop: #0808080a;
   display: block;
   width: 200px;
 }
+  ion-tab-button {
+    --background: var(--ion-color-dark-tint);
+    --color-selected: var(--ion-color-warning);
+  }

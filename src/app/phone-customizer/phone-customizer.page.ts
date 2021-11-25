@@ -268,6 +268,14 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
     });
   }
 
+  addBackgroundCover() {
+    this.addbg.nativeElement.click();
+  }
+
+  addLogoImage() {
+    this.addLogo.nativeElement.click();
+  }
+
   onUploadBackgroundImage(event, id) {
     console.log(event.target.files[0]);
     const pickedFile = event.target.files[0];
@@ -314,6 +322,19 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
       this.cursor = 'zoom-in';
     }
 
+    if(id === 'pinchIn') {
+    console.log('zoom out');
+      this.logoParams.scale -= 0.05;
+      // cursor
+      this.cursor = 'zoom-out';
+    }
+    if (id === 'pinchOut')  {
+      console.log('zoom in');
+      this.logoParams.scale += 0.05;
+      // bg
+      this.cursor = 'zoom-in';
+    }
+
   }
 
   textEdit(event, id) {
@@ -334,6 +355,19 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
       this.textParams.scale += 0.05;
       // bg
         this.cursor = 'zoom-in';
+    }
+
+    if(id === 'pinchIn') {
+      console.log('zoom out');
+      this.textParams.scale -= 0.05;
+      // cursor
+      this.cursor = 'zoom-out';
+    }
+    if (id === 'pinchOut')  {
+      console.log('zoom in');
+      this.textParams.scale += 0.05;
+      // bg
+      this.cursor = 'zoom-in';
     }
   }
 
@@ -462,14 +496,20 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
   }
 
   pinchIn(event) {
-    console.log('pinch in', event);
+    console.log('pinch : ', event);
     this.scale -= 0.05;
+    // bg
+    this.canvasImgBack.size -= 2;
+    // cursor
     this.cursor = 'zoom-out';
   }
 
   pinchOut(event) {
-    console.log('pinch Out', event);
+    console.log('zoom in');
     this.scale += 0.05;
+    // bg
+    this.canvasImgBack.size += 2;
+    // cursor
     this.cursor = 'zoom-in';
   }
 

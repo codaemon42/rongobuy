@@ -1,374 +1,185 @@
 <app-header [showSearch]="showSearch" (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)" [searchData]="searchData"></app-header>
 
 <ion-content>
-  <!-- fab icon section -->
-	<!-- <ion-fab vertical="top" horizontal="end" slot="fixed">
-		<ion-fab-button color="danger">
-			<ion-icon name="cart"></ion-icon>
-		</ion-fab-button>
-	</ion-fab> -->
-      <!-- chat section -->
+    <!-- full home page  -->
+      <!-- [ngStyle]="{
+        'background': 'url('+'https://i0.wp.com/www.cssscript.com/wp-content/uploads/2017/12/Animated-Particles-Background.png?fit=499%2C386&ssl=1'+')'
+      }" -->
+    <ion-grid
+     *ngIf="!homepage">
+      <ion-row>
+        <ion-col>
+          <div class="spinner">
+            <ion-spinner color="warning"></ion-spinner>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid
+      class="ion-no-padding" *ngFor="let homeSection of homepage; let homeIndex = index">
+      <ion-row *ngIf="homeSection.isActive === 1">
+        <ion-col>
+          <div *ngIf="homeIndex" class="header-center">
+            <span>
+              {{ homeSection.sectionTitle }}
+            </span>
+          </div>
+        </ion-col>
+      </ion-row>
+      <!-- main slider -->
+      <ion-row *ngIf="homeSection.sectionType === 'slider' && homeSection.isActive === 1">
+        <ion-col *ngIf="!homeIndex">
+          <ion-slides [ngClass]="{'slider-margin': !mobileView}" pager="true" scrollbar="true" [options]="slideOpts">
+            <ion-slide *ngFor="let slide of homeSection.sectioncontent;let i=index" (click)="sliderNavigate(i)">
+              <ion-img [src]="slide.imageUrl+'_'+slide.width+'x'+slide.height+'.jpg'"></ion-img>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="!homeIndex">
+        <ion-col>
+          <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
+            <ion-slide *ngFor="let emergency of emergencyInfo; let i = index">
+                      <div class="rb-emergency-info" [ngStyle]="{'background': 'var(--ion-color-'+colors[i]+')'}">
+                  <div class="icon">
+                    <!-- <img [src]="emergency.link" alt="icon"> -->
+                    <ion-icon color="light" name="accessibility"></ion-icon>
+                  </div>
+                  <ion-label style="margin: 10px; text-align: left;">{{emergency.name}}</ion-label>
+                </div>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+
+      <!-- other slider -->
+      <ion-row *ngIf="homeSection.sectionType === 'slider' && homeSection.isActive === 1">
+        <ion-col *ngIf="homeIndex" size="11" offset="0.5">
+          <ion-slides class="cat-slider-2" pager="true" scrollbar="false" [options]="catSlider">
+            <ion-slide *ngFor="let slide of sliderEl2.sectioncontent; let i = index">
+              <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
+                <ion-img [src]="slide.imageUrl"></ion-img>
+              </ion-card>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+
+
+      <!-- category section -->
+      <ion-row *ngIf="homeSection.sectionType === 'category' && homeSection.isActive === 1">
+        <ion-col size="11" offset="0.5">
+          <ion-slides #categorySlide class="cat-slider" pager="true" scrollbar="false" [options]="catSlider" (ionSlidesDidLoad)="catSliderLoaded($event)" (ionSlideNextStart)="catSliderLoaded($event)">
+            <ion-slide *ngFor="let phoneCat of homeSection.sectioncontent; let i = index">
+              <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
+                <ion-img [src]="phoneCat.imageUrl"></ion-img>
+              </ion-card>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+
+      <!-- banner section -->
+      <ion-row [ngStyle]="{'background-position-x.px': bannerBg.positionX}" class="bg-drops" *ngIf="homeSection.sectionType === 'banner' && homeSection.isActive === 1">
+        <ion-col size="11" offset="0.5" *ngFor="let banner of homeSection.sectioncontent; let i = index">
+          <div class="banner-images">
+            <img
+              [ngStyle]="{
+                'border-radius.px': 10,
+                'width.%': 100
+              }"
+              [src]="banner.imageUrl" >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- chat section -->
       <ion-fab class="rb-chat-icon" vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button color="warning">
+        <ion-fab-button color="warning" (click)="openAppUrl('facebook', 'rongobuy', '228677831034067')">
           <ion-icon name="chatbubbles"></ion-icon>
-          <ion-badge color="danger">1</ion-badge>
         </ion-fab-button>
       </ion-fab>
-
-  <!-- slider 1 section -->
-  <ion-grid class="ion-no-padding">
-    <ion-row>
-      <ion-col *ngIf="sliderEl">
-        <ion-slides [ngClass]="{'slider-margin': !mobileView}" pager="true" scrollbar="true" [options]="slideOpts">
-          <ion-slide *ngFor="let slide of sliderEl.sectioncontent;let i=index" (click)="sliderNavigate(i)">
-            <ion-img [src]="slide.imageUrl+'_1500x600.jpg'"></ion-img>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-      <ion-col *ngIf="!sliderEl">
-        <div class="spinner">
-          <ion-spinner color="warning"></ion-spinner>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-	<!-- <ion-list>
-		<ion-item-sliding>
-			<ion-item>
-				<ion-label>
-					Sliding Item, Icons Bottom
-				</ion-label>
-			</ion-item>
-			<ion-item-options>
-				<ion-item-option color="primary">
-					<ion-icon slot="bottom" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
-					More
-				</ion-item-option>
-				<ion-item-option color="secondary">
-					<ion-icon slot="bottom" name="archive"></ion-icon>
-					Archive
-				</ion-item-option>
-			</ion-item-options>
-		</ion-item-sliding>
-	</ion-list> -->
-
-  <!-- emergency info -->
-  <ion-grid *ngIf="!mobileView">
-    <ion-row>
-      <ion-col sizeLg="3" sizeMd="3" sizeSm="6" *ngFor="let emergency of emergencyInfo; let i = index">
-        <div class="rb-emergency-info" [ngStyle]="{'background': 'var(--ion-color-'+colors[i]+')'}">
-          <div class="icon">
-            <!-- <img [src]="emergency.link" alt="icon"> -->
-            <ion-icon color="light" name="accessibility"></ion-icon>
-          </div>
-          <ion-label>{{emergency.name}}</ion-label>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <ion-grid *ngIf="mobileView">
-    <ion-row>
-      <ion-col>
-        <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
-          <ion-slide *ngFor="let emergency of emergencyInfo; let i = index">
-                    <div class="rb-emergency-info" [ngStyle]="{'background': 'var(--ion-color-'+colors[i]+')'}">
-                <div class="icon">
-                  <!-- <img [src]="emergency.link" alt="icon"> -->
-                  <ion-icon color="light" name="accessibility"></ion-icon>
-                </div>
-                <ion-label style="margin: 10px; text-align: left;">{{emergency.name}}</ion-label>
-              </div>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <!-- category sections -->
-  <ion-grid>
-    <ion-row>
-      <ion-col [routerLink]="['/', 'phone-customizer']" class="poster-wrapper" size="4">
-        <ion-img src="../../assets/bg/poster.png"></ion-img>
-        <ion-label class="poster-label">Customize</ion-label>
-      </ion-col>
-      <ion-col [routerLink]="['/', 'category', 'phone-cover']" class="poster-wrapper" size="4">
-        <ion-img src="../../assets/bg/poster.png"></ion-img>
-        <ion-label class="poster-label"> Men Cover </ion-label>
-      </ion-col>
-      <ion-col [routerLink]="['/', 'category', 'phone-cover']" class="poster-wrapper" size="4">
-        <ion-img src="../../assets/bg/poster.png"></ion-img>
-        <ion-label class="poster-label"> Women Cover </ion-label>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-
-  <!-- Popular category -->
-  <ion-grid>
-    <ion-row>
-      <ion-col class="ion-text-center">
-        <ion-label class="ion-text-center" color="dark">DESIGNER PHONE CASES</ion-label>
-        <br>
-        <ion-label class="ion-text-center" color="dark">Starts from 299 Taka</ion-label>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size="11" offset="0.5">
-        <ion-slides #categorySlide class="cat-slider" pager="true" scrollbar="false" [options]="catSlider" (ionSlidesDidLoad)="catSliderLoaded($event)" (ionSlideNextStart)="catSliderLoaded($event)">
-          <ion-slide *ngFor="let phoneCat of phoneCategories; let i = index">
-            <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
-              <ion-img [src]="phoneCat.image"></ion-img>
-            </ion-card>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-    </ion-row>
-      <!-- <ion-row>
-      <ion-col size="11" offset="0.5">
-        <ion-slides class="cat-slider-2" pager="true" scrollbar="false" [options]="catSlider2">
-          <ion-slide>
-            <ion-card>
-              <ion-img src="https://media.rongobuy.com/p/product/0ew5fg1orzxcm63t2kshqnyjiu8a47.jpg"></ion-img>
-            </ion-card>
-
-          </ion-slide>
-          <ion-slide>
-
-            <ion-card>
-              <ion-img src="https://media.rongobuy.com/p/product/4n8m75i29qrdwsabfcjo0e6kytv1lh.png"></ion-img>
-            </ion-card>
-
-          </ion-slide>
-          <ion-slide>
-
-            <ion-card>
-              <ion-img src="https://media.rongobuy.com/p/product/67ra30v9uxogqypk1cz58lediwhs2t.png"></ion-img>
-            </ion-card>
-
-          </ion-slide>
-          <ion-slide>
-
-            <ion-card>
-              <ion-img src="https://media.rongobuy.com/p/product/9sc1z7258xrvhwmnobqealdi6gk34p.png"></ion-img>
-            </ion-card>
-          </ion-slide>
-          <ion-slide>
-
-            <ion-card>
-              <ion-img src="https://media.rongobuy.com/p/product/640mng78kd21rujcblexhyqwf3ptao.png"></ion-img>
-            </ion-card>
-          </ion-slide>
-          <ion-slide>
-            <ion-card>
-              <ion-img src="https://media.rongobuy.com/p/product/2c3kresf74wph6lzqa1y5jimvxbn8o.png"></ion-img>
-            </ion-card>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-    </ion-row> -->
-  </ion-grid>
-  <!-- Popular category --/>
-
-  <!-- product section -->
-    <!-- skeleton -->
-  <div *ngIf="!miniProducts">
-    <div class="ion-padding custom-skeleton">
-      <div class="skeleton-img">
-        <ion-skeleton-text animated style="width: 100%; height:300px"></ion-skeleton-text>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- slider 2 section -->
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngIf="sliderEl2" size="11" offset="0.5">
-        <ion-slides class="cat-slider-2" pager="true" scrollbar="false" [options]="catSlider">
-          <ion-slide *ngFor="let slide of sliderEl2.sectioncontent; let i = index">
-            <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
-              <ion-img [src]="slide.imageUrl"></ion-img>
-            </ion-card>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-      <ion-col *ngIf="!sliderEl2">
-        <div class="spinner">
-          <ion-spinner color="warning"></ion-spinner>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <!-- banner 3:1 -->
-  <div *ngIf="banner" class="banner31-containter">
-    <div *ngIf="banner.isActive" class="banner31-row">
-      <div class="banner31-col-60">
-        <img [src]="banner.sectioncontent[0].imageUrl">
-      </div>
-      <div class="banner31-col-40">
-        <img [src]="banner.sectioncontent[1].imageUrl">
-        <img [src]="banner.sectioncontent[2].imageUrl">
-      </div>
-    </div>
-  </div>
-  <!-- <ion-grid *ngIf="banner">
-    <ion-row *ngIf="banner.isActive">
-      <ion-col size="8" style="padding: 10px 0">
-        <img [src]="banner.sectioncontent[0].imageUrl">
-      </ion-col>
-      <ion-col size="4">
-        <ion-row class="ion-no-padding">
-          <ion-col class="ion-no-padding">
-            <img [src]="banner.sectioncontent[1].imageUrl">
-          </ion-col>
-        </ion-row>
-        <ion-row class="ion-no-padding">
-          <ion-col class="ion-no-padding">
-            <img [src]="banner.sectioncontent[2].imageUrl">
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-  <ion-grid *ngIf="!banner">
-    <ion-row>
-      <ion-col>
-        <div class="spinner">
-          <ion-spinner color="warning"></ion-spinner>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <!-- banner 2 section -->
-  <ion-grid class="ion-no-padding">
-    <ion-row>
-      <ion-col *ngIf="banner2" size="11" offset="0.5">
-        <ion-slides pager="true" scrollbar="false" [options]="catSlider2">
-          <ion-slide *ngFor="let slide of banner2.sectioncontent; let i = index">
-            <ion-card class="ion-no-margin" [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
-              <ion-img [src]="slide.imageUrl"></ion-img>
-            </ion-card>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-      <ion-col *ngIf="!sliderEl2">
-        <div class="spinner">
-          <ion-spinner color="warning"></ion-spinner>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-
-<!-- banner 3 section -->
-  <ion-grid *ngIf="!banner3">
-    <ion-row>
-      <ion-col>
-        <div class="spinner">
-          <ion-spinner color="warning"></ion-spinner>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-grid *ngIf="banner3">
-    <ion-row *ngIf="banner3.isActive">
-        <ion-col size="12" *ngFor="let banner of banner3.sectioncontent">
-          <ion-img [src]="banner.imageUrl"></ion-img>
+    <!-- full home page  /-->
+    <!-- footer -->
+    <ion-grid class="footer">
+      <ion-row>
+        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+          <ion-list>
+            <ion-list-header>Customer Care</ion-list-header>
+            <ion-item [routerLink]="['/', '']" color="dark">
+              <ion-label>Terms & Conditions</ion-label>
+            </ion-item>
+            <ion-item color="dark">
+              <ion-label>Contact Us</ion-label>
+            </ion-item>
+            <ion-item color="dark">
+              <ion-label>Return and Refund policy</ion-label>
+            </ion-item>
+          </ion-list>
         </ion-col>
-    </ion-row>
-    <ion-row class="ion-no-padding">
-        <!-- footer void -->
-        <div class="rb-footer-void"></div>
-
-    </ion-row>
-  </ion-grid>
-
-  <ion-grid class="footer">
-    <ion-row>
-      <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-        <ion-list>
-          <ion-list-header>Customer Care</ion-list-header>
-          <ion-item [routerLink]="['/', '']" color="dark">
-            <ion-label>Terms & Conditions</ion-label>
-          </ion-item>
-          <ion-item color="dark">
-            <ion-label>Contact Us</ion-label>
-          </ion-item>
-          <ion-item color="dark">
-            <ion-label>Return and Refund policy</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-      <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-        <ion-list>
-          <ion-list-header>Rongobuy</ion-list-header>
-          <ion-item color="dark">
-            <ion-label>About Us</ion-label>
-          </ion-item>
-          <ion-item color="dark">
-            <ion-label>Privacy Policy</ion-label>
-          </ion-item>
-          <ion-item color="dark">
-            <ion-label>Career</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-      <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-        <ion-list>
-          <ion-list-header>Connect with us</ion-list-header>
-          <ion-item color="dark">
-            <ion-buttons>
-              <ion-button>
-                <a href="https://www.facebook.com/rongobuy/" target="_blank" rel="noopener">
-                  <ion-icon color="light" slot="icon-only" name="logo-facebook"></ion-icon>
-                </a>
-              </ion-button>
-            </ion-buttons>
-            <ion-label >160K people like this</ion-label>
-          </ion-item>
-          <ion-item color="dark">
-            <ion-buttons>
-              <ion-button>
-                <a href="https://www.instagram.com/rongobuy/" target="_blank" rel="noopener">
-                  <ion-icon color="light" slot="icon-only" name="logo-instagram"></ion-icon>
-                </a>
-              </ion-button>
-              <ion-button>
-                <a href="https://www.pinterest.com/rongobuy/" target="_blank" rel="noopener">
-                  <ion-icon color="light" slot="icon-only" name="logo-pinterest"></ion-icon>
-                </a>
-              </ion-button>
-              <ion-button>
-                <a href="https://www.linkedin.com/company/rongobuy/" target="_blank" rel="noopener">
-                  <ion-icon color="light" slot="icon-only" name="logo-linkedin"></ion-icon>
-                </a>
-              </ion-button>
-              <ion-button>
-                <a href="https://twitter.com/rongobuy/" target="_blank" rel="noopener">
-                  <ion-icon color="light" slot="icon-only" name="logo-twitter"></ion-icon>
-                </a>
-              </ion-button>
-            </ion-buttons>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6" offset="3">
-        <ion-note>© All Rights Reserved | Rongobuy private Limited</ion-note>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <p  class="deal-link-text"
-    (click)="openAppUrl('facebook', 'Rongobuy-112507684561517', '112507684561517')">CHECK OUT fb</p>
-
-
-
+        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+          <ion-list>
+            <ion-list-header>Rongobuy</ion-list-header>
+            <ion-item color="dark">
+              <ion-label>About Us</ion-label>
+            </ion-item>
+            <ion-item color="dark">
+              <ion-label>Privacy Policy</ion-label>
+            </ion-item>
+            <ion-item color="dark">
+              <ion-label>Career</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+          <ion-list>
+            <ion-list-header>Connect with us</ion-list-header>
+            <ion-item color="dark">
+              <ion-buttons>
+                <ion-button>
+                  <a href="https://www.facebook.com/rongobuy/" target="_blank" rel="noopener">
+                    <ion-icon color="light" slot="icon-only" name="logo-facebook"></ion-icon>
+                  </a>
+                </ion-button>
+              </ion-buttons>
+              <ion-label >160K people like this</ion-label>
+            </ion-item>
+            <ion-item color="dark">
+              <ion-buttons>
+                <ion-button>
+                  <a href="https://www.instagram.com/rongobuy/" target="_blank" rel="noopener">
+                    <ion-icon color="light" slot="icon-only" name="logo-instagram"></ion-icon>
+                  </a>
+                </ion-button>
+                <ion-button>
+                  <a href="https://www.pinterest.com/rongobuy/" target="_blank" rel="noopener">
+                    <ion-icon color="light" slot="icon-only" name="logo-pinterest"></ion-icon>
+                  </a>
+                </ion-button>
+                <ion-button>
+                  <a href="https://www.linkedin.com/company/rongobuy/" target="_blank" rel="noopener">
+                    <ion-icon color="light" slot="icon-only" name="logo-linkedin"></ion-icon>
+                  </a>
+                </ion-button>
+                <ion-button>
+                  <a href="https://twitter.com/rongobuy/" target="_blank" rel="noopener">
+                    <ion-icon color="light" slot="icon-only" name="logo-twitter"></ion-icon>
+                  </a>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" offset="3">
+          <ion-note>© All Rights Reserved | Rongobuy private Limited</ion-note>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!-- footer /-->
 </ion-content>
 
 

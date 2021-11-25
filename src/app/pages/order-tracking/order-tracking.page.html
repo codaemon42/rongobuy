@@ -16,8 +16,12 @@
         </div>
         <div class="login-content">
           <div class="login-section">
+            <div *ngIf="showStatus" class="order-status">
+              <ion-label>STATUS: {{ statusRes.data }}</ion-label>
+            </div>
             <form [formGroup]="orderTrack" (ngSubmit)="onOrderTrack()">
-              <ion-input type="text" formControlName="orderNumber" class="ion-margin-bottom ion-text-center" placeholder="Order number"></ion-input>
+              <ion-input type="text" formControlName="phoneNumber" class="ion-margin-bottom ion-text-center" placeholder="Phone number"></ion-input>
+              <ion-input type="text" formControlName="orderNumber" class="ion-margin-bottom ion-text-center" placeholder="Order id"></ion-input>
               <ion-button type="submit" color="warning" expand="block"> Track </ion-button>
             </form>
           </div>

@@ -114,10 +114,10 @@ export class AccountPage implements OnInit {
       this.userLoggedIn = this.accountService.isLoggedIn();
       if(!this.userLoggedIn) {
         this.isLogin = true;
-        this.bgContent = 'https://media.rongobuy.com/p/product/wyg3ubxo4kmnq2h0d9i5fpascj16tv.png';
+        this.bgContent = 'url('+'https://media.rongobuy.com/p/product/wyg3ubxo4kmnq2h0d9i5fpascj16tv.png'+') no-repeat';
       } else {
         this.isLogin = false;
-        this.bgContent = null;
+        this.bgContent = '#fff';
       }
   }
 

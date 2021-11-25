@@ -85,6 +85,15 @@ export class OrderService {
     );
   }
 
+  trackOrder(orderId, mobile) {
+    return this.http.post<any>(`${environment.url.base}/order/track`, {orderId, mobile}).pipe(
+      take(1),
+      tap(order=>{
+        console.log('order track : ', order);
+      })
+    );
+  }
+
   headerOptions() {
     const token = this.accountService.userToken;
     return {

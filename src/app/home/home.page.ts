@@ -1,15 +1,11 @@
+import { ColorsService } from './../services/colors/colors.service';
 import { Subscription } from 'rxjs';
-import { Category } from 'src/app/models/category.model';
+import { Category } from './../models/category.model';
 import { HomepageService } from './../services/homepage/homepage.service';
-import { AuthService } from './../services/auth.service';
 import { Device } from '@ionic-native/device/ngx';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MiniProduct } from '../components/product/product.model';
-import { ColorsService } from '../services/colors/colors.service';
 import { BreakpointObserverService } from '../services/breakpoint.service';
-import { IonSlides, Platform } from '@ionic/angular';
-import { StorageService } from '../services/storage.service';
-import { CategoryService } from '../services/category.service';
+import { IonSlides, Platform, LoadingController } from '@ionic/angular';
 import { Homepage } from '../models/homepage.model';
 import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser/ngx';
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -33,7 +29,6 @@ export class HomePage implements OnInit, OnDestroy {
   catSlider2;
 
   emergencyInfo;
-  miniProducts: MiniProduct[];
   searchData;
   isLoadingSearch = false;
   colors: any[];
@@ -41,7 +36,7 @@ export class HomePage implements OnInit, OnDestroy {
   showSearch = false;
 
   phoneCategories: Category[];
-  homepage: Homepage[];
+  homepage: Homepage[] = [];
   homepageSub: Subscription;
 
   sliderEl: Homepage = null;
@@ -50,15 +45,19 @@ export class HomePage implements OnInit, OnDestroy {
   banner2: Homepage = null;
   banner3: Homepage = null;
 
+  bannerBg = {
+    positionX: 0,
+    positionY: 0
+  };
+
   constructor(
     private device: Device,
     private platform: Platform,
-    private authService: AuthService,
-    private colorsService: ColorsService,
     private brkPointService: BreakpointObserverService,
     private homepageService: HomepageService,
-    private categoryService: CategoryService,
-    private inAppBrowser: InAppBrowser
+    private colorsService: ColorsService,
+    private inAppBrowser: InAppBrowser,
+    private loadingCtrl: LoadingController
   ) {
 
    }
@@ -73,12 +72,144 @@ export class HomePage implements OnInit, OnDestroy {
     this.setHomePage();
     this.sizeController();
 
-    this.categoryService.fetchChildCat(4).subscribe(res=>{
-      this.phoneCategories = res.data;
-    });
-    //this.colorsService.getColors();
+    this.bannerBgAnimator();
 
-    this.slideOpts = {
+    this.setSliderOptions();
+    // extra static
+    this.emergencyInfo = [
+      {
+        id: '1',
+        name: 'Customized Design',
+        slug: 'delivery-charge',
+        description: 'This is my page',
+        link: this.pImage,
+        type: 'below-header'
+      },
+      {
+        id: '1',
+        name: '7 days return',
+        slug: 'delivery-charge',
+        description: 'This is my page',
+        link: this.pImage,
+        type: 'below-header'
+      },
+      {
+        id: '1',
+        name: '15 days Refund',
+        slug: 'delivery-charge',
+        description: 'This is my page',
+        link: this.pImage,
+        type: 'below-header'
+      },
+      {
+        id: '1',
+        name: 'Secure Payment',
+        slug: 'delivery-charge',
+        description: 'This is my page',
+        link: this.pImage,
+        type: 'below-header'
+      }
+    ];
+  }
+
+  bannerBgAnimator() {
+    setInterval(()=>{
+      this.bannerBg.positionX +=0.15;
+    },10);
+  }
+
+  sliderNavigate(i) {
+    console.log('selected slider : ', i);
+    console.log('type : ', this.sliderEl[i].type);
+    console.log('type : ', this.sliderEl[i].itemSlug);
+  }
+
+  onSearch(event) {
+    console.log('new event created: ', event);
+    this.searchData = event;
+  }
+
+  isLoading(event) {
+    console.log('is loading', event);
+    this.isLoadingSearch = event;
+  }
+
+
+  catSliderLoaded(event) {
+    console.log('catslide : ', event);
+  }
+
+  //fb page
+  openAppUrl(app: string, name: string, id?: string) {
+    this.loadingCtrl.create({
+      message: 'Opening Chat',
+      duration: 3000
+    }).then(el=>el.present());
+    switch (app) {
+        case 'facebook':
+            this.launchApp(
+              'fb://', 'com.facebook.orca',
+              'http://m.me/' + name,
+              'http://m.me/' + name,
+              'https://www.facebook.com/' + name);
+            break;
+        case 'instagram':
+            this.launchApp(
+              'instagram://',
+              'com.instagram.android',
+              'instagram://user?username=' + name,
+              'instagram://user?username=' + name,
+              'https://www.instagram.com/' + name);
+            break;
+        case 'twitter':
+            this.launchApp(
+              'twitter://', 'com.twitter.android',
+              'twitter://user?screen_name=' + name,
+              'twitter://user?screen_name=' + name,
+              'https://twitter.com/' + name);
+            break;
+        default:
+            break;
+      }
+  }
+
+  ngOnDestroy() {
+    this.homepageSub.unsubscribe();
+  }
+
+
+
+  // helper methods
+  setHomePage() {
+    this.homepageService.fetchHomePage().subscribe();
+    this.homepageSub = this.homepageService.homepage.subscribe(res => {
+      this.homepage = res;
+      // this.sliderEl = this.homepage.find(homepage => homepage.sectionTitle === 'slider');
+      // this.sliderEl2 = this.homepage.find(homepage => homepage.sectionTitle === 'Slider 2');
+      // this.banner = this.homepage.find(homepage => homepage.sectionTitle === 'Banner');
+      // this.banner2 = this.homepage.find(homepage => homepage.sectionTitle === 'Banner 2');
+      // this.banner3 = this.homepage.find(homepage => homepage.sectionTitle === 'Banner 3');
+    });
+  }
+  sizeController() {
+    this.brkPointService.size.subscribe(size=>{
+      console.log('size home : ', size);
+      if( size === 'xs' ){
+        this.mobileView = true;
+      } else{
+        this.mobileView = false;
+      }
+    });
+  }
+  setColors() {
+    this.colorsService.getColors();
+    this.colorsService.randomColors.subscribe(res=>{
+      this.colors = res;
+    });
+    console.log(this.colors);
+  }
+  setSliderOptions() {
+        this.slideOpts = {
       grabCursor: true,
       cubeEffect: {
         shadow: true,
@@ -302,164 +433,8 @@ export class HomePage implements OnInit, OnDestroy {
           }
       }
     };
-
-    this.emergencyInfo = [
-      {
-        id: '1',
-        name: 'Customized Design',
-        slug: 'delivery-charge',
-        description: 'This is my page',
-        link: this.pImage,
-        type: 'below-header'
-      },
-      {
-        id: '1',
-        name: '7 days return',
-        slug: 'delivery-charge',
-        description: 'This is my page',
-        link: this.pImage,
-        type: 'below-header'
-      },
-      {
-        id: '1',
-        name: '15 days Refund',
-        slug: 'delivery-charge',
-        description: 'This is my page',
-        link: this.pImage,
-        type: 'below-header'
-      },
-      {
-        id: '1',
-        name: 'Secure Payment',
-        slug: 'delivery-charge',
-        description: 'This is my page',
-        link: this.pImage,
-        type: 'below-header'
-      }
-    ];
-
-    setTimeout(()=>{
-      this.miniProducts = [
-        {
-          id: '2',
-          title: 'Product One',
-          slug: 'product-slug-1',
-          featured_image: this.pImage,
-        },
-        {
-          id: '2',
-          title: 'Product One',
-          slug: 'product-slug-2',
-          featured_image: this.pImage,
-        },
-        {
-          id: '2',
-          title: 'Product One',
-          slug: 'product-slug-3',
-          featured_image: this.pImage,
-        },
-        {
-          id: '2',
-          title: 'Product One',
-          slug: 'product-slug-4',
-          featured_image: this.pImage,
-        },
-      ];
-    }, 2000);
   }
-
-  sliderNavigate(i) {
-    console.log('selected slider : ', i);
-    console.log('type : ', this.sliderEl[i].type);
-    console.log('type : ', this.sliderEl[i].itemSlug);
-  }
-
-  onClickProduct(i) {
-    console.log(this.miniProducts[i].slug);
-  }
-
-  onSearch(event) {
-    console.log('new event created: ', event);
-    this.searchData = event;
-  }
-
-  isLoading(event) {
-    console.log('is loading', event);
-    this.isLoadingSearch = event;
-  }
-
-  setColors() {
-    this.colorsService.getColors();
-    this.colorsService.randomColors.subscribe(res=>{
-      this.colors = res;
-    });
-    console.log(this.colors);
-  }
-
-  setHomePage() {
-    this.homepageService.fetchHomePage().subscribe();
-    this.homepageSub = this.homepageService.homepage.subscribe(res => {
-      this.homepage = res;
-      this.sliderEl = this.homepage.find(homepage => homepage.sectionTitle === 'slider');
-      this.sliderEl2 = this.homepage.find(homepage => homepage.sectionTitle === 'Slider 2');
-      this.banner = this.homepage.find(homepage => homepage.sectionTitle === 'Banner');
-      this.banner2 = this.homepage.find(homepage => homepage.sectionTitle === 'Banner 2');
-      this.banner3 = this.homepage.find(homepage => homepage.sectionTitle === 'Banner 3');
-    });
-  }
-
-  sizeController() {
-    this.brkPointService.size.subscribe(size=>{
-      console.log('size home : ', size);
-      if( size === 'xs' ){
-        this.mobileView = true;
-      } else{
-        this.mobileView = false;
-      }
-    });
-  }
-
-  catSliderLoaded(event) {
-    console.log('catslide : ', event);
-
-  }
-
-  ngOnDestroy() {
-    this.homepageSub.unsubscribe();
-  }
-
-
-  //fb page
-  openAppUrl(app: string, name: string, id?: string) {
-    switch (app) {
-        case 'facebook':
-            this.launchApp(
-              'fb://', 'com.facebook.orca',
-              'http://m.me/' + name,
-              'http://m.me/' + name,
-              'https://www.facebook.com/' + name);
-            break;
-        case 'instagram':
-            this.launchApp(
-              'instagram://',
-              'com.instagram.android',
-              'instagram://user?username=' + name,
-              'instagram://user?username=' + name,
-              'https://www.instagram.com/' + name);
-            break;
-        case 'twitter':
-            this.launchApp(
-              'twitter://', 'com.twitter.android',
-              'twitter://user?screen_name=' + name,
-              'twitter://user?screen_name=' + name,
-              'https://twitter.com/' + name);
-            break;
-        default:
-            break;
-      }
-  }
-
-private launchApp(iosApp: string, androidApp: string, appUrlIOS: string, appUrlAndroid: string, webUrl: string) {
+  launchApp(iosApp: string, androidApp: string, appUrlIOS: string, appUrlAndroid: string, webUrl: string) {
     let app: string;
     let appUrl: string;
     // check if the platform is ios or android, else open the web url
@@ -486,6 +461,5 @@ private launchApp(iosApp: string, androidApp: string, appUrlIOS: string, appUrlA
     //         const browser: InAppBrowserObject = this.inAppBrowser.create(webUrl, '_system');
     //     }
     // );
-}
-
+  }
 }

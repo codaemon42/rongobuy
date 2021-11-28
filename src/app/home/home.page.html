@@ -6,7 +6,7 @@
         'background': 'url('+'https://i0.wp.com/www.cssscript.com/wp-content/uploads/2017/12/Animated-Particles-Background.png?fit=499%2C386&ssl=1'+')'
       }" -->
     <ion-grid
-     *ngIf="!homepage">
+     *ngIf="homepage.length <= 0">
       <ion-row>
         <ion-col>
           <div class="spinner">
@@ -37,13 +37,29 @@
           </ion-slides>
         </ion-col>
       </ion-row>
-      <ion-row *ngIf="!homeIndex">
+      <ion-row  *ngIf="homeSection.sectionType === 'emergency' && homeSection.isActive === 1">
+        <ion-col>
+          <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
+            <ion-slide *ngFor="let emergency of homeSection.sectioncontent; let i = index">
+                <!-- <div class="rb-emergency-info" [ngStyle]="{'background': 'var(--ion-color-'+colors[i]+')'}"> -->
+                <div class="rb-emergency-info">
+                  <div class="icon">
+                    <img [src]="emergency.imageUrl" alt="icon">
+                  </div>
+                  <ion-label style="margin: 10px; text-align: left;">{{emergency.title}}</ion-label>
+                </div>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+
+      <!-- <ion-row *ngIf="!homeIndex">
         <ion-col>
           <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
             <ion-slide *ngFor="let emergency of emergencyInfo; let i = index">
                       <div class="rb-emergency-info" [ngStyle]="{'background': 'var(--ion-color-'+colors[i]+')'}">
                   <div class="icon">
-                    <!-- <img [src]="emergency.link" alt="icon"> -->
+                    <img [src]="emergency.link" alt="icon">
                     <ion-icon color="light" name="accessibility"></ion-icon>
                   </div>
                   <ion-label style="margin: 10px; text-align: left;">{{emergency.name}}</ion-label>
@@ -51,13 +67,13 @@
             </ion-slide>
           </ion-slides>
         </ion-col>
-      </ion-row>
-
+      </ion-row> -->
+<!-- https://media.rongobuy.com/p/product/e5h8yai2l36m47ckvot9uwbsxq0d1r.png -->
       <!-- other slider -->
       <ion-row *ngIf="homeSection.sectionType === 'slider' && homeSection.isActive === 1">
         <ion-col *ngIf="homeIndex" size="11" offset="0.5">
           <ion-slides class="cat-slider-2" pager="true" scrollbar="false" [options]="catSlider">
-            <ion-slide *ngFor="let slide of sliderEl2.sectioncontent; let i = index">
+            <ion-slide *ngFor="let slide of homeSection.sectioncontent; let i = index">
               <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
                 <ion-img [src]="slide.imageUrl"></ion-img>
               </ion-card>
@@ -80,6 +96,19 @@
         </ion-col>
       </ion-row>
 
+      <!-- Video section -->
+      <ion-row *ngIf="homeSection.sectionType === 'video' && homeSection.isActive === 1">
+        <ion-col size="11" offset="0.5" >
+          <ion-slides class="cat-slider" pager="true" scrollbar="false" [options]="catSlider2" (ionSlidesDidLoad)="catSliderLoaded($event)" (ionSlideNextStart)="catSliderLoaded($event)">
+            <ion-slide *ngFor="let videoContent of homeSection.sectioncontent; let i = index">
+              <ion-card *ngIf="videoContent.imageUrl" [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
+               <iframe width="100%" height="200" src="https://www.youtube.com/embed/{{videoContent.imageUrl}}" [title]="videoContent.title" frameborder="0" allowfullscreen ng-show="showvideo"></iframe>
+              </ion-card>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+
       <!-- banner section -->
       <ion-row [ngStyle]="{'background-position-x.px': bannerBg.positionX}" class="bg-drops" *ngIf="homeSection.sectionType === 'banner' && homeSection.isActive === 1">
         <ion-col size="11" offset="0.5" *ngFor="let banner of homeSection.sectioncontent; let i = index">
@@ -95,6 +124,8 @@
       </ion-row>
     </ion-grid>
 
+    <!-- products -->
+
     <!-- chat section -->
       <ion-fab class="rb-chat-icon" vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="warning" (click)="openAppUrl('facebook', 'rongobuy', '228677831034067')">
@@ -108,8 +139,8 @@
         <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
           <ion-list>
             <ion-list-header>Customer Care</ion-list-header>
-            <ion-item [routerLink]="['/', '']" color="dark">
-              <ion-label>Terms & Conditions</ion-label>
+            <ion-item [routerLink]="['/', 'pages', 'terms-and-conditions']" color="dark">
+              <ion-label color="light">Terms & Conditions</ion-label>
             </ion-item>
             <ion-item color="dark">
               <ion-label>Contact Us</ion-label>

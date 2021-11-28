@@ -209,8 +209,9 @@ export class HomePage implements OnInit, OnDestroy {
     console.log(this.colors);
   }
   setSliderOptions() {
-        this.slideOpts = {
+      this.slideOpts = {
       grabCursor: true,
+      autoplay: true,
       cubeEffect: {
         shadow: true,
         slideShadows: true,
@@ -368,8 +369,32 @@ export class HomePage implements OnInit, OnDestroy {
     this.emergencyCatSlider = {
       initialSlide: 0,
       speed: 400,
+      loop: true,
       slidesPerView: 2.2,
-      spaceBetween: 1
+      spaceBetween: 1,
+      autoplay: true,
+      breakpoints: {
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1.5,
+            spaceBetween: 10
+          },
+          // when window width is >= 480px
+          480: {
+            slidesPerView: 1.7,
+            spaceBetween: 10
+          },
+          // when window width is >= 640px
+          768: {
+            slidesPerView: 2.5,
+            spaceBetween: 10
+          },
+          // when window width is >= 640px
+          980: {
+            slidesPerView: 3.9,
+            spaceBetween: 10
+          }
+        }
     };
 
     this.catSlider = {
@@ -378,7 +403,7 @@ export class HomePage implements OnInit, OnDestroy {
       loop: true,
       slidesPerView: 3.9,
       spaceBetween: 1,
-      autoplay:1000,
+      autoplay: true,
       breakpoints: {
           // when window width is >= 320px
           320: {
@@ -409,7 +434,7 @@ export class HomePage implements OnInit, OnDestroy {
       loop: true,
       slidesPerView: 1,
       spaceBetween: 10,
-      autoplay: 1000,
+      autoplay: true,
       breakpoints: {
           // when window width is >= 320px
           320: {

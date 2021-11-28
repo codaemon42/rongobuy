@@ -70,20 +70,24 @@ ion-slides {
   box-shadow:inset 6px 8px 8px 0 #0000003b;
   width: 100%;
   margin-left: 10px;
+  background: #fff;
 
   .icon{
-    width: 20px;
-    height: 40px;
     margin: 15px 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    img{
+      border-radius: 10px;
+    }
+
   }
 
   ion-label{
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
-    color: var(--ion-color-dark-contrast-rgb);
+    //color: var(--ion-color-dark-contrast-rgb);
   }
 }
 

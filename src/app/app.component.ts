@@ -1,11 +1,13 @@
 import { Device } from '@ionic-native/device/ngx';
 /* eslint-disable max-len */
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { MenuService } from './services/menu.service';
 import { AccountService } from './account/account.service';
 import { LoadingService } from './services/controllers/loading.service';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +29,10 @@ export class AppComponent {
     private nav: NavController,
     private device: Device,
     private accountService: AccountService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private deeplinks: Deeplinks,
+    private zone: NgZone,
+    private router: Router,
     ) {
       this.initializeApp();
   }
@@ -61,6 +66,28 @@ export class AppComponent {
 
   getMenus(){
     this.menus = this.menuService.fetchMenus();
+  }
+
+  setDeeplinks() {
+        this.deeplinks.route({
+           '/:slug': 'pages'
+           }).subscribe(
+      match => {
+        console.log('Successfully matched route', match);
+
+        // Create our internal Router path by hand
+        const internalPath = `/${match.$route}/${match.$args['slug']}`;
+
+        // Run the navigation in the Angular zone
+        this.zone.run(() => {
+          this.router.navigateByUrl(internalPath);
+        });
+      },
+      nomatch => {
+        // nomatch.$link - the full link data
+        console.error("Got a deeplink that didn't match", nomatch);
+      }
+    );
   }
 
 

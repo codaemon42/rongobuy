@@ -66,10 +66,13 @@ export class OrderService {
     );
   }
 
-  addCustomOrder(shippingAddressId, text='', gift=0, message='', from='') {
+  addCustomOrder(shippingAddressId, mainImage='', backgroundImage='', logoImage='', text='', gift=0, message='', from='') {
     const headerOps = this.headerOptions();
     const body = {
       shippingAddressId,
+      mainImage,
+      backgroundImage,
+      logoImage,
       text,
       gift,
       message,

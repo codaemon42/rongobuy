@@ -39,17 +39,17 @@
     }
   }
 
-  ion-tab-bar {
-    &:before {
-      box-shadow: 0 347px 0 456px var(--ion-color-dark-tint);
-      position: absolute;
-      margin-top: -48px;
-      //padding: 46px;
-      border-radius: 48%;
-      content: "";
-      margin-bottom: 68px;
-    }
-  }
+  // ion-tab-bar {
+  //   &:before {
+  //     box-shadow: 0 347px 0 456px var(--ion-color-dark-tint);
+  //     position: absolute;
+  //     margin-top: -48px;
+  //     //padding: 46px;
+  //     border-radius: 48%;
+  //     content: "";
+  //     margin-bottom: 68px;
+  //   }
+  // }
 
   .inner-left-btn {
     //border-radius: 0 39% 0 0; // create the curved style on the left side of the center

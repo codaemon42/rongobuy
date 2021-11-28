@@ -23,6 +23,7 @@
     "@angular/router": "~12.0.0",
     "@capacitor/core": "3.2.4",
     "@ionic-native/core": "^5.36.0",
+    "@ionic-native/deeplinks": "^5.36.0",
     "@ionic-native/device": "^5.36.0",
     "@ionic-native/file": "^5.36.0",
     "@ionic-native/file-transfer": "^5.36.0",
@@ -84,6 +85,7 @@
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsdoc": "30.7.6",
     "eslint-plugin-prefer-arrow": "1.2.2",
+    "ionic-plugin-deeplinks": "^1.0.24",
     "jasmine-core": "~3.8.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.3.2",
@@ -112,7 +114,11 @@
       },
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-device-name": {},
-      "cordova-plugin-inappbrowser": {}
+      "cordova-plugin-inappbrowser": {},
+      "ionic-plugin-deeplinks": {
+        "URL_SCHEME": "rongobuy--variable",
+        "DEEPLINK_HOST": "test.rongobuy.com"
+      }
     },
     "platforms": [
       "android",

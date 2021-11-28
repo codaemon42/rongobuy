@@ -1,3 +1,4 @@
+import { IonicModule } from '@ionic/angular';
 import { CustomizationReviewComponent } from './../../customization-review/customization-review.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -9,7 +10,8 @@ import { CommonModule } from '@angular/common';
     CustomizationReviewComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    IonicModule
   ],
   exports: [
     CustomizationReviewComponent

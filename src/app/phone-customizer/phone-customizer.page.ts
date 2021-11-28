@@ -1,4 +1,4 @@
-import { MediaService } from './../services/media/media.service';
+import { AccountService } from './../account/account.service';
 
 import { textEditor, TextEditorScreenComponent } from './../components/text-editor-screen/text-editor-screen.component';
 import { AfterViewInit } from '@angular/core';
@@ -16,7 +16,6 @@ import { LoadingController, ModalController, Platform, ToastController } from '@
 
 import { MenuItem } from 'primeng/api';
 import { CustomizationReviewComponent } from '../components/customization-review/customization-review.component';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-phone-customizer',
@@ -32,6 +31,11 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
   @ViewChild('screen', {static: false}) screen: ElementRef;
   @ViewChild('canvas', {static: false}) canvas: ElementRef;
   @ViewChild('downloadLink', {static: false}) downloadLink: ElementRef;
+
+  logoImage = '';
+  mainImage = '';
+  backgroundImage = '';
+  text = '';
 
   domToImage: any = domtoimage;
   backgroundImg;
@@ -108,11 +112,14 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
     private platform: Platform,
     private transfer: FileTransfer,
     private file: File,
-    private sanitizer: DomSanitizer,
-    private mediaService: MediaService
+    private accountService: AccountService
   ) { }
 
   ngOnInit() {
+    if(!this.accountService.isLoggedIn()){
+      this.toastCtrl.create({message: 'please login if you wish to place an order', color: 'danger', duration:4000, position: 'bottom'})
+      .then(el=>el.present());
+    }
     this.tooltipItems = [
             {
                 tooltipOptions: {
@@ -214,23 +221,23 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
   onChangeArea() { console.log('changed'); }
 
   captureScreen() {
+        console.log(
+        this.mainImage, this.backgroundImage,
+        this.logoImage ,
+        this.text,
+    );
     this.loadingCtrl.create({
       message: 'Loading Image ...',
       mode: 'ios'
     }).then(loadingEl => {
       loadingEl.present();
-      this.domToImage.toBlob(this.screen.nativeElement).then(blob => {
-        console.log(' blob file : ', blob);
-        const objectURL = URL.createObjectURL(blob);
-        console.log(' blob file data url : ', blob);
-        this.img = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      });
-      this.domToImage.toPng(this.screen.nativeElement).then( dataUrl => {
-        console.log('png : ',dataUrl);
-        this.mediaService.addMediaString(dataUrl).subscribe(res=>{
-          console.log('media uploder : ', res);
-        });
-      });
+      // this.domToImage.toBlob(this.screen.nativeElement).then(blob => {
+      //   console.log(' blob file : ', blob);
+      //   const objectURL = URL.createObjectURL(blob);
+      //   console.log(' blob file data url : ', blob);
+      //   this.img = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+      // });
+
       this.domToImage.toSvg(this.screen.nativeElement).then( dataUrl => {
         console.log('data  : ',dataUrl);
         //this.img = dataUrl;
@@ -240,27 +247,41 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
         const svg = new Blob([preview], {type:"image/svg+xml;charset=utf-8"});
         console.log('svg blob : ', svg);
 
-        this.modal({dataUrl}).then(data => {
-          if ( data['confirm'] ) {
-            console.log('confirm');
-            this.isWebPlatform().then(web => {
-              if ( web ) {
-                this.webDownloadManager('phone-cover.png', dataUrl);
-              }
-              else {
-                this.appDownloadManager('phone-cover.png', dataUrl);
-              }
-            });
+        this.domToImage.toPng(this.screen.nativeElement).then( dataUrls => {
+          console.log('png : ',dataUrls);
+          this.mainImage = dataUrls;
+          this.modalCtrl.dismiss();
 
-            if( data['buy'] ) {
-              console.log('want to buy the design now');
-              // add this item to cart
-              // navigate to the cart page
+          this.modal({
+            dataUrl,
+            mainImage: this.mainImage,
+            backgroundImage: this.backgroundImage,
+            logoImage: this.logoImage,
+            text: this.text
+            }).then(data => {
+            if ( data['confirm'] ) {
+              console.log('confirm');
+              this.isWebPlatform().then(web => {
+                if ( web ) {
+                  this.webDownloadManager('phone-cover.png', dataUrl);
+                }
+                else {
+                  this.appDownloadManager('phone-cover.png', dataUrl);
+                }
+              });
+
+              if( data['buy'] ) {
+                console.log('want to buy the design now');
+                // add this item to cart
+                // navigate to the cart page
+              }
+            } else {
+              console.log('cancelled');
             }
-          } else {
-            console.log('cancelled');
-          }
+          });
         });
+
+
       })
       .catch(err=>{
         console.log('err : ', err);
@@ -287,6 +308,8 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
       const dataUrl = fr.result.toString();
       if ( id === 'background' ) {
         this.backgroundImg = dataUrl;
+        this.backgroundImage = dataUrl;
+        console.log('backgroundImage : ', this.backgroundImage);
       }
       else if ( id === 'logo' ) {
         const heightTimer = setInterval(()=>{
@@ -296,6 +319,8 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
           }
         },1);
         this.logoParams.src = dataUrl;
+        this.logoImage = dataUrl;
+        console.log('logoImage : ', this.logoImage);
       }
     };
     fr.readAsDataURL(pickedFile);
@@ -381,6 +406,8 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
         text: data['text'],
         styleParams: data['styleParams']
       };
+      this.text = this.textEditor.confirm ? this.textEditor.text : this.text;
+      console.log('text edited : ', this.text);
     });
   }
 

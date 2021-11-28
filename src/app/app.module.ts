@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,6 +34,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     Storage,
     Device,
     InAppBrowser,
+    Deeplinks,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     ],
   bootstrap: [AppComponent],

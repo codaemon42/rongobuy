@@ -1,6 +1,7 @@
+import { Subscription } from 'rxjs';
 import { Page } from './../../models/page.model';
 import { PageService } from './../../services/page.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -8,11 +9,13 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './page-detail.page.html',
   styleUrls: ['./page-detail.page.scss'],
 })
-export class PageDetailPage implements OnInit {
+export class PageDetailPage implements OnInit, OnDestroy {
 
-  page: Page;
+  page: Page = null;
 
   title: any;
+
+  pageSub: Subscription;
 
   // app-header properties
   searchData;
@@ -39,10 +42,9 @@ export class PageDetailPage implements OnInit {
     this.pageService.fetchPage(slug).subscribe((data)=>{
       console.log('fetch : ', data);
     });
-    this.pageService.page.subscribe(data=>{
+    this.pageSub = this.pageService.page.subscribe(data=>{
       this.page = data;
       console.log('page-detail : ',this.page);
-      document.getElementById('page-content').innerHTML = this.page.content;
     });
 
 
@@ -57,6 +59,10 @@ export class PageDetailPage implements OnInit {
   isLoading(event) {
     console.log('is loading', event);
     this.isLoadingSearch = event;
+  }
+
+  ngOnDestroy() {
+    this.pageSub.unsubscribe();
   }
 
 }

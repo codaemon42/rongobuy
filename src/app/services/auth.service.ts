@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { CartService } from './cart.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -25,7 +26,7 @@ export class AuthService {
 
   loginWithOtp(phone='01767000000') {
     return new Promise(resolve=>{
-      const url = 'http://auth.rongobuy.com/api/auth/v1/send-otp';
+      const url = `${environment.url.auth}/send-otp`;
       const body = {
         mobile: phone
       };
@@ -38,7 +39,7 @@ export class AuthService {
 
   checkOTP(phone='01767000000', code='111111') {
     return new Promise(resolve=>{
-      const url = 'http://auth.rongobuy.com/api/auth/v1/check-otp';
+      const url = `${environment.url.auth}/check-otp`;
       const body = {
         mobile: phone,
         otp: code

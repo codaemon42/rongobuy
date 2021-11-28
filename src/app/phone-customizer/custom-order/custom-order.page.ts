@@ -16,6 +16,9 @@ import { OrderService } from 'src/app/services/orders/order.service';
   styleUrls: ['./custom-order.page.scss'],
 })
 export class CustomOrderPage implements OnInit, OnDestroy {
+  @Input() mainImage;
+  @Input() backgroundImage;
+  @Input() logoImage;
   @Input() text;
 
   giftForm: FormGroup;
@@ -45,6 +48,11 @@ export class CustomOrderPage implements OnInit, OnDestroy {
     this.giftFormInit();
     this.addressInit();
     this.cartServiceInit();
+    console.log(
+        this.mainImage, this.backgroundImage,
+        this.logoImage ,
+        this.text,
+    );
   }
 
   giftFormInit() {
@@ -124,7 +132,14 @@ export class CustomOrderPage implements OnInit, OnDestroy {
     }).then(el=>{
       el.present();
 
-      this.orderService.addCustomOrder(this.selectedAddress.id, this.text, gift.isGift, gift.message, gift.from ).subscribe(res=>{
+      this.orderService.addCustomOrder(
+        this.selectedAddress.id,
+        this.mainImage, this.backgroundImage,
+        this.logoImage ,
+        this.text,
+        gift.isGift,
+        gift.message,
+        gift.from ).subscribe(res=>{
         console.log('custom order res : ', res);
         this.loadingCtrl.dismiss();
         this.toastService.toast('Order placed successfully', 'success', 3000);

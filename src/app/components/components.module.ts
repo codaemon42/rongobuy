@@ -30,7 +30,6 @@ import { RouterModule } from '@angular/router';
     ProductComponent,
     SignupComponent,
     YoutubeComponent,
-    CustomizationReviewComponent,
     TextEditorScreenComponent,
     PhoneSelectorComponent
   ],
@@ -49,7 +48,6 @@ import { RouterModule } from '@angular/router';
     ProductComponent,
     SignupComponent,
     YoutubeComponent,
-    CustomizationReviewComponent,
     TextEditorScreenComponent,
     PhoneSelectorComponent
   ]

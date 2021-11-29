@@ -189,26 +189,6 @@ ion-slides {
   }
 }
 
-
-// footer
-.footer {
-  background-color: #333;
-
-  ion-list{
-    background-color: #333;
-
-    ion-list-header{
-      color: var(--ion-color-warning);
-      font-weight: bold;
-    }
-
-    ion-item{
-      ion-label{
-        color: var(--ion-color-warning-tint);
-      }
-    }
-  }
-}
 .header-center {
   display: flex;
   flex-direction: column;

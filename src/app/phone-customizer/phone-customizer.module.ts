@@ -1,3 +1,4 @@
+import { EditorModule } from './../components/modules/editor/editor.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -42,6 +43,7 @@ import { PhoneCustomizerPage } from './phone-customizer.page';
     RippleModule,
     ToastModule,
     HammerModule,
+    EditorModule,
     PhoneCustomizerPageRoutingModule
   ],
   declarations: [PhoneCustomizerPage],

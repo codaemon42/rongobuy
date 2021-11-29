@@ -1,6 +1,8 @@
+import { ToastService } from './../../services/controllers/toast.service';
+import { AccountService } from './../../account/account.service';
 import { CustomOrderPage } from './../../phone-customizer/custom-order/custom-order.page';
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { present } from '@ionic/core/dist/types/utils/overlays';
 
 @Component({
@@ -16,7 +18,12 @@ export class CustomizationReviewComponent implements OnInit {
   @Input() logoImage;
   @Input() text;
 
-  constructor( private modalCtrl: ModalController ) { }
+  constructor(
+    private modalCtrl: ModalController,
+    private accountService: AccountService,
+    private nav: NavController,
+    private toastService: ToastService
+  ) { }
 
   ngOnInit() {
     console.log(
@@ -44,16 +51,22 @@ export class CustomizationReviewComponent implements OnInit {
       buy: true
     });
 
-    this.modalCtrl.create({
-      component: CustomOrderPage,
-      componentProps: {
-          mainImage: this.mainImage,
-          backgroundImage: this.backgroundImage,
-          logoImage: this.logoImage,
-          text: this.text
-      },
-      cssClass: 'preview-modal'
-    }).then(el=>el.present());
+    if( this.accountService.isLoggedIn() ) {
+      this.modalCtrl.create({
+        component: CustomOrderPage,
+        componentProps: {
+            mainImage: this.mainImage,
+            backgroundImage: this.backgroundImage,
+            logoImage: this.logoImage,
+            text: this.text
+        },
+        cssClass: 'preview-modal'
+      }).then(el=>el.present());
+    } else {
+      this.toastService.toast('Please login to order Customized Design', 'danger', 2000);
+      this.nav.navigateForward('/tabs/account');
+    }
+
   }
 
 }

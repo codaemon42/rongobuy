@@ -3,6 +3,7 @@ import { switchMap, take, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Product } from '../models/product.model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export interface ProductListResponse {
   success: boolean;
@@ -41,19 +42,33 @@ export class ProductsService {
     this._selectedProductBackground.next(image);
   }
 
-  fetchProductsByCat(slug) {
-    return this.http.get<ProductListResponse>(`http://public.rongobuy.com/api/v1/category/${slug}`).pipe(
-      take(1),
-      tap( productList =>{
-        console.log('productListRes : ', productList.data);
-        console.log('productList : ', productList.data.data);
-        this._product.next(productList.data.data);
-      })
-    );
+  fetchProductsByCat(slug, page=1) {
+    if(page>1) {
+      return this.http.get<ProductListResponse>(`${environment.url.base}/category/${slug}?page=${page}`).pipe(
+        take(1),
+        tap( productList =>{
+          console.log('productListRes : ', productList.data);
+          console.log('productList : ', productList.data.data);
+          this.products.pipe(take(1)).subscribe(res=>{
+            this._product.next(res.concat(productList.data.data));
+          });
+        })
+      );
+    }
+    else {
+      return this.http.get<ProductListResponse>(`${environment.url.base}/category/${slug}?page=${page}`).pipe(
+        take(1),
+        tap( productList =>{
+          console.log('productListRes : ', productList.data);
+          console.log('productList : ', productList.data.data);
+          this._product.next(productList.data.data);
+        })
+      );
+    }
   }
 
   fetchProductsBySearch(text) {
-      return this.http.post<ProductListResponse>(`http://public.rongobuy.com/api/v1/search`, {search: text}).pipe(
+      return this.http.post<ProductListResponse>(`${environment.url.base}/search`, {search: text}).pipe(
         take(1),
         tap( productList =>{
           console.log('productListRes : ', productList.data);

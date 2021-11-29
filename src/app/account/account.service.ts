@@ -52,6 +52,7 @@ export class AccountService {
   async logOut(){
     this._userIsAuthenticated = false;
     await this.storageService.set('_userIsAuthenticated', false);
+    await this.storageService.set('_userToken', false);
   }
 
   async storeToken(token) {

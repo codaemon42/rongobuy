@@ -25,6 +25,7 @@ export class CheckoutPage implements OnInit, OnDestroy {
 
   giftForm: FormGroup;
   sendGift = false;
+  terms = false;
 
   cartSub: Subscription;
   cartDetails: CartRes;
@@ -133,6 +134,12 @@ export class CheckoutPage implements OnInit, OnDestroy {
     console.log('check box event : ', event);
     this.sendGift = !this.sendGift;
   }
+
+  termsAccept(event) {
+    console.log('terms event : ', event);
+    this.terms = !this.sendGift;
+  }
+
 
   onChangePayment(payment) {
     console.log('onchangepayment : ', payment);

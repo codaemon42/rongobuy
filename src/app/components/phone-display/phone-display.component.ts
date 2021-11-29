@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { IonInfiniteScroll } from '@ionic/angular';
 
 @Component({
   selector: 'app-phone-display',
@@ -7,6 +8,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class PhoneDisplayComponent implements OnInit {
   @Output() selectedBackground = new EventEmitter<any>();
+  @Output() loadMoreCover = new EventEmitter<IonInfiniteScroll>();
   @Input() categoryImages;
   @Input() backgroundImage;
 
@@ -18,5 +20,10 @@ export class PhoneDisplayComponent implements OnInit {
     console.log('category index', index);
     this.selectedBackground.emit(index);
   }
+
+  loadData(event) {
+    this.loadMoreCover.emit(event);
+  }
+
 
 }

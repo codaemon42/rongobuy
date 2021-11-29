@@ -1,3 +1,4 @@
+import { catchError } from 'rxjs/operators';
 import { CategoryService } from './../services/category.service';
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
@@ -8,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { Product } from '../models/product.model';
 import { ProductsService } from '../services/products.service';
 import { Category } from '../models/category.model';
+import { ToastService } from '../services/controllers/toast.service';
 
 @Component({
   selector: 'app-category',
@@ -17,6 +19,8 @@ import { Category } from '../models/category.model';
 
 export class CategoryPage implements OnInit, OnDestroy {
   items: MenuItem[];
+  loadMoreSlug = null;
+  loadMoreCounter = 1;
   menuBackLabel: string;
   catSearchPlaceholder: string;
   catSearchId: string;
@@ -38,7 +42,8 @@ export class CategoryPage implements OnInit, OnDestroy {
   constructor(
     private nav: NavController,
     private productsService: ProductsService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -110,10 +115,33 @@ mapCats(categories: Category[]) {
   }
   fetchProductByCat(slug) {
     console.log('naim');
+    this.loadMoreSlug = slug;
     this.productsService.fetchProductsByCat(slug).subscribe(()=>{
       this.isLoading = false;
       return true;
     });
+  }
+  loadData(event) {
+    if(this.loadMoreSlug){
+      this.loadMoreCounter++;
+      console.log('infinte scroll data : ', event.target);
+      this.productsService.fetchProductsByCat(this.loadMoreSlug, this.loadMoreCounter).subscribe((res)=>{
+        this.isLoading = false;
+        event.target.complete();
+        if(res.data.data.length<=0){
+          event.target.disabled = true;
+          this.toastService.toast('No more Product available', 'danger', 2000);
+        }
+        if (this.products.length === 1000) {
+          event.target.disabled = true;
+        }
+        return true;
+      });
+    }else {
+      setTimeout(() => {
+        event.target.complete();
+      }, 500);
+    }
   }
 
   onClickProduct(index) {

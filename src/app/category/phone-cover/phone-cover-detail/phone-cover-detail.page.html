@@ -20,7 +20,7 @@
   <ion-grid *ngIf="isDisplay">
     <ion-row>
       <ion-col>
-        <app-phone-display [categoryImages]="phoneCovers" [backgroundImage]="backgroundImage" (selectedBackground)="onSelectProductModel($event)"></app-phone-display>
+        <app-phone-display [categoryImages]="phoneCovers" [backgroundImage]="backgroundImage" (selectedBackground)="onSelectProductModel($event)" (loadMoreCover)="loadData($event)"></app-phone-display>
       </ion-col>
     </ion-row>
   </ion-grid>

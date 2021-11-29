@@ -19,7 +19,7 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     HeaderComponent,
-    SearchResultsComponent
+    // SearchResultsComponent
     ]
 })
 export class HeaderModule { }

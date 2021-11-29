@@ -105,14 +105,14 @@
               <ion-col size="10" class="gift-box">
                   <ion-input formControlName="sender"></ion-input>
               </ion-col>
-              <!-- <ion-col>
+              <ion-col>
                 <ion-list>
                   <ion-item>
-                    <ion-checkbox (ionChange)="sendAsGift($event)" [checked]="sendGift" mode="ios" color="warning" ></ion-checkbox>
-                    <ion-label color="dark"> add special packaging </ion-label>
+                    <ion-checkbox (ionChange)="termsAccept($event)" [checked]="terms" mode="md" color="warning" ></ion-checkbox>
+                    <ion-label color="dark"> Accept our terms and conditions </ion-label>
                   </ion-item>
                 </ion-list>
-              </ion-col> -->
+              </ion-col>
             </ion-row>
           </ion-grid>
 
@@ -177,7 +177,7 @@
               </ion-list>
             </div>
           </div>
-          <ion-button [disabled]="cartLoading && addressLoading" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>
+          <ion-button [disabled]="cartLoading && addressLoading && terms" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>
         </div>
       </ion-col>
     </ion-row>

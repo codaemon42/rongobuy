@@ -6,52 +6,6 @@
 ></app-header>
 
 <ion-content>
-  <!-- <ion-grid class="ion-no-padding">
-    <ion-row>
-      <ion-col size="4" class="rb-category-split">
-        <ion-row>
-          <ion-col>
-            <ion-card>
-              <ion-label>Category one</ion-label>
-            </ion-card>
-
-            <div class="secondary-category">
-              <ion-card class="">
-                <ion-label>Category one sub</ion-label>
-              </ion-card>
-              <ion-card>
-                <ion-label>Category one sub</ion-label>
-              </ion-card>
-            </div>
-
-            <div class="third-category">
-              <ion-card class="">
-                <ion-label>Category 3rd sub</ion-label>
-              </ion-card>
-              <ion-card>
-                <ion-label>Category 3rd sub</ion-label>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-card>
-              <ion-label>Category one</ion-label>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-card>
-              <ion-label>Category one</ion-label>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-      <ion-col size="8">Main content</ion-col>
-    </ion-row>
-  </ion-grid> -->
   <!-- <ion-segment value="heart">
     <ion-segment-button value="home">
       <ion-icon name="man-sharp"></ion-icon>
@@ -71,7 +25,7 @@
     <ion-row>
       <ion-col size="12" sizeSm="12" sizeMd="4" sizeLg="3">
         <!-- <p-panelMenu [model]="items" [style]="{'width':'100%'}"></p-panelMenu> -->
-        <p-slideMenu [menuWidth]="280" [model]="items" [style]="{'width':'100%'}" [viewportHeight]="250"></p-slideMenu>
+      <p-slideMenu [menuWidth]="280" [model]="items" [style]="{'width':'100%'}" [viewportHeight]="250"></p-slideMenu>
       </ion-col>
       <ion-col size="12" sizeSm="12" sizeMd="8" sizeLg="9">
         <ion-grid class="ion-no-padding">
@@ -123,6 +77,13 @@
                   </div>
                 </ion-card>
               </ion-col>
+              <ion-infinite-scroll threshold="50%" (ionInfinite)="loadData($event)">
+                <ion-infinite-scroll-content
+                  loadingSpinner="lines"
+                  loadingText="Loading more products...">
+                </ion-infinite-scroll-content>
+              </ion-infinite-scroll>
+
 
               <!-- <ion-col size="6" sizeSm="6" sizeMd="4" sizeLg="3" *ngFor="let image of categoryImages; let i = index" (click)="onClickProduct(i)">
                 <ion-card>

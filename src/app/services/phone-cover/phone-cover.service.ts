@@ -35,14 +35,14 @@ export class PhoneCoverService {
     );
   }
 
-  fetchPhoneCoversByFilter(gender=null, phoneModel=null, data=[]) {
+  fetchPhoneCoversByFilter(page=1,gender=null, phoneModel=null, data=[]) {
     const body = {
       type: 'phone-cover',
       gender,
       phoneModel
     };
     console.log(body);
-    return this.http.post<PhoneCoverRes>(`${environment.url.base}/setting/get-phone-cover`, body).pipe(
+    return this.http.post<PhoneCoverRes>(`${environment.url.base}/setting/get-phone-cover?page=${page}`, body).pipe(
       take(1),
       tap(res=>{
         this._phoneCovers.next(data.concat(res.data.data));

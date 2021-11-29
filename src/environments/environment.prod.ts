@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   url: {
-    base: 'http://public.rongobuy.com/api/v1'
+    base: 'https://public.rongobuy.com/api/v1',
+    auth: 'https://auth.rongobuy.com/api/auth/v1'
   }
 };

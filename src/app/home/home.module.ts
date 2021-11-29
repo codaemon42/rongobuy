@@ -1,3 +1,4 @@
+import { FooterModule } from './../components/footer/footer.module';
 import { HeaderModule } from './../components/modules/header/header.module';
 import { ComponentsModule } from '../components/components.module';
 import { NgModule } from '@angular/core';
@@ -18,8 +19,8 @@ import { HomePage } from './home.page';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    ComponentsModule,
-    HeaderModule
+    HeaderModule,
+    FooterModule
   ],
   declarations: [HomePage]
 })

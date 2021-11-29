@@ -26,7 +26,6 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    FooterComponent,
     ProductComponent,
     SignupComponent,
     YoutubeComponent,
@@ -44,7 +43,6 @@ import { RouterModule } from '@angular/router';
     DropdownModule,
   ],
   exports: [
-    FooterComponent,
     ProductComponent,
     SignupComponent,
     YoutubeComponent,

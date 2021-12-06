@@ -1,6 +1,7 @@
 export interface PhoneCover {
   id: number;
   type: string;
+  price: number;
   gender: string;
   phoneModel: string;
   image: string;

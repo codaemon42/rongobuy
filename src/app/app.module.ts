@@ -35,7 +35,7 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
     Device,
     InAppBrowser,
     Deeplinks,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],
   bootstrap: [AppComponent],
 })

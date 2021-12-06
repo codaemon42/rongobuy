@@ -9,8 +9,33 @@ $backgroundLayer: #ffd700;
   //     padding-bottom: 25px;
   //   }
   // }
+  // p{
+  //   color: red;
+  // }
+
+  .real-price{
+    margin-bottom: 0;
+  }
+  .disabled-price{
+    text-decoration: line-through;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+  .description{
+    background: #fff;
+    padding: 35px 15px 50px 15px;
+    letter-spacing: 1.1px;
+    line-height: 1.7;
+    font-size: 14px;
+    text-align: justify;
+
+    ion-segment{
+      margin-bottom: 30px;
+      --background: #f8f8f8;
+    }
+  }
 ion-content{
-  --background: #ffd700;
+  --background: #ffffff;
 
 
 

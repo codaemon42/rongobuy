@@ -9,7 +9,7 @@ const routes: Routes = [
     component: PhoneCoverDetailPage
   },
   {
-    path: 'specific',
+    path: ':catSlug',
     loadChildren: () => import('./specific/specific.module').then( m => m.SpecificPageModule)
   }
 ];

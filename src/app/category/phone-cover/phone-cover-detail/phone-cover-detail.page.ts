@@ -1,14 +1,10 @@
-import { ProductService } from './../../../services/product.service';
 import { Subscription } from 'rxjs';
 import { PhoneCover } from './../../../models/phone-cover.model';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoadingController, NavController } from '@ionic/angular';
-import { PhoneCoverService } from 'src/app/services/phone-cover/phone-cover.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ActivatedRoute } from '@angular/router';
-import { ProductsService } from 'src/app/services/products.service';
-import { Product } from 'src/app/models/product.model';
-import { ToastService } from 'src/app/services/controllers/toast.service';
+import { Category } from 'src/app/models/category.model';
 
 @Component({
   selector: 'app-phone-cover-detail',
@@ -20,23 +16,16 @@ export class PhoneCoverDetailPage implements OnInit, OnDestroy {
   phoneCovers: PhoneCover[] = [];
   isDisplay = false;
   phoneCoverCatChild: any;
+  selectedCatChild: any = null;
   catSub: Subscription;
-  phoneCoverSub: Subscription;
   backgroundImage = null;
-  product: Product;
-
-  phoneCoverPage = 1;
-  gender = null;
-  phoneModel = null;
+  slug = '';
 
   constructor(
     private loadingCtrl: LoadingController,
     private categoryService: CategoryService,
-    private phoneCoverService: PhoneCoverService,
     private router: ActivatedRoute,
-    private productsService: ProductsService,
     private nav: NavController,
-    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -44,6 +33,8 @@ export class PhoneCoverDetailPage implements OnInit, OnDestroy {
     this.categoryService.fetchCategories().subscribe();
     this.router.params.subscribe(res=>{
       console.log(res.slug);
+      this.isDisplay = true;
+      this.slug = res.slug;
       this.catSub = this.categoryService.categories.subscribe(categories=>{
         this.getCategory(categories, res.slug).then(phoneCat=>{
           this.phoneCoverCatChild = phoneCat;
@@ -51,7 +42,6 @@ export class PhoneCoverDetailPage implements OnInit, OnDestroy {
         });
       });
     });
-    this.fetchPhoneCovers();
   }
 
   getCategory(categories: any[], slug) {
@@ -74,49 +64,24 @@ export class PhoneCoverDetailPage implements OnInit, OnDestroy {
 
   onSelectImage(slug) {
     this.isDisplay = true;
-    this.productsService.fetchProductsByCat(slug).subscribe(products=>{
-      this.product = products.data.data[0];
-      this.backgroundImage = products.data.data[0].mainImage;
-    });
-  }
-
-  fetchPhoneCovers() {
-    this.phoneCoverPage++;
-    this.phoneCoverSub = this.phoneCoverService.phoneCovers.subscribe(data => {
-      this.phoneCovers = data;
-      console.log('this fn cover : ', this.phoneCovers);
-    });
-    this.phoneCoverService.fetchPhoneCoversByFilter(this.phoneCoverPage, this.gender, this.phoneModel, this.phoneCovers).subscribe(data=>{
-      console.log('fetch fn covers : ', data);
-    });
-  }
-
-  loadData(event) {
-      this.phoneCoverPage++;
-      console.log('infinite scroll data : ', event.target);
-      this.phoneCoverService.fetchPhoneCoversByFilter(this.phoneCoverPage, this.gender, this.phoneModel, this.phoneCovers).subscribe(res=>{
-        event.target.complete();
-        if(res.data.data.length<=0){
-          event.target.disabled = true;
-          this.toastService.toast('No more Product available', 'danger', 2000);
-        }
-        if (this.phoneCovers.length === 10000) {
-          event.target.disabled = true;
-        }
-        return true;
-      });
+    this.onRoute(slug);
 
   }
+  onChangeArea() {
+    console.log('changed', this.selectedCatChild);
+    this.loadingCtrl.create({message: 'Loading Designs'}).then(el=>el.present());
+    setTimeout(()=>{
+      this.loadingCtrl.dismiss();
+      this.onRoute(this.selectedCatChild.slug);
+    },1000);
+  }
 
-  onSelectProductModel(event) {
-    console.log('selected backGround : ',this.phoneCovers[event]);
-    this.productsService.addSelectedProductBackground(this.phoneCovers[event].image);
-    this.nav.navigateForward(`products/${this.product.slug}`);
+  onRoute(slug) {
+    this.nav.navigateForward(`category/phone-cover/phone-cover-detail/${this.slug}/${slug}`);
   }
 
   ngOnDestroy() {
     this.catSub.unsubscribe();
-    this.phoneCoverSub.unsubscribe();
   }
 
 }

@@ -1,3 +1,4 @@
+import { PipesModule } from './../../pipes/pipes/pipes.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
     RatingModule,
     ComponentsModule,
     HttpClientModule,
+    PipesModule,
     ProductDetailPageRoutingModule
   ],
   declarations: [ProductDetailPage]

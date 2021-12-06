@@ -1,9 +1,59 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>specific</ion-title>
+  <ion-toolbar color="warning">
+    <ion-buttons slot="start">
+        <ion-back-button defaultHref="tabs/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Product designs</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+  <ion-segment mode="ios" (ionChange)="segmentChanged($event)" value="all">
+    <ion-segment-button mode="ios" value="all">
+      <ion-label>All</ion-label>
+    </ion-segment-button>
+    <ion-segment-button mode="ios" value="male">
+      <ion-label>Men</ion-label>
+    </ion-segment-button>
+    <ion-segment-button mode="ios" value="female">
+      <ion-label>Women</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <ion-grid *ngIf="!isDisplay" class="ion-no-padding">
+    <ion-row>
+      <ion-col size="6" sizeSm="6" sizeMd="3">
+        <ion-card>
+          <ion-skeleton-text animated style="width: 100%; height: 200px;"></ion-skeleton-text>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6" sizeSm="6" sizeMd="3">
+        <ion-card>
+          <ion-skeleton-text animated style="width: 100%; height: 200px;"></ion-skeleton-text>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6" sizeSm="6" sizeMd="3">
+        <ion-card>
+          <ion-skeleton-text animated style="width: 100%; height: 200px;"></ion-skeleton-text>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6" sizeSm="6" sizeMd="3">
+        <ion-card>
+          <ion-skeleton-text animated style="width: 100%; height: 200px;"></ion-skeleton-text>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="isDisplay">
+    <ion-row>
+      <ion-col>
+        <app-phone-display [productName]="product.title" [categoryImages]="phoneCovers" [backgroundImage]="backgroundImage" (selectedBackground)="onSelectProductModel($event)" (loadMoreCover)="loadData($event)"></app-phone-display>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

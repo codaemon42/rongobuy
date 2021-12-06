@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { PhoneCoverDetailPageRoutingModule } from './phone-cover-detail-routing.module';
 
 import { PhoneCoverDetailPage } from './phone-cover-detail.page';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { PhoneCoverDetailPage } from './phone-cover-detail.page';
     FormsModule,
     IonicModule,
     PhoneDisplayModule,
+    DropdownModule,
     PhoneCoverDetailPageRoutingModule
   ],
   declarations: [PhoneCoverDetailPage]

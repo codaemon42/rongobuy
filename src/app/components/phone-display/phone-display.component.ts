@@ -11,6 +11,7 @@ export class PhoneDisplayComponent implements OnInit {
   @Output() loadMoreCover = new EventEmitter<IonInfiniteScroll>();
   @Input() categoryImages;
   @Input() backgroundImage;
+  @Input() productName;
 
   constructor() { }
 

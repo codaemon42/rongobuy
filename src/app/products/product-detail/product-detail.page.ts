@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import { WishlistService } from './../../services/wishlist/wishlist.service';
 import { SkuPriceList } from './../../models/sku.model';
 import { AccountService } from './../../account/account.service';
@@ -20,6 +21,7 @@ import { CartService } from '../../services/cart.service';
 import { ToastService } from 'src/app/services/controllers/toast.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { Wishlist } from 'src/app/models/wishlist.model';
+
 
 
 @Component({
@@ -48,7 +50,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
   slideOpts = {
     initialSlide: 0,
     slidesPerView: 1,
-    speed: 400
+    speed: 300,
+    autoplay: true
   };
 
   selectedAttr: any[] = [];
@@ -72,7 +75,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     private productService: ProductService,
     private productsService: ProductsService,
     private accountService: AccountService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private authService: AuthService
     ) { }
 
 
@@ -81,6 +85,7 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     this.cartQuantityController();
     this.activatedRoute.params.subscribe(data => {
       console.log('activated route : ', data.slug);
+      this.product_slug = data.slug;
       this.getSingleProduct(data.slug);
     });
     this.productsService.selectedProductBackground.subscribe(res=>{
@@ -144,6 +149,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     this.productService.fetchSingleProduct(product_slug).subscribe( product => {
       console.log('product detail : ', product);
       this.singleProduct = product;
+
+      //document.getElementById('short').innerHTML = this.singleProduct.shortDescription;
       this.selectedSKUProduct = this.singleProduct.skuModule.skuPriceList[0];
       const propValues = this.singleProduct.skuModule.skuPriceList[0].skuPropValIds;
       this.singleProduct.skuModule.productSKUPropertyList.map(res=>{
@@ -191,7 +198,12 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     if( this.accountService.isLoggedIn() ) {
       this.cartAdder();
     } else {
-      this.nav.navigateForward('tabs/carts');
+      if(this.product_slug){
+        this.authService.addReferrer(`products/${this.product_slug}`);
+        this.nav.navigateForward('tabs/account');
+      } else {
+        this.nav.navigateForward('tabs/account');
+      }
     }
 
     console.log('carted');
@@ -199,19 +211,29 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   buyNow() {
     this.addToCart();
-    this.nav.navigateForward('carts');
+    this.nav.navigateForward('tabs/carts');
   }
 
   addToWishlist() {
-    this.wishlistColor = !this.wishlistColor;
-    this.wishlistService.addToWishlist(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage).subscribe(res=>{
-      if(res.success){
-        this.toastService.toast('added to wishlist', 'success', 2000);
+    if(this.accountService.isLoggedIn()) {
+      this.wishlistColor = !this.wishlistColor;
+      this.wishlistService.addToWishlist(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage).subscribe(res=>{
+        if(res.success){
+          this.toastService.toast('added to wishlist', 'success', 2000);
+        } else {
+          this.wishlistColor = !this.wishlistColor;
+          this.toastService.toast(res.message, 'danger', 2000);
+        }
+      });
+    }
+    else {
+      if(this.product_slug){
+        this.authService.addReferrer(`products/${this.product_slug}`);
+        this.nav.navigateForward('tabs/account');
       } else {
-        this.wishlistColor = !this.wishlistColor;
-        this.toastService.toast(res.message, 'danger', 2000);
+        this.nav.navigateForward('tabs/account');
       }
-    });
+    }
   }
 
   genarateSKU(skuModule) {

@@ -7,13 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { PhoneCoverPageRoutingModule } from './phone-cover-routing.module';
 
 import { PhoneCoverPage } from './phone-cover.page';
-import { ComponentsModule } from '../../components/components.module';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    DropdownModule,
     PhoneCoverPageRoutingModule
   ],
   declarations: [PhoneCoverPage]

@@ -1,7 +1,9 @@
+import { Observable, Observer, Subscription } from 'rxjs';
+import { PhoneModelService } from './../services/phone-model/phone-model.service';
 import { AccountService } from './../account/account.service';
 
 import { textEditor, TextEditorScreenComponent } from './../components/text-editor-screen/text-editor-screen.component';
-import { AfterViewInit } from '@angular/core';
+import { AfterViewInit, OnDestroy } from '@angular/core';
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import html2canvas from 'html2canvas';
@@ -16,13 +18,14 @@ import { LoadingController, ModalController, Platform, ToastController } from '@
 
 import { MenuItem } from 'primeng/api';
 import { CustomizationReviewComponent } from '../components/customization-review/customization-review.component';
+import { PhoneModel } from '../models/phoneModels.model';
 
 @Component({
   selector: 'app-phone-customizer',
   templateUrl: './phone-customizer.page.html',
   styleUrls: ['./phone-customizer.page.scss'],
 })
-export class PhoneCustomizerPage implements OnInit, AfterViewInit {
+export class PhoneCustomizerPage implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('addbg', {static: false}) addbg: ElementRef<HTMLInputElement>;
   @ViewChild('addLogo', {static: false}) addLogo: ElementRef<HTMLInputElement>;
@@ -31,7 +34,9 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
   @ViewChild('screen', {static: false}) screen: ElementRef;
   @ViewChild('canvas', {static: false}) canvas: ElementRef;
   @ViewChild('downloadLink', {static: false}) downloadLink: ElementRef;
-
+  hideImageActions = false;
+  actionWorking = false;
+  rotateAngle = 0;
   logoImage = '';
   mainImage = '';
   backgroundImage = '';
@@ -39,6 +44,11 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
 
   domToImage: any = domtoimage;
   backgroundImg;
+  canvasImgBackConst = {
+    size: 110,
+    x: 0,
+    y: 30
+  };
   canvasImgBack = {
     size: 110,
     x: 0,
@@ -48,23 +58,48 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
   textEditor: textEditor;
 
   cursor = 'move';
-  marginLeft;
-  marginTop;
-  scale = 1;
+
   downloadHref= '';
+  phoneModelsSub: Subscription;
+  phoneModels: PhoneModel[] = [];
+  selectedPhoneModel: PhoneModel;
    area = [
      {name: 'Samsung', img: '../../assets/phone-cover/samsung/A5-2017.png', cost: '60'},
      {name: 'Realme', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'},
      {name: 'vivo', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'},
      {name: 'oppo', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'}
     ];
-  selectedArea = {name: 'Samsung', img: '../../assets/phone-cover/samsung/A5-2017.png', cost: '60'};
+  selectedArea = {name: 'Samsung', img: 'https://rongobuy.s3.ap-southeast-1.amazonaws.com/images/r9ome7n52zf6bxja0wiupcg8dk41ht.png', cost: '60'};
   // editor menu item
   items: MenuItem[];
   tooltipItems: MenuItem[];
   leftTooltipItems: MenuItem[];
+rotateBack = 180;
+controlImageParam = {
+  left: 0,
+  top: 0,
+  scale: 1,
+  rotate: 0
+};
+controlImageParamConst = {
+  left: 0,
+  top: 0,
+  scale: 1,
+  rotate: 0
+};
 
   logoParams = {
+    scale: 1,
+    width: 153,
+    height: 'auto',
+    overlayHeight: 10,
+    marginTop: -333,
+    marginLeft: 100,
+    zIndex: 15,
+    position: 'absolute',
+    src: ''
+  };
+  logoParamConst = {
     scale: 1,
     width: 153,
     height: 'auto',
@@ -102,6 +137,13 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
     zIndex: 20,
     position: 'absolute'
   };
+  textParamsConst = {
+    scale: 1,
+    marginTop: -333,
+    marginLeft: 100,
+    zIndex: 20,
+    position: 'absolute'
+  };
 
 
 
@@ -112,12 +154,13 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
     private platform: Platform,
     private transfer: FileTransfer,
     private file: File,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private phoneModelsService: PhoneModelService // this
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     if(!this.accountService.isLoggedIn()){
-      this.toastCtrl.create({message: 'please login if you wish to place an order', color: 'danger', duration:4000, position: 'bottom'})
+      this.toastCtrl.create({message: 'please login if you wish to place an order', color: 'danger', duration:4000, position: 'top'})
       .then(el=>el.present());
     }
     this.tooltipItems = [
@@ -212,6 +255,16 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
                 icon: 'pi pi-external-link'
             }
     ];
+    this.phoneModelsService.fetchPhoneModels().subscribe();
+    this.phoneModelsSub = this.phoneModelsService.phoneModel.subscribe(models=>{
+      this.phoneModels = models;
+      this.selectedPhoneModel = models[0];
+    });
+  }
+
+  definePhoneModels() {
+    //this.phoneModelsSub = this.phoneModelsService.phoneModel.subscribe(models=>this.phoneModels = models);
+    //this.phoneModelsService.fetchPhoneModels().subscribe
   }
 
   ngAfterViewInit() {
@@ -221,11 +274,13 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
   onChangeArea() { console.log('changed'); }
 
   captureScreen() {
+    this.hideImageActions = true;
         console.log(
-        this.mainImage, this.backgroundImage,
-        this.logoImage ,
-        this.text,
-    );
+          this.mainImage,
+          this.backgroundImage,
+          this.logoImage,
+          this.text,
+        );
     this.loadingCtrl.create({
       message: 'Loading Image ...',
       mode: 'ios'
@@ -237,6 +292,7 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
       //   console.log(' blob file data url : ', blob);
       //   this.img = this.sanitizer.bypassSecurityTrustUrl(objectURL);
       // });
+
 
       this.domToImage.toSvg(this.screen.nativeElement).then( dataUrl => {
         console.log('data  : ',dataUrl);
@@ -277,6 +333,7 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
               }
             } else {
               console.log('cancelled');
+              this.hideImageActions = false;
             }
           });
         });
@@ -325,13 +382,129 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
     };
     fr.readAsDataURL(pickedFile);
   }
+  imageClick() {
+    this.controlImageParamConst.left = this.controlImageParam.left;
+    this.controlImageParamConst.top = this.controlImageParam.top;
+  }
 
+  controlImage(event, id) {
+    if(this.actionWorking){
+      return;
+    }
+    if(id === 'pinchIn') {
+      console.log('zoom out');
+      this.controlImageParam.scale -= 0.03;
+      // cursor
+      this.cursor = 'zoom-out';
+      return;
+    }
+    if(id === 'pinchOut')  {
+      console.log('zoom in');
+      this.controlImageParam.scale += 0.03;
+      // bg
+      this.cursor = 'zoom-in';
+      return;
+    }
+    console.log(id , event);
+    if ( id === 'panright' || id === 'panleft' || id === 'panup' || id === 'pandown'  ) {
+      this.controlImageParam.left = this.controlImageParamConst.left + event.deltaX;
+      this.controlImageParam.top = this.controlImageParamConst.top + event.deltaY;
+      return;
+    }
+
+    if (event.deltaY === 114) {
+      console.log('zoom out');
+      // if(this.controlImageParam.scale < 0.2){
+      //   return;
+      // }
+      this.controlImageParam.scale -= 0.03;
+      // cursor
+      this.cursor = 'zoom-out';
+      return;
+    }
+    if (event.deltaY === -114)  {
+      console.log('zoom in');
+      // if(this.controlImageParam.scale > 1.5){
+      //   return;
+      // }
+      this.controlImageParam.scale += 0.03;
+      // bg
+      this.cursor = 'zoom-in';
+      return;
+    }
+
+  }
+
+  rotateBgImg(event) {
+    console.log('rotate : ', event);
+    this.actionWorking = true;
+    // if(event.isFirst){
+    //   this.controlImageParam.rotate = this.controlImageParamConst.rotate+ event.angle/3;
+    // }
+    if(event.isFirst){
+
+    }
+    if(event.angle > 0){
+        this.controlImageParam.rotate = this.rotateAngle++;
+    }
+     else {
+      // this.controlImageParam.rotate = this.controlImageParamConst.rotate + event.angle;
+      this.controlImageParam.rotate = this.rotateAngle--;
+    }
+    if(event.isFinal){
+      this.actionWorking = false;
+      //this.controlImageParamConst.rotate = this.controlImageParam.rotate;
+    }
+  }
+  resizeBgImg(event) {
+    console.log('resize : ', event);
+    this.actionWorking = true;
+    if(event.additionalEvent === 'panleft') {
+      this.controlImageParam.scale += 0.01;
+    }
+
+    if(event.additionalEvent === 'panright') {
+      this.controlImageParam.scale -= 0.01;
+    }
+    if(event.isFinal){
+      this.actionWorking = false;
+      this.controlImageParamConst.scale = this.controlImageParam.scale;
+    }
+    // this.actionWorking = true;
+    // // if(event.isFirst){
+    // //   this.controlImageParam.rotate = this.controlImageParamConst.rotate+ event.angle/3;
+    // // }
+    // this.controlImageParam.scale += ;
+    // if(event.isFinal){
+    //   this.actionWorking = false;
+    //   this.controlImageParamConst.rotate = this.controlImageParam.rotate;
+    // }
+  }
+
+  deleteImage() {
+    this.backgroundImg = null;
+    this.controlImageParam = {
+      left: 0,
+      top: 0,
+      scale: 1,
+      rotate: 0
+    };
+    this.controlImageParamConst = {
+      left: 0,
+      top: 0,
+      scale: 1,
+      rotate: 0
+    };
+  }
+  logoClick() {
+    this.logoParamConst.marginLeft = this.logoParams.marginLeft;
+    this.logoParamConst.marginTop = this.logoParams.marginTop;
+  }
   logoEdit(event, id) {
     console.log(id , event);
-
     if ( id === 'panright' || id === 'panleft' || id === 'panup' || id === 'pandown'  ) {
-      this.logoParams.marginLeft = 100 + event.deltaX;
-      this.logoParams.marginTop = -333 + event.deltaY;
+      this.logoParams.marginLeft = this.logoParamConst.marginLeft + event.deltaX;
+      this.logoParams.marginTop = this.logoParamConst.marginTop + event.deltaY;
     }
 
     if (event.deltaY === 114) {
@@ -348,12 +521,12 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
     }
 
     if(id === 'pinchIn') {
-    console.log('zoom out');
+      console.log('zoom out');
       this.logoParams.scale -= 0.05;
       // cursor
       this.cursor = 'zoom-out';
     }
-    if (id === 'pinchOut')  {
+    if(id === 'pinchOut')  {
       console.log('zoom in');
       this.logoParams.scale += 0.05;
       // bg
@@ -362,11 +535,15 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
 
   }
 
+  textClick(){
+    this.textParamsConst.marginLeft = this.textParams.marginLeft;
+    this.textParamsConst.marginTop = this.textParams.marginTop;
+  }
   textEdit(event, id) {
     console.log(id, event);
     if ( id === 'panright' || id === 'panleft' || id === 'panup' || id === 'pandown'  ) {
-      this.textParams.marginLeft = 100 + event.deltaX;
-      this.textParams.marginTop = -333 + event.deltaY;
+      this.textParams.marginLeft = this.textParamsConst.marginLeft + event.deltaX;
+      this.textParams.marginTop = this.textParamsConst.marginTop + event.deltaY;
     }
 
     if (event.deltaY === 114) {
@@ -457,33 +634,27 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
   // image editor methods
   panUp(event) {
     console.log('up : ', event);
-    this.marginLeft = event.deltaX;
-    this.marginTop = event.deltaY;
     // bg
-    this.canvasImgBack.x = event.deltaX;
-    this.canvasImgBack.y = event.deltaY;
+    this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
+    this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
     // cursor
     this.cursor = 'move';
   }
 
   panDown(event) {
     console.log('down : ', event);
-    this.marginLeft = event.deltaX;
-    this.marginTop = event.deltaY;
     // bg
-    this.canvasImgBack.x = event.deltaX;
-    this.canvasImgBack.y = event.deltaY;
+    this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
+    this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
     // cursor
     this.cursor = 'move';
   }
 
   panRight(event) {
     console.log('right : ', event);
-    this.marginLeft = event.deltaX;
-    this.marginTop = event.deltaY;
     // bg
-    this.canvasImgBack.x = 0+event.deltaX;
-    this.canvasImgBack.y = event.deltaY;
+    this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
+    this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
 
         // cursor
     this.cursor = 'move';
@@ -491,11 +662,9 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
 
   panLeft(event) {
     console.log('left : ', event);
-    this.marginLeft = 0-event.deltaX;
-    this.marginTop = event.deltaY;
     // bg
-    this.canvasImgBack.x = event.deltaX;
-    this.canvasImgBack.y = event.deltaY;
+    this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
+    this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
     // cursor
     this.cursor = 'move';
   }
@@ -504,19 +673,15 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
     console.log('pinch : ', event);
     if (event.deltaY > 0) {
       console.log('zoom out');
-      this.scale -= 0.05;
       // bg
       this.canvasImgBack.size -= 2;
-      console.log('scale', this.scale);
       // cursor
       this.cursor = 'zoom-out';
     }
     else {
       console.log('zoom in');
-      this.scale += 0.05;
       // bg
       this.canvasImgBack.size += 2;
-      console.log('scale', this.scale);
       // cursor
         this.cursor = 'zoom-in';
     }
@@ -524,23 +689,23 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
 
   pinchIn(event) {
     console.log('pinch : ', event);
-    this.scale -= 0.05;
     // bg
-    this.canvasImgBack.size -= 2;
+    this.canvasImgBack.size -= 0.5;
     // cursor
     this.cursor = 'zoom-out';
   }
 
   pinchOut(event) {
     console.log('zoom in');
-    this.scale += 0.05;
     // bg
-    this.canvasImgBack.size += 2;
+    this.canvasImgBack.size += 0.5;
     // cursor
     this.cursor = 'zoom-in';
   }
 
   initialEditorClick() {
+    this.canvasImgBackConst.x = this.canvasImgBack.x;
+    this.canvasImgBackConst.y = this.canvasImgBack.y;
     if (this.backgroundImg === '' || this.backgroundImg === undefined) {
       this.addBG();
       console.log('clicked');
@@ -635,4 +800,10 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit {
       });
     });
   }
+
+  ngOnDestroy(){
+    this.phoneModelsSub.unsubscribe();
+  }
+
+
 }

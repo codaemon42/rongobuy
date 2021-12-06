@@ -5,15 +5,35 @@
       <!-- [ngStyle]="{
         'background': 'url('+'https://i0.wp.com/www.cssscript.com/wp-content/uploads/2017/12/Animated-Particles-Background.png?fit=499%2C386&ssl=1'+')'
       }" -->
+     <!-- *ngIf="homepage.length <= 0" -->
     <ion-grid
-     *ngIf="homepage.length <= 0">
+    *ngIf="homepage.length <= 0"
+     >
       <ion-row>
         <ion-col>
-          <div class="spinner">
-            <ion-spinner color="warning"></ion-spinner>
-          </div>
+          <ion-slides pager="true" scrollbar="true" [options]="slideOpts">
+            <ion-slide *ngFor="let s of skeleton">
+              <ion-skeleton-text animated style="width: 100%; height: 300px;"></ion-skeleton-text>
+            </ion-slide>
+          </ion-slides>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
+            <ion-slide *ngFor="let s of skeleton">
+                <ion-skeleton-text animated style="width: 100%; height: 200px;"></ion-skeleton-text>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="11" offset="0.5" *ngFor="let s of skeleton">
+          <ion-skeleton-text animated style="width: 100%; height: 300px;"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+
     </ion-grid>
 
     <ion-grid

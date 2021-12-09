@@ -16,7 +16,7 @@ export class PhoneCoverPage implements OnInit, OnDestroy {
   phoneCoverChild: Category[] = [];
   selectedBrand: Category = null;
   catSub: Subscription;
-  skeletonCount = [1,2,3,4,5,6,7,8,9];
+  skeletonCount = [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,6,7];
      area = [
      {name: 'Samsung', img: '../../assets/phone-cover/samsung/A5-2017.png', cost: '60'},
      {name: 'Realme', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'},

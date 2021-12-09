@@ -13,12 +13,22 @@ export class PhoneCoverService {
 
   private _phoneCovers = new BehaviorSubject<PhoneCover[]>([]);
 
+  private _selectedPhoneCover = new BehaviorSubject<PhoneCover>(null);
+
   constructor(
     private http: HttpClient
   ) { }
 
   get phoneCovers() {
     return this._phoneCovers.asObservable();
+  }
+
+  get selectedPhoneCover() {
+    return this._selectedPhoneCover.asObservable();
+  }
+
+  addSelectedPhoneCover(phoneCover: PhoneCover) {
+    this._selectedPhoneCover.next(phoneCover);
   }
 
   fetchPhoneCovers(data=[]) {

@@ -3,6 +3,7 @@ import { map, take, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Product } from '../models/product.model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export interface ProductResponse {
   success: boolean;
@@ -25,7 +26,7 @@ export class ProductService {
   }
 
   fetchSingleProduct(slug) {
-    return this.http.get<ProductResponse>(`http://public.rongobuy.com/api/v1/details/${slug}`).pipe(
+    return this.http.get<ProductResponse>(`${environment.url.base}/details/${slug}`).pipe(
       take(1),
       map(data=>{
         console.log(data);

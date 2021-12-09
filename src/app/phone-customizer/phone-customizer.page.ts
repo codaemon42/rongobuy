@@ -1,3 +1,4 @@
+import { present } from '@ionic/core/dist/types/utils/overlays';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { PhoneModelService } from './../services/phone-model/phone-model.service';
 import { AccountService } from './../account/account.service';
@@ -14,11 +15,12 @@ import domtoimage from 'dom-to-image-improved';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 
-import { LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
 
 import { MenuItem } from 'primeng/api';
 import { CustomizationReviewComponent } from '../components/customization-review/customization-review.component';
 import { PhoneModel } from '../models/phoneModels.model';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-phone-customizer',
@@ -34,6 +36,7 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('screen', {static: false}) screen: ElementRef;
   @ViewChild('canvas', {static: false}) canvas: ElementRef;
   @ViewChild('downloadLink', {static: false}) downloadLink: ElementRef;
+  valRanges = [20,30];
   hideImageActions = false;
   actionWorking = false;
   rotateAngle = 0;
@@ -75,19 +78,30 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit, OnDestroy {
   tooltipItems: MenuItem[];
   leftTooltipItems: MenuItem[];
 rotateBack = 180;
+transform = null;
+isFirst = [];
 controlImageParam = {
   left: 0,
   top: 0,
   scale: 1,
-  rotate: 0
+  rotate: 0,
+  currentDeltaX: null,
+  currentDeltaY: null,
+  currentScale: null,
+  currentRotation: null
 };
 controlImageParamConst = {
   left: 0,
   top: 0,
   scale: 1,
-  rotate: 0
+  rotate: 0,
+  adjustDeltaX: 0,
+  adjustDeltaY: 0,
+  adjustScale: 1,
+  adjustRotation: 0
 };
-
+  rotationAll = 0;
+  rotateStarter = false;
   logoParams = {
     scale: 1,
     width: 153,
@@ -134,14 +148,14 @@ controlImageParamConst = {
     scale: 1,
     marginTop: -333,
     marginLeft: 100,
-    zIndex: 20,
+    zIndex: 20000,
     position: 'absolute'
   };
   textParamsConst = {
     scale: 1,
     marginTop: -333,
     marginLeft: 100,
-    zIndex: 20,
+    zIndex: 20000,
     position: 'absolute'
   };
 
@@ -155,9 +169,77 @@ controlImageParamConst = {
     private transfer: FileTransfer,
     private file: File,
     private accountService: AccountService,
-    private phoneModelsService: PhoneModelService // this
+    private phoneModelsService: PhoneModelService, // this
+    private actionSheetController: ActionSheetController,
   ) { }
 
+  rotatexyz(event){
+    console.log('rotate event : ', event);
+  }
+  startXYZ(e){
+    this.isFirst.push({name: 'start', rotation:e.rotation});
+    console.log(e);
+    console.log('rotation : ', this.controlImageParamConst.adjustRotation);
+    this.rotationAll = e.rotation;
+    if(!this.rotateStarter){
+      this.controlImageParamConst.adjustRotation -= e.rotation;
+      this.rotateStarter = true;
+    } else{
+      return;
+    }
+    console.log('rotation edited : ', this.controlImageParamConst.adjustRotation);
+  }
+  moveXYZ(e){
+    this.isFirst.push({name: 'move', rotation: e.rotation});
+    console.log('move',e);
+    this.controlImageParam.currentScale = this.controlImageParamConst.adjustScale * e.scale;
+    this.controlImageParam.currentDeltaX = this.controlImageParamConst.adjustDeltaX + (e.deltaX / this.controlImageParam.currentScale);
+    this.controlImageParam.currentDeltaY = this.controlImageParamConst.adjustDeltaY + (e.deltaY / this.controlImageParam.currentScale);
+    if(this.rotateStarter){
+      this.rotateStarter = false;
+      return;
+    } else{
+      this.controlImageParam.currentRotation = this.controlImageParamConst.adjustRotation + e.rotation;
+    }
+
+    const transforms = ['scale(' + this.controlImageParam.currentScale + ')'];
+    transforms.push('translate(' + this.controlImageParam.currentDeltaX + 'px,' + this.controlImageParam.currentDeltaY + 'px)');
+    transforms.push('rotate(' + Math.round(this.controlImageParam.currentRotation) + 'deg)');
+    this.transform = transforms.join(' ');
+  }
+  endXYZ(e){
+    this.isFirst.push({name: 'end', rotation: e.rotation});
+    this.controlImageParamConst.adjustScale = this.controlImageParam.currentScale;
+    this.controlImageParamConst.adjustRotation = this.controlImageParam.currentRotation;
+    this.controlImageParamConst.adjustDeltaX = this.controlImageParam.currentDeltaX;
+    this.controlImageParamConst.adjustDeltaY = this.controlImageParam.currentDeltaY;
+  }
+
+  pSlider(event, id){
+    this.controlImageParam.currentDeltaX = this.controlImageParam.currentDeltaX ? this.controlImageParam.currentDeltaX : 0;
+    this.controlImageParam.currentDeltaY = this.controlImageParam.currentDeltaY ? this.controlImageParam.currentDeltaY : 0;
+    if(id === 'zoom'){
+      this.controlImageParam.currentScale = event.value;
+      this.controlImageParam.currentRotation = this.controlImageParam.currentRotation ? this.controlImageParam.currentRotation : 0;
+      console.log('zoom', this.controlImageParam.currentScale);
+    }
+    if(id === 'rotate'){
+      this.controlImageParam.currentRotation = event.value;
+      this.controlImageParam.currentScale = this.controlImageParam.currentScale ? this.controlImageParam.currentScale : 1;
+      console.log('rotate', this.controlImageParam.currentRotation);
+    }
+    console.log(this.controlImageParam.currentScale, this.controlImageParam.currentRotation);
+    const transforms = ['scale(' + this.controlImageParam.currentScale + ')'];
+    transforms.push('translate(' + this.controlImageParam.currentDeltaX + 'px,' + this.controlImageParam.currentDeltaY + 'px)');
+    transforms.push('rotate(' + Math.round(this.controlImageParam.currentRotation) + 'deg)');
+    this.transform = transforms.join(' ');
+    console.log('transform : ', this.transform);
+
+    this.controlImageParamConst.adjustScale = this.controlImageParam.currentScale;
+    this.controlImageParamConst.adjustRotation = this.controlImageParam.currentRotation;
+    this.controlImageParamConst.adjustDeltaX = this.controlImageParam.currentDeltaX;
+    this.controlImageParamConst.adjustDeltaY = this.controlImageParam.currentDeltaY;
+  }
   async ngOnInit() {
     if(!this.accountService.isLoggedIn()){
       this.toastCtrl.create({message: 'please login if you wish to place an order', color: 'danger', duration:4000, position: 'top'})
@@ -258,7 +340,23 @@ controlImageParamConst = {
     this.phoneModelsService.fetchPhoneModels().subscribe();
     this.phoneModelsSub = this.phoneModelsService.phoneModel.subscribe(models=>{
       this.phoneModels = models;
-      this.selectedPhoneModel = models[0];
+      this.phoneModelsService.selectedModel.subscribe(selectedModelName=>{
+        this.selectedPhoneModel = models[0];
+        if(selectedModelName) {
+          this.phoneModels.map(allModels=>{
+            if(allModels.name.toLowerCase() === selectedModelName.toLowerCase()){
+              this.selectedPhoneModel = allModels;
+              console.log('model found');
+              return;
+            } else{
+              console.log('model not found');
+            }
+          });
+        }
+      });
+      // setTimeout(()=>{
+      //   this.selectedPhoneModel = models[1];
+      // },100);
     });
   }
 
@@ -307,6 +405,45 @@ controlImageParamConst = {
           console.log('png : ',dataUrls);
           this.mainImage = dataUrls;
           this.modalCtrl.dismiss();
+
+    //       this.actionSheetController.create({
+    //   header: 'Albums',
+    //   cssClass: 'my-custom-class',
+    //   buttons: [{
+    //     text: 'Delete',
+    //     role: 'destructive',
+    //     icon: 'trash',
+    //     handler: () => {
+    //       console.log('Delete clicked');
+    //     }
+    //   }, {
+    //     text: 'Share',
+    //     icon: 'share',
+    //     handler: () => {
+    //       console.log('Share clicked');
+    //     }
+    //   }, {
+    //     text: 'Play (open modal)',
+    //     icon: 'caret-forward-circle',
+    //     handler: () => {
+    //       console.log('Play clicked');
+    //     }
+    //   }, {
+    //     text: 'Favorite',
+    //     icon: 'heart',
+    //     handler: () => {
+    //       console.log('Favorite clicked');
+    //     }
+    //   }, {
+    //     text: 'Cancel',
+    //     icon: 'close',
+    //     role: 'cancel',
+    //     handler: () => {
+    //       console.log('Cancel clicked');
+    //     }
+    //   }]
+    // }).then(el=>el.present());
+
 
           this.modal({
             dataUrl,
@@ -386,6 +523,14 @@ controlImageParamConst = {
     this.controlImageParamConst.left = this.controlImageParam.left;
     this.controlImageParamConst.top = this.controlImageParam.top;
   }
+  resizeImage(event) {
+    console.log('resize : ', event);
+    this.controlImageParam.scale = event.detail.value/10;
+  }
+  rotateImage(event) {
+    this.controlImageParam.rotate = event.detail.value;
+  }
+
 
   controlImage(event, id) {
     if(this.actionWorking){
@@ -441,9 +586,9 @@ controlImageParamConst = {
     // if(event.isFirst){
     //   this.controlImageParam.rotate = this.controlImageParamConst.rotate+ event.angle/3;
     // }
-    if(event.isFirst){
+    // if(event.isFirst){
 
-    }
+    // }
     if(event.angle > 0){
         this.controlImageParam.rotate = this.rotateAngle++;
     }
@@ -487,13 +632,21 @@ controlImageParamConst = {
       left: 0,
       top: 0,
       scale: 1,
-      rotate: 0
+      rotate: 0,
+      currentDeltaX: null,
+      currentDeltaY: null,
+      currentScale: null,
+      currentRotation: null
     };
     this.controlImageParamConst = {
       left: 0,
       top: 0,
       scale: 1,
-      rotate: 0
+      rotate: 0,
+      adjustDeltaX: 0,
+      adjustDeltaY: 0,
+      adjustScale: 1,
+      adjustRotation: 0
     };
   }
   logoClick() {

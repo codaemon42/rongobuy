@@ -12,7 +12,7 @@ export class PhoneModelService {
 
   _phoneModels = new BehaviorSubject<PhoneModel[]>([]);
 
-  _selectedModel = new BehaviorSubject<PhoneModel>(null);
+  _selectedModel = new BehaviorSubject<string>(null);
 
   constructor(
     private http: HttpClient
@@ -26,8 +26,8 @@ export class PhoneModelService {
     return this._selectedModel.asObservable();
   }
 
-  addSelectedModel(phoneModel: PhoneModel) {
-    this._selectedModel.next(phoneModel);
+  addSelectedModel(productName) {
+      this._selectedModel.next(productName);
   }
 
   fetchPhoneModels() {

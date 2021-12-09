@@ -36,7 +36,7 @@ export class WishlistService {
     );
   }
 
-  addToWishlist(productId, SkuId, backgroundImage) {
+  addToWishlist(productId, SkuId, backgroundImage, phoneDesignId) {
     const token = this.accountService.userToken;
     const httpOptions = {
       headers: new HttpHeaders({
@@ -44,7 +44,10 @@ export class WishlistService {
       'Authorization': `Bearer ${token}`})
     };
 
-    return this.http.post<WishlistAddRes>(`${environment.url.base}/add-to-wishlist`, {productId, SkuId, backgroundImage}, httpOptions).pipe(
+    return this.http.post<WishlistAddRes>(
+      `${environment.url.base}/add-to-wishlist`,
+      {productId, SkuId, backgroundImage, phoneDesignId},
+      httpOptions).pipe(
       take(1),
       tap(wishlistAddRes=>{
         if(wishlistAddRes.success){

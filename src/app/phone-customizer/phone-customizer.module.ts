@@ -15,7 +15,7 @@ import {SpeedDialModule} from 'primeng/speeddial';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {RippleModule} from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
-
+import {SliderModule} from 'primeng/slider';
 // particular imports for hammer
 import * as Hammer from 'hammerjs';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG}
@@ -24,7 +24,18 @@ from '@angular/platform-browser';
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = {
     swipe: { direction: Hammer.DIRECTION_ALL },
-    pan: { direction: Hammer.DIRECTION_ALL },
+    pan: {
+      direction: Hammer.DIRECTION_ALL,
+      enable: true
+    },
+    rotate: {
+      direction: Hammer.DIRECTION_ALL,
+      enable: true
+    }, // override default settings
+    pinch: {
+      direction: Hammer.DIRECTION_ALL,
+      enable: true
+    },
   };
 }
 
@@ -38,6 +49,7 @@ import { PhoneCustomizerPage } from './phone-customizer.page';
     FormsModule,
     IonicModule,
     DropdownModule,
+    SliderModule,
     SpeedDialModule,
     ProgressSpinnerModule,
     RippleModule,

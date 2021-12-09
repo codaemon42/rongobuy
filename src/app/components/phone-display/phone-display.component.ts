@@ -1,3 +1,4 @@
+import { PhoneCoverService } from 'src/app/services/phone-cover/phone-cover.service';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { IonInfiniteScroll } from '@ionic/angular';
 
@@ -13,12 +14,15 @@ export class PhoneDisplayComponent implements OnInit {
   @Input() backgroundImage;
   @Input() productName;
 
-  constructor() { }
+  constructor(
+    private phoneCoverService: PhoneCoverService
+  ) { }
 
   ngOnInit() {}
 
   onClickProduct(index) {
     console.log('category index', index);
+    this.phoneCoverService.addSelectedPhoneCover(this.categoryImages[index]);
     this.selectedBackground.emit(index);
   }
 

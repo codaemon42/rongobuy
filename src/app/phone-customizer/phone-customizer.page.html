@@ -38,6 +38,17 @@
       </ion-row> -->
       <ion-row>
       <ion-col class="makeTop" size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+        <!-- <ion-list class="imageEditorWrapper" *ngIf="backgroundImg">
+            <ion-item class="imageEditor">
+              <ion-note slot="start">Zoom</ion-note>
+              <ion-range (ionChange)="resizeImage($event)" value="5" mode="md" step="1" min="5" max="50" color="warning"></ion-range>
+            </ion-item>
+
+            <ion-item class="imageEditor">
+              <ion-note slot="start">Rotate</ion-note>
+              <ion-range (ionChange)="rotateImage($event)" mode="md" snaps="true" min="-360" max="360" color="warning"></ion-range>
+            </ion-item>
+        </ion-list> -->
 
       </ion-col>
         <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
@@ -110,31 +121,56 @@
             >
 
             <!-- bg image -->
-            <img [hidden]="!backgroundImg"
+            <img [hidden]="!backgroundImg" #bgImage
+              crossorigin="anonymous"
               [ngStyle]="{
                 'position': 'absolute',
-                'width.px': mainSlot.offsetWidth-100,
-                'height.px': mainSlot.offsetHeight-100,
+                'width.%': 100,
+                'height': 'auto',
                 'left.px': controlImageParam.left,
                 'top.px': controlImageParam.top,
                 'bottom.px': 0,
                 'z-index': 100,
-                'transform': 'rotate('+controlImageParam.rotate+'deg) scale('+controlImageParam.scale+')'
+                'transform': transform
               }"
               [src]="backgroundImg"
             >
+            <!-- 'transform': 'rotate('+controlImageParam.rotate+'deg) scale('+controlImageParam.scale+')' -->
             <!-- layer to control image -->
             <div [hidden]="!backgroundImg"
               [ngStyle]="{
                 'position': 'absolute',
-                'width.px': mainSlot.offsetWidth-100,
-                'height.px': mainSlot.offsetHeight-100,
+                'width.px': bgImage.offsetWidth,
+                'height.px': bgImage.clientHeight,
                 'left.px': controlImageParam.left,
                 'top.px': controlImageParam.top,
                 'background': '#3330',
                 'border': '0.5px solid #3332',
                 'z-index': 1100,
-                'transform': 'rotate('+controlImageParam.rotate+'deg) scale('+controlImageParam.scale+')'
+                'transform': transform
+              }"
+                (click)="imageClick()"
+                (panstart)="startXYZ($event)"
+                (pinchstart)="startXYZ($event)"
+                (rotatestart)="startXYZ($event)"
+                (panmove)="moveXYZ($event)"
+                (pinchmove)="moveXYZ($event)"
+                (rotatemove)="moveXYZ($event)"
+                (panend)="endXYZ($event)"
+                (pinchend)="endXYZ($event)"
+                (rotateend)="endXYZ($event)"
+              >
+              <!--             <div [hidden]="!backgroundImg"
+              [ngStyle]="{
+                'position': 'absolute',
+                'width.px': bgImage.offsetWidth,
+                'height.px': bgImage.clientHeight,
+                'left.px': controlImageParam.left,
+                'top.px': controlImageParam.top,
+                'background': '#3330',
+                'border': '0.5px solid #3332',
+                'z-index': 1100,
+                'transform': transform
               }"
                 (click)="imageClick()"
                 (wheel)="controlImage($event, 'wheel')"
@@ -144,14 +180,27 @@
                 (pandown)="controlImage($event, 'pandown')"
                 (panright)="controlImage($event, 'panright')"
                 (panleft)="controlImage($event, 'panleft')"
-              >
+              > -->
                              <!-- 'scale': controlImageParam.scale, -->
-                <ion-icon [hidden]="hideImageActions" (click)="deleteImage()" class="action-icon close-img" color="dark" name="trash-bin"></ion-icon>
-                <ion-icon [hidden]="hideImageActions" (pan)="rotateBgImg($event)" class="action-icon rotate-img" color="dark" name="refresh-circle"></ion-icon>
-                <ion-icon [hidden]="hideImageActions" (pan)="resizeBgImg($event)" class="action-icon resize-img" color="dark" name="resize"></ion-icon>
+                <ion-icon [hidden]="hideImageActions"
+                  [ngStyle]="{
+                    'transform': 'rotate('+controlImageParam.rotate+'deg)'
+                  }"
+                  (click)="deleteImage()" class="action-icon close-img" color="dark" name="close-circle"></ion-icon>
+                <!-- <ion-icon [hidden]="hideImageActions"
+                  [ngStyle]="{
+                    'transform': 'rotate('+controlImageParam.rotate+'deg)'
+                  }"
+                  (pan)="rotateBgImg($event)" class="action-icon rotate-img" color="dark" name="refresh-circle"></ion-icon>
+                <ion-icon [hidden]="hideImageActions"
+                  [ngStyle]="{
+                    'transform': 'rotate('+controlImageParam.rotate+'deg)'
+                  }"
+                 (pan)="resizeBgImg($event)" class="action-icon resize-img" color="dark" name="resize"></ion-icon> -->
               </div>
               <!-- new addition added / -->
-            <div style="position: relative">
+              <!-- old logo version -->
+            <!-- <div style="position: relative">
               <img
                 #logoRef
                 [ngStyle]="{
@@ -211,7 +260,8 @@
                     }"
                   >{{ textEditor.text }}</span>
               </span>
-            </div>
+            </div> -->
+            <!-- old logo version /-->
           </div>
           <div
             class="canvas overlay"
@@ -224,14 +274,41 @@
             (pandown)="panDown($event)"
             (panright)="panRight($event)"
             (panleft)="panLeft($event)"
+            (rotate)="rotatexyz($event)"
+          >
+          </div>
+          <div
+            class="canvas overlay"
+            [ngStyle]="{'cursor': cursor}"
+            (panstart)="startXYZ($event)"
+            (pinchstart)="startXYZ($event)"
+            (rotatestart)="startXYZ($event)"
+            (panmove)="moveXYZ($event)"
+            (pinchmove)="moveXYZ($event)"
+            (rotatemove)="moveXYZ($event)"
           >
           </div>
           <!-- <ion-button (click)="initialClick()" *ngIf="img !== undefined || img !== ''" class="upload-btn"><ion-icon name="cloud-upload"></ion-icon></ion-button> -->
         </div>
         <!-- customization image section -->
         <!-- <p #p style="height: 400px; background: #888"> </p> -->
+        <div class="resizeCtrl" [hidden]="hideImageActions || !backgroundImg">
+          <p>Rotate</p>
+          <ion-icon color="medium" name="refresh"></ion-icon>
+          <p-slider (onChange)="pSlider($event, 'rotate')" [(ngModel)]="controlImageParamConst.adjustRotation" [min]="-360" [max]="360" [step]="1" [animate]="true" orientation="vertical"></p-slider>
+        </div>
+
+        <div class="rotateCtrl" [hidden]="hideImageActions || !backgroundImg">
+          <p>Zoom</p>
+          <ion-icon color="medium" name="add-circle"></ion-icon>
+          <p-slider (onChange)="pSlider($event, 'zoom')" [(ngModel)]="controlImageParamConst.adjustScale" [min]="0.1" [max]="5" [step]="0.01" [animate]="true" orientation="vertical"></p-slider>
+        </div>
       </ion-col>
       <ion-col class="makeTop" size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+          <!-- <p> adjust : {{controlImageParamConst.adjustRotation}}</p>
+          <p> current : {{controlImageParam.currentRotation}}</p>
+          <p> rotation : {{rotationAll}}</p>
+          <p *ngFor="let f of isFirst"> {{f.name}} : {{f.rotation}}</p> -->
 
       </ion-col>
     </ion-row>

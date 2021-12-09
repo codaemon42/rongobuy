@@ -61,10 +61,10 @@
       <ion-col size="10" sizeSm="10" sizeMd="4" offset="1">
         <h2 style="font-weight: 700;">{{ singleProduct.title }}</h2>
         <p-rating [(ngModel)]="singleProduct.review.avarage" [readonly]="true" [cancel]="false"></p-rating>
-        <h3 class="real-price" style="font-weight: 600;"><b>৳ {{selectedSKUProduct.discountPrice}}</b></h3>
+        <h3 class="real-price" style="font-weight: 600;"><b>৳ {{selectedPhoneCover ? selectedPhoneCover.price : selectedSKUProduct.discountPrice}}</b></h3>
         <p class="disabled-price" *ngIf="selectedSKUProduct.price === selectedSKUProduct.discountPrice" style="font-weight: 500;"><b>৳ {{selectedSKUProduct.price}}</b></p>
         <div [innerHTML]="singleProduct.shortDescription | safeHtml"></div>
-          <ion-button color="tertiary" [routerLink]="['/', 'phone-customizer']">
+          <ion-button color="tertiary" (click)="onCustomize(singleProduct.title)">
             <ion-icon name="brush"></ion-icon>
             <ion-label style="margin-left: 10px"> Customize </ion-label>
           </ion-button>

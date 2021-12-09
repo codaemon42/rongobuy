@@ -1,3 +1,4 @@
+import { PhoneCoverService } from 'src/app/services/phone-cover/phone-cover.service';
 import { AuthService } from './../../services/auth.service';
 import { WishlistService } from './../../services/wishlist/wishlist.service';
 import { SkuPriceList } from './../../models/sku.model';
@@ -21,6 +22,7 @@ import { CartService } from '../../services/cart.service';
 import { ToastService } from 'src/app/services/controllers/toast.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { Wishlist } from 'src/app/models/wishlist.model';
+import { PhoneModelService } from 'src/app/services/phone-model/phone-model.service';
 
 
 
@@ -66,6 +68,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   wishlistColor = false;
 
+  selectedPhoneCover = null;
+
   constructor(
     private animationCtrl: AnimationController,
     private nav: NavController,
@@ -76,7 +80,9 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     private productsService: ProductsService,
     private accountService: AccountService,
     private toastService: ToastService,
-    private authService: AuthService
+    private authService: AuthService,
+    private phoneCoverService: PhoneCoverService,
+    private phoneModelService: PhoneModelService
     ) { }
 
 
@@ -88,6 +94,11 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
       this.product_slug = data.slug;
       this.getSingleProduct(data.slug);
     });
+    this.phoneCoverService.selectedPhoneCover.subscribe(res=>{
+      this.selectedPhoneCover = res;
+      console.log('this.selectedPhoneCover : ', this.selectedPhoneCover);
+    });
+
     this.productsService.selectedProductBackground.subscribe(res=>{
       this.backGroundImage = res;
       console.log('this.backGroundImage : ', this.backGroundImage);
@@ -217,7 +228,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
   addToWishlist() {
     if(this.accountService.isLoggedIn()) {
       this.wishlistColor = !this.wishlistColor;
-      this.wishlistService.addToWishlist(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage).subscribe(res=>{
+      const designId = this.selectedPhoneCover ? this.selectedPhoneCover.id : null;
+      this.wishlistService.addToWishlist(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage, designId).subscribe(res=>{
         if(res.success){
           this.toastService.toast('added to wishlist', 'success', 2000);
         } else {
@@ -366,7 +378,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     this.totalCartQty += 1;
     console.log('product-detail cartAdder');
     const skuId = `${this.singleProduct.id}-green`;
-    this.cartService.addTOCart(this.singleProduct.id, this.selectedSKUProduct.SkuId, 1, this.backGroundImage).subscribe();
+    const designId = this.selectedPhoneCover ? this.selectedPhoneCover.id : null;
+    this.cartService.addTOCart(this.singleProduct.id, this.selectedSKUProduct.SkuId, 1, this.backGroundImage, designId).subscribe();
     console.log(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage);
   }
 
@@ -378,6 +391,11 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     this.cartQtySub = this.cartService.cartTotalItems.subscribe(res => {
       this.totalCartQty = res;
     });
+  }
+
+  onCustomize(productName) {
+    this.phoneModelService.addSelectedModel(productName);
+    this.nav.navigateForward('phone-customizer');
   }
 
   /**

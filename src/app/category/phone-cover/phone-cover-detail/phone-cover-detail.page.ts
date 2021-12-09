@@ -20,6 +20,7 @@ export class PhoneCoverDetailPage implements OnInit, OnDestroy {
   catSub: Subscription;
   backgroundImage = null;
   slug = '';
+  skeleton = [1,2,3,4,5,6,7,8,9,10];
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -30,10 +31,9 @@ export class PhoneCoverDetailPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     //this.closeLoader();
-    this.categoryService.fetchCategories().subscribe();
+    this.categoryService.fetchCategories().subscribe(res=>this.isDisplay = true);
     this.router.params.subscribe(res=>{
       console.log(res.slug);
-      this.isDisplay = true;
       this.slug = res.slug;
       this.catSub = this.categoryService.categories.subscribe(categories=>{
         this.getCategory(categories, res.slug).then(phoneCat=>{

@@ -12,6 +12,11 @@
       <ion-label *ngIf="showTabTitle">Category</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button [routerLink]="['/','phone-customizer']"  class="inner-left-btn">
+      <ion-icon name="phone-portrait-sharp"></ion-icon>
+      <ion-label *ngIf="showTabTitle">Customize</ion-label>
+    </ion-tab-button>
+
     <!-- <ion-tab-button tab="search" class="rb-tab-middle">
       <ion-icon name="ellipse" class="icon-button"></ion-icon>
       <ion-label>Search</ion-label>

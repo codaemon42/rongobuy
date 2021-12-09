@@ -107,14 +107,17 @@ export class CartService {
         );
   }
 
-  addTOCart(productId, skuId, quantity=1, backgroundImage=null){
+  addTOCart(productId, skuId, quantity=1, backgroundImage=null, phoneDesignId=null){
     const token = this.accountService.userToken;
     const httpOptions = {
       headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`})
     };
-    return this.http.post<any>(`${environment.url.base}/cart/add`, {productId, skuId, quantity, backgroundImage}, httpOptions).pipe(
+    return this.http.post<any>(
+      `${environment.url.base}/cart/add`,
+      {productId, skuId, quantity, backgroundImage, phoneDesignId},
+      httpOptions).pipe(
       take(1),
       tap(newCartItemRes => {
         let details;

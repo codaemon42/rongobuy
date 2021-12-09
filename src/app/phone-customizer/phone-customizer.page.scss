@@ -93,3 +93,73 @@ $borderTop: #0808080a;
     right: -20px;
     bottom: -20px;
   }
+
+.imageEditorWrapper {
+  padding: 0;
+  .imageEditor{
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    ion-range{
+      padding: 0 10px;
+    }
+  }
+}
+.resizeCtrl{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000000;
+  top: 0;
+  left: 0;
+
+  p-slider{
+    margin: 10px;
+  }
+
+  p{
+    color: #8a2be278;
+    //transform: rotate(-90deg);
+    font-weight: bold;
+    margin: 0;
+    margin-left: 5px;
+  }
+
+  ion-icon{
+    font-size: 24px;
+  }
+}
+.rotateCtrl {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000000;
+  top: 0;
+  right: 0;
+
+  p-slider{
+    margin: 10px;
+  }
+
+  p{
+    color: #8a2be278;
+    //transform: rotate(-90deg);
+    font-weight: bold;
+    margin: 0;
+    margin-right: 5px;
+  }
+
+  ion-icon{
+    font-size: 24px;
+  }
+}
+:host ::ng-deep .p-slider-vertical{
+  height: 250px;
+}

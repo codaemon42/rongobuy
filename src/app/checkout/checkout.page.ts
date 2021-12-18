@@ -1,18 +1,18 @@
+import { ParamShippingCost } from './../models/address.model';
+import { OrderVideoComponent } from './../components/video/order-video/order-video.component';
 import { Subscription } from 'rxjs';
 import { CartRes } from './../models/cart.model';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
-import { CartsService } from '../carts/carts.service';
-import { ShippingArea } from '../models/shipping.model';
-import { ShippingService } from '../services/shipping.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { LoadingController, NavController, ModalController } from '@ionic/angular';
 import { CartService } from '../services/cart.service';
 import { OrderService } from '../services/orders/order.service';
 import { AddressService } from '../services/address/address.service';
 import { AddressSingle } from '../models/address.model';
 import { ToastService } from '../services/controllers/toast.service';
 import { AccountService } from '../account/account.service';
+import { StorageService } from '../services/storage.service';
 
 
 @Component({
@@ -36,6 +36,8 @@ export class CheckoutPage implements OnInit, OnDestroy {
   selectedAddress: AddressSingle = null;
   addressLoading = true;
 
+  shippingCost: number;
+
 
   constructor(
     private nav: NavController,
@@ -44,10 +46,15 @@ export class CheckoutPage implements OnInit, OnDestroy {
     private cartService: CartService,
     private addressService: AddressService,
     private accountService: AccountService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private modalCtrl: ModalController,
+    private storageService: StorageService
     ) { }
 
   ngOnInit() {
+    if(this.modalCtrl){
+      this.modalCtrl.dismiss();
+    }
     this.giftFormInit();
     this.AddressInit();
     this.cartServiceInit();
@@ -70,13 +77,21 @@ export class CheckoutPage implements OnInit, OnDestroy {
     this.addressLoading = true;
     this.addressService.fetchAddress().subscribe(res=>{
       this.addressLoading = false;
-      this.selectedAddress = res.data.data.filter(address=>address.default === '1')[0];
+      if(res.data.data.length === 0){
+        //
+      } else {
+        this.selectedAddress = res.data.data.filter(address=>address.default === '1')[0];
+        if(!this.selectedAddress) {
+          this.selectedAddress = res.data.data[0];
+        }
+        console.log('selected Address : ', this.selectedAddress);
+        this.getShippingCost({city: this.selectedAddress.city, area: this.selectedAddress.area});
+      }
     });
     this.addressSub = this.addressService.address.subscribe(addresses=>{
       this.addresses = addresses;
     });
 
-    console.log('selected Address : ', this.selectedAddress);
   }
 
   cartServiceInit() {
@@ -95,14 +110,12 @@ export class CheckoutPage implements OnInit, OnDestroy {
       this.cartLoading = false;
     });
     console.log('cart ion view');
-    this.addressLoading = true;
-    this.addressService.fetchAddress().subscribe(res=>{
-      this.addressLoading = false;
-    });
+    this.AddressInit();
   }
 
   onSelectAddress(addressId) {
     this.selectedAddress = this.addresses.filter(address=>address.id===addressId)[0];
+    this.getShippingCost({city: this.selectedAddress.city, area: this.selectedAddress.area});
     console.log('selected Address : ', this.selectedAddress);
   }
 
@@ -110,26 +123,71 @@ export class CheckoutPage implements OnInit, OnDestroy {
     this.nav.navigateForward('account/address/add-address');
   }
 
+  async modal() {
+    const modal = await this.modalCtrl.create({
+        component: OrderVideoComponent,
+        keyboardClose: false,
+        swipeToClose: false,
+        backdropDismiss: false
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    console.log(data);
+
+    return new Promise(resolve => {
+      resolve(data);
+    });
+  }
+
 
   onPlacingOrder() {
-    this.loadingCtrl.create({
-      message: 'Placing order',
-      mode: 'ios'
-    }).then(el=>{
-      el.present();
-
-      this.orderService.addOrder(1).subscribe(res=>{
-        this.loadingCtrl.dismiss();
-        this.toastService.toast('Order placed successfully', 'success', 3000);
-        this.nav.navigateForward('/all/orders');
-      });
+    this.storageService.get('first_order_completed').then(firstOrder=>{
+      if(firstOrder){
+        console.log('first_order true');
+        this.loadingCtrl.create({
+          message: 'Placing order',
+          mode: 'ios'
+        }).then(el=>{
+          el.present();
+        });
+        this.processOrder();
+      } else {
+        console.log('first_order false|null');
+        this.modal().then(data=>{
+          if(data['confirm']){
+            this.loadingCtrl.create({
+              message: 'Placing order',
+              mode: 'ios'
+            }).then(el=>{
+              el.present();
+            });
+            this.processOrder();
+          }
+        });
+      }
     });
   }
 
 
 
 
+
+
   // helper
+  getShippingCost(body: ParamShippingCost){
+    this.addressService.getShippingCost(body).subscribe(shippingRes=>{
+      this.shippingCost = parseInt(shippingRes.data,10);
+    });
+  }
+  processOrder(){
+    this.orderService.addOrder(this.selectedAddress.id).subscribe(res=>{
+      this.loadingCtrl.dismiss();
+      this.toastService.toast('Order placed successfully', 'success', 3000);
+      this.nav.navigateForward('/all/orders');
+    });
+  }
   sendAsGift(event) {
     console.log('check box event : ', event);
     this.sendGift = !this.sendGift;
@@ -137,7 +195,8 @@ export class CheckoutPage implements OnInit, OnDestroy {
 
   termsAccept(event) {
     console.log('terms event : ', event);
-    this.terms = !this.sendGift;
+    this.terms = !this.terms;
+    console.log('terms : ', this.terms);
   }
 
 

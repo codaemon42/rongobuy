@@ -65,17 +65,21 @@ export class CategoryPage implements OnInit, OnDestroy {
 mapCats(categories: Category[]) {
   const cats = [];
   categories.map(cat=>{
-    const category = {
-      id: cat.slug,
-      label: cat.categoryName,
-      escape: false,
-    };
-    if(cat.child.length > 0) {
-      category['items'] = this.mapCats(cat.child);
-      cats.push(category);
-      return cats;
+    if(cat.categoryName === 'custom'){
+      // escape
     } else {
-      cats.push(category);
+      const category = {
+        id: cat.slug,
+        label: cat.categoryName,
+        escape: false,
+      };
+      if(cat.child.length > 0) {
+        category['items'] = this.mapCats(cat.child);
+        cats.push(category);
+        return cats;
+      } else {
+        cats.push(category);
+      }
     }
   });
   return cats;

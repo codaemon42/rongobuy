@@ -30,7 +30,7 @@
       </ion-buttons>
 
     </ion-toolbar>
-    <ion-searchbar *ngIf="showSearch" (ionInput)="onKeyInput($event)" (ionChange)="onSearch($event)" debounce="200" showCancelButton="focus" animated [placeholder]="searchText"></ion-searchbar>
+    <ion-searchbar *ngIf="showSearch" mode="md" (ionInput)="onKeyInput($event)" (ionChange)="onSearch($event)" debounce="200" showCancelButton="focus" animated [placeholder]="searchText"></ion-searchbar>
     <ion-grid *ngIf="isLoading">
       <ion-row>
         <ion-col size="12">

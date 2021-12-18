@@ -21,7 +21,7 @@ export interface textEditor {
       left: number;
     };
     zIndex: number;
-    position: 'absolute';
+    position: string;
   };
 };
 

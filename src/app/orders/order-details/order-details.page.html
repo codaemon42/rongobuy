@@ -23,7 +23,7 @@
         <div class="card">
             <div class="header">
               <ion-chip color="tertiary">#{{orderDetail.data.orderId}}</ion-chip>
-              <div class="date"> 12-10-2021 </div>
+              <div class="date"> {{orderDetail.data.created_at | date : 'MMM d, y, h:mm:ss a'}} </div>
             </div>
             <div class="content">
               <div class="status">
@@ -38,10 +38,15 @@
       <ion-col *ngIf="orderDetail" size="12" sizeSM="12" sizeMd="6" sizeLg="4">
         <span *ngIf="orderDetail.success">
           <div class="card-2" *ngFor="let orderItem of orderDetail.data.orderItems; let i = index">
-            <img [src]="orderItem.image">
+            <img [src]="orderItem.image"
+              [ngStyle]="{
+                'background': 'url('+orderItem.backgroundImage+')',
+                'background-size.%': 100
+              }"
+            >
             <ion-label class="detail">
               <h3 class="title">{{ orderItem.productTitle }}</h3>
-              <p class="price">Total: {{ orderItem.price }}</p>
+              <p class="price">unit cost: {{ orderItem.price }}</p>
               <p class="price">Quantity: {{ orderItem.quantity }}</p>
             </ion-label>
           </div>

@@ -36,13 +36,6 @@
           <ion-icon color="warning" slot="end" [name]="menuIcon(i)"></ion-icon>
         </ion-item>
 
-        <!-- <ion-item lines="none" (click)="onClickMenu(i)">
-          <ion-icon color="warning" [name]="menu.icon" slot="start"></ion-icon>
-          {{ menu.title }}
-          <ion-icon color="warning" slot="end" [name]="menuIcon(i)"></ion-icon>
-        </ion-item> -->
-
-
         <ion-menu-toggle *ngIf="menu.show"  auto-hide="false">
           <ion-list lines="none">
             <ion-item
@@ -59,7 +52,7 @@
           </ion-list>
         </ion-menu-toggle>
       </div>
-      <div *ngIf="isLoggedIn" class="main-menu-item">
+      <!-- <div *ngIf="isLoggedIn" class="main-menu-item">
         <ion-item lines="none" (click)="logOut()">
           <ion-icon color="dark" name="log-out" slot="start"></ion-icon>
           Log Out
@@ -70,7 +63,7 @@
           <ion-icon color="dark" name="person" slot="start"></ion-icon>
           Log In
         </ion-item>
-      </div>
+      </div> -->
       </ion-list>
     </ion-content>
   </ion-menu>

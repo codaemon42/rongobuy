@@ -88,19 +88,21 @@ export class CartsPage implements OnInit, OnDestroy {
     console.log('next');
   }
 
-  increaseCart(productId, quantity){
-    const skuId = productId+'-green';
+  increaseCart(productId, skuId, quantity, backgroundImage, phoneDesignId){
     console.log(productId);
     this.increaseQuantity(productId);
-
-    this.cartService.addTOCart(productId, skuId, quantity).subscribe();
+    this.cartService.addTOCart(productId, skuId, quantity, backgroundImage , phoneDesignId).subscribe();
   }
 
-  decreaseCart(productId, quantity){
-    const skuId = productId+'-green';
+  decreaseCart(productId, skuId, quantity, backgroundImage, phoneDesignId){
     console.log(productId, quantity);
-    this.decreaseQuantity(productId);
-    this.cartService.addTOCart(productId, skuId, quantity).subscribe();
+    this.decreaseQuantity(productId).then(bool=>{
+      if(bool) {
+        this.cartService.addTOCart(productId, skuId, quantity, backgroundImage , phoneDesignId).subscribe();
+      } else{
+        return;
+      }
+    });
   }
 
 
@@ -108,28 +110,37 @@ export class CartsPage implements OnInit, OnDestroy {
   // helpers
 
   increaseQuantity(productId) {
-    this.cartDetails.data.product.map(cartItem => {
-      if(cartItem.productId === productId ) {
-        // this.cartDetails.data.subtotal += cartItem.discountedPrice;
-        console.log('naims cart subtotal : ', this.cartDetails.data.subtotal);
-        cartItem.quantity++;
-        cartItem.discountedPrice = cartItem.orginalPrice*cartItem.quantity;
-        this.cartDetails.data.subtotal += cartItem.orginalPrice;
-        this.cartDetails.data.grandTotal += cartItem.orginalPrice;
-        return;
-      }
-    });
+      this.cartDetails.data.product.map(cartItem => {
+        if(cartItem.productId === productId ) {
+          // this.cartDetails.data.subtotal += cartItem.discountedPrice;
+          console.log('naims cart subtotal : ', this.cartDetails.data.subtotal);
+          cartItem.quantity++;
+          //cartItem.discountedPrice = cartItem.orginalPrice*cartItem.quantity;
+          this.cartDetails.data.subtotal += cartItem.orginalPrice;
+          this.cartDetails.data.grandTotal += cartItem.orginalPrice;
+          return;
+        }
+      });
   }
 
   decreaseQuantity(productId) {
-    this.cartDetails.data.product.map(cartItem => {
-      if(cartItem.productId === productId ) {
-        cartItem.quantity--;
-        cartItem.discountedPrice = cartItem.orginalPrice*cartItem.quantity;
-        this.cartDetails.data.subtotal -= cartItem.orginalPrice;
-        this.cartDetails.data.grandTotal -= cartItem.orginalPrice;
-        return;
-      }
+    return new Promise(resolve=>{
+      this.cartDetails.data.product.map(cartItem => {
+        if(cartItem.productId === productId ) {
+          if(cartItem.quantity <= 1){
+            resolve(false);
+            return;
+          }
+          else {
+            cartItem.quantity--;
+            //cartItem.discountedPrice = cartItem.orginalPrice*cartItem.quantity;
+            this.cartDetails.data.subtotal -= cartItem.orginalPrice;
+            this.cartDetails.data.grandTotal -= cartItem.orginalPrice;
+            resolve(true);
+            return;
+          }
+        }
+      });
     });
   }
 

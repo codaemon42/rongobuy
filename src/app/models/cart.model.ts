@@ -42,6 +42,7 @@ export interface CartProduct {
     productImage: string;
     backgroundImage: string;
     quantity: number;
+    phoneDesignId: number;
     orginalPrice: number;
     countedPrice: number;
     discountLabel: any;

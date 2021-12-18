@@ -23,7 +23,7 @@ const routes: Routes = [
       {
         path: 'carts',
         loadChildren: () => import('../carts/carts.module').then(m => m.CartsPageModule),
-        canActivate:[AccountGuard]
+        canActivate:[AccountGuard],
       },
       {
         path: 'wishlist',

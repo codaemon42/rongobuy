@@ -36,7 +36,7 @@ export class WishlistService {
     );
   }
 
-  addToWishlist(productId, SkuId, backgroundImage, phoneDesignId) {
+  addToWishlist(productId, SkuId, backgroundImage=null, phoneDesignId=null) {
     const token = this.accountService.userToken;
     const httpOptions = {
       headers: new HttpHeaders({
@@ -44,9 +44,14 @@ export class WishlistService {
       'Authorization': `Bearer ${token}`})
     };
 
+    const body = {productId, SkuId, backgroundImage, phoneDesignId};
+    if(phoneDesignId === null || phoneDesignId === '' || phoneDesignId === undefined){
+      delete body.phoneDesignId;
+    }
+
     return this.http.post<WishlistAddRes>(
       `${environment.url.base}/add-to-wishlist`,
-      {productId, SkuId, backgroundImage, phoneDesignId},
+      body,
       httpOptions).pipe(
       take(1),
       tap(wishlistAddRes=>{

@@ -58,7 +58,7 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit, OnDestroy {
     y: 30
   };
   img: any = '';
-  textEditor: textEditor;
+
 
   cursor = 'move';
 
@@ -77,9 +77,31 @@ export class PhoneCustomizerPage implements OnInit, AfterViewInit, OnDestroy {
   items: MenuItem[];
   tooltipItems: MenuItem[];
   leftTooltipItems: MenuItem[];
-rotateBack = 180;
-transform = null;
-isFirst = [];
+  rotateBack = 180;
+  transform = null;
+  transformText = null;
+  isFirst = [];
+  isImgEditor = true;
+controlTextParam = {
+  left: 0,
+  top: 0,
+  scale: 1,
+  rotate: 0,
+  currentDeltaX: null,
+  currentDeltaY: null,
+  currentScale: null,
+  currentRotation: null
+};
+controlTextParamConst = {
+  left: 0,
+  top: 0,
+  scale: 1,
+  rotate: 0,
+  adjustDeltaX: 0,
+  adjustDeltaY: 0,
+  adjustScale: 1,
+  adjustRotation: 0
+};
 controlImageParam = {
   left: 0,
   top: 0,
@@ -102,6 +124,7 @@ controlImageParamConst = {
 };
   rotationAll = 0;
   rotateStarter = false;
+  rotateStarterText = false;
   logoParams = {
     scale: 1,
     width: 153,
@@ -158,8 +181,13 @@ controlImageParamConst = {
     zIndex: 20000,
     position: 'absolute'
   };
+  textBackground = '#3331';
 
-
+  textEditor: textEditor = {
+    confirm: false,
+    text: '',
+    styleParams: this.textStyleParams
+  };
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -170,13 +198,46 @@ controlImageParamConst = {
     private file: File,
     private accountService: AccountService,
     private phoneModelsService: PhoneModelService, // this
-    private actionSheetController: ActionSheetController,
   ) { }
 
   rotatexyz(event){
     console.log('rotate event : ', event);
   }
+  textStartXYZ(e){
+    this.textClick();
+    if(!this.rotateStarterText){
+      this.controlTextParamConst.adjustRotation -= e.rotation;
+      this.rotateStarterText = true;
+    } else{
+      return;
+    }
+  }
+  textMoveXYZ(e){
+    console.log('move',e);
+    this.controlTextParam.currentScale = this.controlTextParamConst.adjustScale * e.scale;
+    this.controlTextParam.currentDeltaX = this.controlTextParamConst.adjustDeltaX + (e.deltaX / this.controlTextParam.currentScale);
+    this.controlTextParam.currentDeltaY = this.controlTextParamConst.adjustDeltaY + (e.deltaY / this.controlTextParam.currentScale);
+
+    if(this.rotateStarterText){
+      this.rotateStarterText = false;
+      return;
+    } else{
+      this.controlTextParam.currentRotation = this.controlTextParamConst.adjustRotation + e.rotation;
+    }
+
+    const transforms = ['scale(' + this.controlTextParam.currentScale + ')'];
+    transforms.push('translate(' + this.controlTextParam.currentDeltaX + 'px,' + this.controlTextParam.currentDeltaY + 'px)');
+    transforms.push('rotate(' + Math.round(this.controlTextParam.currentRotation) + 'deg)');
+    this.transformText = transforms.join(' ');
+  }
+  textEndXYZ(e){
+    this.controlTextParamConst.adjustScale = this.controlTextParam.currentScale;
+    this.controlTextParamConst.adjustRotation = this.controlTextParam.currentRotation;
+    this.controlTextParamConst.adjustDeltaX = this.controlTextParam.currentDeltaX;
+    this.controlTextParamConst.adjustDeltaY = this.controlTextParam.currentDeltaY;
+  }
   startXYZ(e){
+    this.imageClick();
     this.isFirst.push({name: 'start', rotation:e.rotation});
     console.log(e);
     console.log('rotation : ', this.controlImageParamConst.adjustRotation);
@@ -239,6 +300,31 @@ controlImageParamConst = {
     this.controlImageParamConst.adjustRotation = this.controlImageParam.currentRotation;
     this.controlImageParamConst.adjustDeltaX = this.controlImageParam.currentDeltaX;
     this.controlImageParamConst.adjustDeltaY = this.controlImageParam.currentDeltaY;
+  }
+  pSliderText(event, id) {
+    this.controlTextParam.currentDeltaX = this.controlTextParam.currentDeltaX ? this.controlTextParam.currentDeltaX : 0;
+    this.controlTextParam.currentDeltaY = this.controlTextParam.currentDeltaY ? this.controlTextParam.currentDeltaY : 0;
+    if(id === 'zoom'){
+      this.controlTextParam.currentScale = event.value;
+      this.controlTextParam.currentRotation = this.controlTextParam.currentRotation ? this.controlTextParam.currentRotation : 0;
+      console.log('zoom', this.controlTextParam.currentScale);
+    }
+    if(id === 'rotate'){
+      this.controlTextParam.currentRotation = event.value;
+      this.controlTextParam.currentScale = this.controlTextParam.currentScale ? this.controlTextParam.currentScale : 1;
+      console.log('rotate', this.controlTextParam.currentRotation);
+    }
+    console.log(this.controlTextParam.currentScale, this.controlTextParam.currentRotation);
+    const transforms = ['scale(' + this.controlTextParam.currentScale + ')'];
+    transforms.push('translate(' + this.controlTextParam.currentDeltaX + 'px,' + this.controlTextParam.currentDeltaY + 'px)');
+    transforms.push('rotate(' + Math.round(this.controlTextParam.currentRotation) + 'deg)');
+    this.transformText = transforms.join(' ');
+    console.log('transform : ', this.transformText);
+
+    this.controlTextParamConst.adjustScale = this.controlTextParam.currentScale;
+    this.controlTextParamConst.adjustRotation = this.controlTextParam.currentRotation;
+    this.controlImageParamConst.adjustDeltaX = this.controlTextParam.currentDeltaX;
+    this.controlTextParamConst.adjustDeltaY = this.controlTextParam.currentDeltaY;
   }
   async ngOnInit() {
     if(!this.accountService.isLoggedIn()){
@@ -366,12 +452,13 @@ controlImageParamConst = {
   }
 
   ngAfterViewInit() {
-    console.log('ref : ', this.logoRef.nativeElement.clientHeight);
+    //console.log('ref : ', this.logoRef.nativeElement.clientHeight);
   }
 
   onChangeArea() { console.log('changed'); }
 
   captureScreen() {
+    this.textBackground = '#3330';
     this.hideImageActions = true;
         console.log(
           this.mainImage,
@@ -384,13 +471,6 @@ controlImageParamConst = {
       mode: 'ios'
     }).then(loadingEl => {
       loadingEl.present();
-      // this.domToImage.toBlob(this.screen.nativeElement).then(blob => {
-      //   console.log(' blob file : ', blob);
-      //   const objectURL = URL.createObjectURL(blob);
-      //   console.log(' blob file data url : ', blob);
-      //   this.img = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      // });
-
 
       this.domToImage.toSvg(this.screen.nativeElement).then( dataUrl => {
         console.log('data  : ',dataUrl);
@@ -405,46 +485,6 @@ controlImageParamConst = {
           console.log('png : ',dataUrls);
           this.mainImage = dataUrls;
           this.modalCtrl.dismiss();
-
-    //       this.actionSheetController.create({
-    //   header: 'Albums',
-    //   cssClass: 'my-custom-class',
-    //   buttons: [{
-    //     text: 'Delete',
-    //     role: 'destructive',
-    //     icon: 'trash',
-    //     handler: () => {
-    //       console.log('Delete clicked');
-    //     }
-    //   }, {
-    //     text: 'Share',
-    //     icon: 'share',
-    //     handler: () => {
-    //       console.log('Share clicked');
-    //     }
-    //   }, {
-    //     text: 'Play (open modal)',
-    //     icon: 'caret-forward-circle',
-    //     handler: () => {
-    //       console.log('Play clicked');
-    //     }
-    //   }, {
-    //     text: 'Favorite',
-    //     icon: 'heart',
-    //     handler: () => {
-    //       console.log('Favorite clicked');
-    //     }
-    //   }, {
-    //     text: 'Cancel',
-    //     icon: 'close',
-    //     role: 'cancel',
-    //     handler: () => {
-    //       console.log('Cancel clicked');
-    //     }
-    //   }]
-    // }).then(el=>el.present());
-
-
           this.modal({
             dataUrl,
             mainImage: this.mainImage,
@@ -503,14 +543,15 @@ controlImageParamConst = {
       if ( id === 'background' ) {
         this.backgroundImg = dataUrl;
         this.backgroundImage = dataUrl;
+        this.imageClick();
         console.log('backgroundImage : ', this.backgroundImage);
       }
       else if ( id === 'logo' ) {
         const heightTimer = setInterval(()=>{
-          if ( this.logoRef.nativeElement.clientHeight !== 0 ) {
-              this.logoParams.overlayHeight = this.logoRef.nativeElement.clientHeight;
-              clearInterval(heightTimer);
-          }
+          // if ( this.logoRef.nativeElement.clientHeight !== 0 ) {
+          //     this.logoParams.overlayHeight = this.logoRef.nativeElement.clientHeight;
+          //     clearInterval(heightTimer);
+          // }
         },1);
         this.logoParams.src = dataUrl;
         this.logoImage = dataUrl;
@@ -520,8 +561,19 @@ controlImageParamConst = {
     fr.readAsDataURL(pickedFile);
   }
   imageClick() {
+    this.isImgEditor = true;
     this.controlImageParamConst.left = this.controlImageParam.left;
     this.controlImageParamConst.top = this.controlImageParam.top;
+  }
+  textClick(){
+    console.log('text clicked');
+    this.textBackground = '#3331';
+    setTimeout(()=>{
+      this.textBackground = '#3330';
+    }, 1000);
+    this.isImgEditor = false;
+    this.textParamsConst.marginLeft = this.textParams.marginLeft;
+    this.textParamsConst.marginTop = this.textParams.marginTop;
   }
   resizeImage(event) {
     console.log('resize : ', event);
@@ -625,8 +677,12 @@ controlImageParamConst = {
     //   this.controlImageParamConst.rotate = this.controlImageParam.rotate;
     // }
   }
-
+  deleteText() {
+    this.textEditor.text = '';
+    this.imageClick();
+  }
   deleteImage() {
+    this.textClick();
     this.backgroundImg = null;
     this.controlImageParam = {
       left: 0,
@@ -688,10 +744,7 @@ controlImageParamConst = {
 
   }
 
-  textClick(){
-    this.textParamsConst.marginLeft = this.textParams.marginLeft;
-    this.textParamsConst.marginTop = this.textParams.marginTop;
-  }
+
   textEdit(event, id) {
     console.log(id, event);
     if ( id === 'panright' || id === 'panleft' || id === 'panup' || id === 'pandown'  ) {
@@ -736,6 +789,9 @@ controlImageParamConst = {
         text: data['text'],
         styleParams: data['styleParams']
       };
+      if(data['confirm']){
+        this.textClick();
+      }
       this.text = this.textEditor.confirm ? this.textEditor.text : this.text;
       console.log('text edited : ', this.text);
     });
@@ -767,6 +823,7 @@ controlImageParamConst = {
       animated: true,
       swipeToClose: false,
       keyboardClose: false,
+      backdropDismiss: false,
       cssClass: 'preview-modal'
     });
 

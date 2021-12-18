@@ -101,7 +101,7 @@ export class CartService {
         return this.http.post<CartAddRes>(`${environment.url.base}/cart/delete/${id}`, null, httpOptions).pipe(
           take(1),
           tap(newCartItemRes => {
-              //this.fetchCartObj().subscribe();
+              this.fetchCartObj().subscribe();
 
           }),
         );
@@ -114,9 +114,13 @@ export class CartService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`})
     };
+    const body = {productId, skuId, quantity, backgroundImage, phoneDesignId};
+    if(phoneDesignId === null || phoneDesignId === '' || phoneDesignId === undefined) {
+      delete body.phoneDesignId;
+    }
     return this.http.post<any>(
       `${environment.url.base}/cart/add`,
-      {productId, skuId, quantity, backgroundImage, phoneDesignId},
+      body,
       httpOptions).pipe(
       take(1),
       tap(newCartItemRes => {
@@ -132,6 +136,7 @@ export class CartService {
 
           this._cartDetails.next(details);
           this._cartTotalItems.next(nextTotalItems);
+          this.fetchCartObj().subscribe();
         });
       }),
     );

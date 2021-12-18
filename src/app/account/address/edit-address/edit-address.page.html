@@ -18,10 +18,23 @@
           <ion-input formControlName="name" type="text" placeholder="Full Name *"></ion-input>
           <ion-input formControlName="email" type="email" placeholder="Email *"></ion-input>
           <ion-input formControlName="phone" type="text" placeholder="Phone *"></ion-input>
+
+          <ion-select *ngIf="divisions" (ionChange)="divisionSelected($event)" formControlName="division" placeholder="Select Division *" okText="Okay" cancelText="Dismiss">
+            <ion-select-option *ngFor="let division of divisions" [value]="division.name">{{division.name}}</ion-select-option>
+          </ion-select>
+
+          <ion-select *ngIf="districts" (ionChange)="citySelected($event)" formControlName="city" placeholder="Select district *" okText="Okay" cancelText="Dismiss">
+            <ion-select-option *ngFor="let district of districts" [value]="district.name">{{district.name}}</ion-select-option>
+          </ion-select>
+
+          <ion-select *ngIf="area" (ionChange)="areaSelected($event)" formControlName="area" placeholder="Select area *" okText="Okay" cancelText="Dismiss">
+            <ion-select-option *ngFor="let a of area" [value]="a.name">{{a.name}}</ion-select-option>
+          </ion-select>
+
           <ion-input formControlName="address" type="text" placeholder="Address *"></ion-input>
-          <ion-input formControlName="city" type="text" placeholder="city *"></ion-input>
+          <!-- <ion-input formControlName="city" type="text" placeholder="city *"></ion-input>
           <ion-input formControlName="area" type="text" placeholder="area *"></ion-input>
-          <ion-input formControlName="division" type="text" placeholder="division *"></ion-input>
+          <ion-input formControlName="division" type="text" placeholder="division *"></ion-input> -->
           <ion-input formControlName="additional" type="text" placeholder="additional"></ion-input>
           <ion-input formControlName="type" type="text" placeholder="type (home/ofice/...etc) *"></ion-input>
           <ion-list>

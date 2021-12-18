@@ -24,335 +24,300 @@
 
 <ion-content>
   <div #contentFull style="overflow: hidden;">
+    <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="makeTop" size="12" sizeSm="12" sizeMd="6" sizeLg="4"></ion-col>
+          <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
 
-
-
-  <ion-grid class="ion-no-padding">
-    <!-- <ion-row>
-      <ion-col sizeSm="12" sizeMd="5" sizeLg="3" offsetMd="3.5" offsetLg="4.5">
-
-        <div class="phone-model">
-
-        </div>
-        </ion-col> offsetMd="3.5" offsetLg="4.5"
-      </ion-row> -->
-      <ion-row>
-      <ion-col class="makeTop" size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-        <!-- <ion-list class="imageEditorWrapper" *ngIf="backgroundImg">
-            <ion-item class="imageEditor">
-              <ion-note slot="start">Zoom</ion-note>
-              <ion-range (ionChange)="resizeImage($event)" value="5" mode="md" step="1" min="5" max="50" color="warning"></ion-range>
-            </ion-item>
-
-            <ion-item class="imageEditor">
-              <ion-note slot="start">Rotate</ion-note>
-              <ion-range (ionChange)="rotateImage($event)" mode="md" snaps="true" min="-360" max="360" color="warning"></ion-range>
-            </ion-item>
-        </ion-list> -->
-
-      </ion-col>
-        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-        <!-- phone select -->
-
-        <!-- customization image section -->
-        <!-- <div class="customize-img">
-          <ion-img
-            class="canvas"
-            [ngStyle]="{'margin-left.px': marginLeft, 'margin-top.px': marginTop, 'transform': 'scale('+scale+')'}"
-            [src]="logo">
-          </ion-img>
-
-          <ion-img class="canvas" [src]="selectedArea.img"></ion-img>
-          <div
-            class="canvas overlay"
-            (wheel)="pinch($event)"
-            (panup)="panUp($event)"
-            (pandown)="panDown($event)"
-            (panright)="panRight($event)"
-            (panleft)="panLeft($event)">
-          </div>
-
-          <ion-img class="logo-img" [src]="logo"></ion-img>
-        </div> -->
-
-        <div  #screen  class="customize-section">
-          <!-- <ion-img
-            class="canvas-img-section"
-            [ngStyle]=""
-            [src]="logo">
-          </ion-img> -->
-
-          <div id="screen">
-            <!-- old editor image  -->
-            <!-- <img
-              [ngStyle]="{
-                'margin-bottom.px': 20,
-                'background-image': 'url('+backgroundImg+')',
-                'background-size.%': canvasImgBack.size,
-                'background-repeat': 'no-repeat',
-                'background-position-x.px': canvasImgBack.x,
-                'background-position-y.px': canvasImgBack.y
-              }"
-              [src]="selectedArea.img"
-            > -->
-            <!-- old editor image /  -->
-            <!-- layer to control full content -->
-            <!-- new addition added  -->
-            <!-- <div
-              [ngStyle]="{
-                'position': 'fixed',
-                'width.px': contentFull.offsetWidth,
-                'height.px': contentFull.offsetHeight+200,
-                'left.px': 0,
-                'top.px': 0,
-                'bottom.px': 0,
-                'background': '#fff0',
-                'z-index': 999
-              }">{{mainSlot.offsetWidth}} {{mainSlot.offsetHeight}}</div> -->
-
-            <!-- mockup image -->
-            <img #mainSlot
-              [ngStyle]="{
-                'margin-bottom.px': -4,
-                'position': 'relative',
-                'z-index': 1000
-              }"
-              [src]="selectedPhoneModel ? selectedPhoneModel.mainImage : selectedArea.img"
-            >
-
-            <!-- bg image -->
-            <img [hidden]="!backgroundImg" #bgImage
-              crossorigin="anonymous"
-              [ngStyle]="{
-                'position': 'absolute',
-                'width.%': 100,
-                'height': 'auto',
-                'left.px': controlImageParam.left,
-                'top.px': controlImageParam.top,
-                'bottom.px': 0,
-                'z-index': 100,
-                'transform': transform
-              }"
-              [src]="backgroundImg"
-            >
-            <!-- 'transform': 'rotate('+controlImageParam.rotate+'deg) scale('+controlImageParam.scale+')' -->
-            <!-- layer to control image -->
-            <div [hidden]="!backgroundImg"
-              [ngStyle]="{
-                'position': 'absolute',
-                'width.px': bgImage.offsetWidth,
-                'height.px': bgImage.clientHeight,
-                'left.px': controlImageParam.left,
-                'top.px': controlImageParam.top,
-                'background': '#3330',
-                'border': '0.5px solid #3332',
-                'z-index': 1100,
-                'transform': transform
-              }"
-                (click)="imageClick()"
+            <div style="margin-top: -1px; margin-left: -1px"  #screen  class="customize-section">
+              <div id="screen">
+                <!-- old editor image  -->
+                <!-- <img
+                  [ngStyle]="{
+                    'margin-bottom.px': 20,
+                    'background-image': 'url('+backgroundImg+')',
+                    'background-size.%': canvasImgBack.size,
+                    'background-repeat': 'no-repeat',
+                    'background-position-x.px': canvasImgBack.x,
+                    'background-position-y.px': canvasImgBack.y
+                  }"
+                  [src]="selectedArea.img"
+                > -->
+                <!-- old editor image /  -->
+                <!-- layer to control full content -->
+                <!-- new addition added  -->
+                <!-- crossorigin="anonymous" onContextMenu="return false;" -->
+                <!-- mockup image -->
+                <img #mainSlot
+                  crossorigin="*"
+                  [ngStyle]="{
+                    'margin-bottom.px': -4,
+                    'position': 'relative',
+                    'z-index': 1000
+                  }"
+                  [src]="selectedPhoneModel ? selectedPhoneModel.mainImage : selectedArea.img"
+                >
+                <!-- bg image -->
+                <img [hidden]="!backgroundImg" #bgImage
+                  [ngStyle]="{
+                    'position': 'absolute',
+                    'width.%': 100,
+                    'height': 'auto',
+                    'left.px': controlImageParam.left,
+                    'top.px': controlImageParam.top,
+                    'bottom.px': 0,
+                    'z-index': 100,
+                    'transform': transform
+                  }"
+                  [src]="backgroundImg"
+                >
+                <!-- text overlay -->
+                <div  *ngIf="textEditor.text !== ''" #mainText
+                  [ngStyle]="{
+                    'position': 'absolute',
+                    'width': 'fit-content',
+                    'color': textEditor.styleParams.color,
+                    'font-weight': textEditor.styleParams.font.weight,
+                    'font-size.px': textEditor.styleParams.font.size,
+                    'padding': '2px 6px',
+                    'height': 'auto',
+                    'left.px': 100,
+                    'top.px': 100,
+                    'z-index': 200,
+                    'transform': transformText
+                  }"
+                >{{textEditor.text}}</div>
+                <!-- 'transform': 'rotate('+controlImageParam.rotate+'deg) scale('+controlImageParam.scale+')' -->
+                <!-- layer to control image -->
+                <div [hidden]="!backgroundImg"
+                  [ngStyle]="{
+                    'position': 'absolute',
+                    'width.px': bgImage.offsetWidth,
+                    'height.px': bgImage.clientHeight,
+                    'left.px': controlImageParam.left,
+                    'top.px': controlImageParam.top,
+                    'background': '#3330',
+                    'border': '0.5px solid #3332',
+                    'z-index': 1100,
+                    'transform': transform
+                  }"
+                    (click)="imageClick()"
+                    (panstart)="startXYZ($event)"
+                    (pinchstart)="startXYZ($event)"
+                    (rotatestart)="startXYZ($event)"
+                    (panmove)="moveXYZ($event)"
+                    (pinchmove)="moveXYZ($event)"
+                    (rotatemove)="moveXYZ($event)"
+                    (panend)="endXYZ($event)"
+                    (pinchend)="endXYZ($event)"
+                    (rotateend)="endXYZ($event)"
+                  >
+                  <!-- <div [hidden]="!backgroundImg"
+                  [ngStyle]="{
+                    'position': 'absolute',
+                    'width.px': bgImage.offsetWidth,
+                    'height.px': bgImage.clientHeight,
+                    'left.px': controlImageParam.left,
+                    'top.px': controlImageParam.top,
+                    'background': '#3330',
+                    'border': '0.5px solid #3332',
+                    'z-index': 1100,
+                    'transform': transform
+                  }"
+                    (click)="imageClick()"
+                    (wheel)="controlImage($event, 'wheel')"
+                    (pinchIn)="controlImage($event, 'pinchIn')"
+                    (pinchOut)="controlImage($event, 'pinchOut')"
+                    (panup)="controlImage($event, 'panup')"
+                    (pandown)="controlImage($event, 'pandown')"
+                    (panright)="controlImage($event, 'panright')"
+                    (panleft)="controlImage($event, 'panleft')"
+                  > -->
+                                <!-- 'scale': controlImageParam.scale, -->
+                    <ion-icon [hidden]="hideImageActions"
+                      [ngStyle]="{
+                        'transform': 'rotate('+controlImageParam.rotate+'deg)'
+                      }"
+                      (click)="deleteImage()" class="action-icon close-img" color="dark" name="close-circle"></ion-icon>
+                    <!-- <ion-icon [hidden]="hideImageActions"
+                      [ngStyle]="{
+                        'transform': 'rotate('+controlImageParam.rotate+'deg)'
+                      }"
+                      (pan)="rotateBgImg($event)" class="action-icon rotate-img" color="dark" name="refresh-circle"></ion-icon>
+                    <ion-icon [hidden]="hideImageActions"
+                      [ngStyle]="{
+                        'transform': 'rotate('+controlImageParam.rotate+'deg)'
+                      }"
+                    (pan)="resizeBgImg($event)" class="action-icon resize-img" color="dark" name="resize"></ion-icon> -->
+                  </div>
+                  <!-- text overlay -->
+                  <div *ngIf="textEditor.text !== ''"
+                    [ngStyle]="{
+                      'position': 'absolute',
+                      'width': 'fit-content',
+                    'font-size.px': textEditor.styleParams.font.size,
+                      'padding': '2px 6px',
+                      'height': 'auto',
+                      'color': '#3330',
+                      'left.px': 100,
+                      'top.px': 100,
+                      'z-index': 2100,
+                      'background': textBackground,
+                      'transform': transformText
+                    }"
+                    (click)="textClick()"
+                    (dblclick)="editedText({
+                      text : this.textEditor ? this.textEditor.text : '',
+                      styleParams: this.textEditor ? this.textEditor.styleParams : this.textStyleParams
+                    })"
+                    (panstart)="textStartXYZ($event)"
+                    (pinchstart)="textStartXYZ($event)"
+                    (rotatestart)="textStartXYZ($event)"
+                    (panmove)="textMoveXYZ($event)"
+                    (pinchmove)="textMoveXYZ($event)"
+                    (rotatemove)="textMoveXYZ($event)"
+                    (panend)="textEndXYZ($event)"
+                    (pinchend)="textEndXYZ($event)"
+                    (rotateend)="textEndXYZ($event)"
+                    > {{textEditor.text}}
+                    <ion-icon [hidden]="hideImageActions || textEditor.text === ''"
+                      [ngStyle]="{
+                        'transform': 'rotate('+controlImageParam.rotate+'deg)'
+                      }"
+                      (click)="deleteText()" class="action-icon close-img" color="dark" name="close-circle"></ion-icon>
+                  </div>
+                  <!-- new addition added / -->
+                  <!-- old logo version -->
+                <div style="position: relative">
+                  <!-- <img
+                    #logoRef
+                    [ngStyle]="{
+                      'scale': logoParams.scale,
+                      'width.px': logoParams.width,
+                      'height': logoParams.height,
+                      'margin-top.px': logoParams.marginTop,
+                      'margin-left.px':logoParams.marginLeft,
+                      'z-index': logoParams.zIndex,
+                      'position': logoParams.position
+                      }"
+                    [src]="logoParams.src"
+                  >
+                  <div
+                    (click)="logoClick()"
+                    (dblclick)="addLogoImage()"
+                    (wheel)="logoEdit($event, 'wheel')"
+                    (pinchIn)="logoEdit($event, 'pinchIn')"
+                    (pinchOut)="logoEdit($event, 'pinchOut')"
+                    (panup)="logoEdit($event, 'panup')"
+                    (pandown)="logoEdit($event, 'pandown')"
+                    (panright)="logoEdit($event, 'panright')"
+                    (panleft)="logoEdit($event, 'panleft')"
+                    [ngStyle]="{
+                      'scale': logoParams.scale,
+                      'width.px': logoParams.width,
+                      'margin-top.px': logoParams.marginTop,
+                      'margin-left.px':logoParams.marginLeft,
+                      'z-index': logoParams.zIndex+2,
+                      'position': logoParams.position,
+                      'height.px': logoParams.overlayHeight
+                      }"></div> -->
+                  <!-- <span *ngIf="textEditor">
+                    <span
+                      class="textContext"
+                      (dblclick)="editedText({
+                        text : textEditor.text,
+                        styleParams: textEditor ? textEditor.styleParams : textStyleParams
+                        })"
+                      (click)="textClick()"
+                      (wheel)="textEdit($event, 'wheel')"
+                      (pinchIn)="textEdit($event, 'pinchIn')"
+                      (pinchOut)="textEdit($event, 'pinchOut')"
+                      (panup)="textEdit($event, 'panup')"
+                      (pandown)="textEdit($event, 'pandown')"
+                      (panright)="textEdit($event, 'panright')"
+                      (panleft)="textEdit($event, 'panleft')"
+                      [ngStyle]="{
+                        'scale': textParams.scale,
+                        'margin-top.px': textParams.marginTop,
+                        'margin-left.px':textParams.marginLeft,
+                        'z-index': textParams.zIndex,
+                        'position': textParams.position,
+                        'font-size.px': textEditor.styleParams.font.size,
+                        'font-weight': textEditor.styleParams.font.weight,
+                        'transform': 'scale('+textEditor.styleParams.transform.scale+') rotate('+textEditor.styleParams.transform.rotate+'deg)'
+                        }"
+                      >{{ textEditor.text }}</span>
+                  </span> -->
+                </div>
+                <!-- old logo version /-->
+              </div>
+              <!-- old overlay -->
+              <div
+                class="canvas overlay"
+                [ngStyle]="{'cursor': cursor}"
+                (click)="initialEditorClick()"
+                (wheel)="wheel($event)"
+                (pinchIn)="pinchIn($event)"
+                (pinchOut)="pinchOut($event)"
+                (panup)="panUp($event)"
+                (pandown)="panDown($event)"
+                (panright)="panRight($event)"
+                (panleft)="panLeft($event)"
+                (rotate)="rotatexyz($event)"
+              >
+              </div>
+              <div
+                class="canvas overlay"
+                [ngStyle]="{'cursor': cursor}"
                 (panstart)="startXYZ($event)"
                 (pinchstart)="startXYZ($event)"
                 (rotatestart)="startXYZ($event)"
                 (panmove)="moveXYZ($event)"
                 (pinchmove)="moveXYZ($event)"
                 (rotatemove)="moveXYZ($event)"
-                (panend)="endXYZ($event)"
-                (pinchend)="endXYZ($event)"
-                (rotateend)="endXYZ($event)"
               >
-              <!--             <div [hidden]="!backgroundImg"
-              [ngStyle]="{
-                'position': 'absolute',
-                'width.px': bgImage.offsetWidth,
-                'height.px': bgImage.clientHeight,
-                'left.px': controlImageParam.left,
-                'top.px': controlImageParam.top,
-                'background': '#3330',
-                'border': '0.5px solid #3332',
-                'z-index': 1100,
-                'transform': transform
-              }"
-                (click)="imageClick()"
-                (wheel)="controlImage($event, 'wheel')"
-                (pinchIn)="controlImage($event, 'pinchIn')"
-                (pinchOut)="controlImage($event, 'pinchOut')"
-                (panup)="controlImage($event, 'panup')"
-                (pandown)="controlImage($event, 'pandown')"
-                (panright)="controlImage($event, 'panright')"
-                (panleft)="controlImage($event, 'panleft')"
-              > -->
-                             <!-- 'scale': controlImageParam.scale, -->
-                <ion-icon [hidden]="hideImageActions"
-                  [ngStyle]="{
-                    'transform': 'rotate('+controlImageParam.rotate+'deg)'
-                  }"
-                  (click)="deleteImage()" class="action-icon close-img" color="dark" name="close-circle"></ion-icon>
-                <!-- <ion-icon [hidden]="hideImageActions"
-                  [ngStyle]="{
-                    'transform': 'rotate('+controlImageParam.rotate+'deg)'
-                  }"
-                  (pan)="rotateBgImg($event)" class="action-icon rotate-img" color="dark" name="refresh-circle"></ion-icon>
-                <ion-icon [hidden]="hideImageActions"
-                  [ngStyle]="{
-                    'transform': 'rotate('+controlImageParam.rotate+'deg)'
-                  }"
-                 (pan)="resizeBgImg($event)" class="action-icon resize-img" color="dark" name="resize"></ion-icon> -->
               </div>
-              <!-- new addition added / -->
-              <!-- old logo version -->
-            <!-- <div style="position: relative">
-              <img
-                #logoRef
-                [ngStyle]="{
-                  'scale': logoParams.scale,
-                  'width.px': logoParams.width,
-                  'height': logoParams.height,
-                  'margin-top.px': logoParams.marginTop,
-                  'margin-left.px':logoParams.marginLeft,
-                  'z-index': logoParams.zIndex,
-                  'position': logoParams.position
-                  }"
-                [src]="logoParams.src"
-              >
-              <div
-                (click)="logoClick()"
-                (dblclick)="addLogoImage()"
-                (wheel)="logoEdit($event, 'wheel')"
-                (pinchIn)="logoEdit($event, 'pinchIn')"
-                (pinchOut)="logoEdit($event, 'pinchOut')"
-                (panup)="logoEdit($event, 'panup')"
-                (pandown)="logoEdit($event, 'pandown')"
-                (panright)="logoEdit($event, 'panright')"
-                (panleft)="logoEdit($event, 'panleft')"
-                [ngStyle]="{
-                  'scale': logoParams.scale,
-                  'width.px': logoParams.width,
-                  'margin-top.px': logoParams.marginTop,
-                  'margin-left.px':logoParams.marginLeft,
-                  'z-index': logoParams.zIndex+2,
-                  'position': logoParams.position,
-                  'height.px': logoParams.overlayHeight
-                  }"></div>
-              <span *ngIf="textEditor">
-                <span
-                  class="textContext"
-                  (dblclick)="editedText({
-                    text : textEditor.text,
-                    styleParams: textEditor ? textEditor.styleParams : textStyleParams
-                    })"
-                  (click)="textClick()"
-                  (wheel)="textEdit($event, 'wheel')"
-                  (pinchIn)="textEdit($event, 'pinchIn')"
-                  (pinchOut)="textEdit($event, 'pinchOut')"
-                  (panup)="textEdit($event, 'panup')"
-                  (pandown)="textEdit($event, 'pandown')"
-                  (panright)="textEdit($event, 'panright')"
-                  (panleft)="textEdit($event, 'panleft')"
-                  [ngStyle]="{
-                    'scale': textParams.scale,
-                    'margin-top.px': textParams.marginTop,
-                    'margin-left.px':textParams.marginLeft,
-                    'z-index': textParams.zIndex,
-                    'position': textParams.position,
-                    'font-size.px': textEditor.styleParams.font.size,
-                    'font-weight': textEditor.styleParams.font.weight,
-                    'transform': 'scale('+textEditor.styleParams.transform.scale+') rotate('+textEditor.styleParams.transform.rotate+'deg)'
-                    }"
-                  >{{ textEditor.text }}</span>
-              </span>
-            </div> -->
-            <!-- old logo version /-->
+              <!-- old overlay /-->
+            </div>
+          <!-- customization image section -->
+          <!-- <p #p style="height: 400px; background: #888"> </p> -->
+          <div *ngIf="backgroundImg || textEditor.text !== ''" class="resizeCtrl" [hidden]="hideImageActions">
+            <p>Rotate</p>
+            <ion-icon color="medium" name="refresh"></ion-icon>
+            <p-slider *ngIf="isImgEditor" (onChange)="pSlider($event, 'rotate')" [(ngModel)]="controlImageParamConst.adjustRotation" [min]="-360" [max]="360" [step]="1" [animate]="true" orientation="vertical"></p-slider>
+            <p-slider *ngIf="!isImgEditor" (onChange)="pSliderText($event, 'rotate')" [(ngModel)]="controlTextParamConst.adjustRotation" [min]="-360" [max]="360" [step]="1" [animate]="true" orientation="vertical"></p-slider>
           </div>
-          <div
-            class="canvas overlay"
-            [ngStyle]="{'cursor': cursor}"
-            (click)="initialEditorClick()"
-            (wheel)="wheel($event)"
-            (pinchIn)="pinchIn($event)"
-            (pinchOut)="pinchOut($event)"
-            (panup)="panUp($event)"
-            (pandown)="panDown($event)"
-            (panright)="panRight($event)"
-            (panleft)="panLeft($event)"
-            (rotate)="rotatexyz($event)"
-          >
-          </div>
-          <div
-            class="canvas overlay"
-            [ngStyle]="{'cursor': cursor}"
-            (panstart)="startXYZ($event)"
-            (pinchstart)="startXYZ($event)"
-            (rotatestart)="startXYZ($event)"
-            (panmove)="moveXYZ($event)"
-            (pinchmove)="moveXYZ($event)"
-            (rotatemove)="moveXYZ($event)"
-          >
-          </div>
-          <!-- <ion-button (click)="initialClick()" *ngIf="img !== undefined || img !== ''" class="upload-btn"><ion-icon name="cloud-upload"></ion-icon></ion-button> -->
-        </div>
-        <!-- customization image section -->
-        <!-- <p #p style="height: 400px; background: #888"> </p> -->
-        <div class="resizeCtrl" [hidden]="hideImageActions || !backgroundImg">
-          <p>Rotate</p>
-          <ion-icon color="medium" name="refresh"></ion-icon>
-          <p-slider (onChange)="pSlider($event, 'rotate')" [(ngModel)]="controlImageParamConst.adjustRotation" [min]="-360" [max]="360" [step]="1" [animate]="true" orientation="vertical"></p-slider>
-        </div>
 
-        <div class="rotateCtrl" [hidden]="hideImageActions || !backgroundImg">
-          <p>Zoom</p>
-          <ion-icon color="medium" name="add-circle"></ion-icon>
-          <p-slider (onChange)="pSlider($event, 'zoom')" [(ngModel)]="controlImageParamConst.adjustScale" [min]="0.1" [max]="5" [step]="0.01" [animate]="true" orientation="vertical"></p-slider>
-        </div>
-      </ion-col>
-      <ion-col class="makeTop" size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-          <!-- <p> adjust : {{controlImageParamConst.adjustRotation}}</p>
-          <p> current : {{controlImageParam.currentRotation}}</p>
-          <p> rotation : {{rotationAll}}</p>
-          <p *ngFor="let f of isFirst"> {{f.name}} : {{f.rotation}}</p> -->
-
-      </ion-col>
-    </ion-row>
-    <!-- <ion-row>
-      <ion-col size="2" offset="5">
-        <div class="card">
-          <div style="margin-bottom: -20px"> -->
-            <!-- <p-speedDial [model]="tooltipItems" radius="80" type="circle" buttonClassName="p-button-warning"></p-speedDial>
-            <p-speedDial [model]="tooltipItems" radius="80" direction="down" type="semi-circle"></p-speedDial>
-            <p-speedDial [model]="tooltipItems" radius="80" direction="left" type="semi-circle"></p-speedDial>
-            <p-speedDial [model]="tooltipItems" radius="80" direction="right" type="semi-circle"></p-speedDial>
-            <p-speedDial [model]="tooltipItems" radius="120" direction="up-left" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
-            <p-speedDial [model]="tooltipItems" radius="120" direction="up-right" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
-            <p-speedDial [model]="tooltipItems" radius="120" direction="down-left" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial>
-            <p-speedDial [model]="tooltipItems" radius="120" direction="down-right" type="quarter-circle" buttonClassName="p-button-success"></p-speedDial> -->
-            <!-- <p-speedDial [model]="tooltipItems" [radius]="80" direction="up" type="semi-circle"></p-speedDial>
+          <div *ngIf="backgroundImg || textEditor.text !== ''" class="rotateCtrl" [hidden]="hideImageActions">
+            <p>Zoom</p>
+            <ion-icon color="medium" name="add-circle"></ion-icon>
+            <p-slider *ngIf="isImgEditor" (onChange)="pSlider($event, 'zoom')" [(ngModel)]="controlImageParamConst.adjustScale" [min]="0.1" [max]="5" [step]="0.01" [animate]="true" orientation="vertical"></p-slider>
+            <p-slider *ngIf="!isImgEditor" (onChange)="pSliderText ($event, 'zoom')" [(ngModel)]="controlTextParamConst.adjustScale" [min]="0.1" [max]="5" [step]="0.01" [animate]="true" orientation="vertical"></p-slider>
           </div>
-        </div>
-      </ion-col>
-    </ion-row> -->
-  </ion-grid>
+        </ion-col>
+        <ion-col class="makeTop" size="12" sizeSm="12" sizeMd="6" sizeLg="4">
+            <!-- <p> adjust : {{controlImageParamConst.adjustRotation}}</p>
+            <p> current : {{controlImageParam.currentRotation}}</p>
+            <p> rotation : {{rotationAll}}</p>
+            <p *ngFor="let f of isFirst"> {{f.name}} : {{f.rotation}}</p> -->
 
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
     <ion-grid  class="mainTop">
     <ion-row>
       <div>
-          <!-- <ion-button (click)="captureScreen()">
-            <ion-icon name="print" size='small' slot="icon-only"></ion-icon>
-          </ion-button>
-          <ion-button  (click)="addBG()">
-            <ion-icon name="add" size='small' slot="icon-only"></ion-icon>
-          </ion-button> -->
-          <input #addbg hidden id="bg-img" type="file" name="bg_img" value="" (change)="onUploadBackgroundImage($event, 'background')">
-          <input #addLogo hidden id="logo-img" type="file" name="logo_img" value="" (change)="onUploadBackgroundImage($event, 'logo')">
-
-          <!-- <div id="pdfContent">
-            <h1>Testing this to pdf</h1>
-          </div> -->
-          <a #downloadLink hidden></a>
-          <img hidden [ngStyle]="{'background-image': 'url('+img+')'}" [src]="img">
+        <input #addbg hidden id="bg-img" type="file" name="bg_img" value="" (change)="onUploadBackgroundImage($event, 'background')">
+        <input #addLogo hidden id="logo-img" type="file" name="logo_img" value="" (change)="onUploadBackgroundImage($event, 'logo')">
+        <a #downloadLink hidden></a>
+        <img hidden [ngStyle]="{'background-image': 'url('+img+')'}" [src]="img">
       </div>
     </ion-row>
   </ion-grid>
 </ion-content>
+
+
 <ion-footer>
   <ion-toolbar>
     <ion-tabs>

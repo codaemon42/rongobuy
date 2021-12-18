@@ -12,6 +12,7 @@ export interface Wishlist{
   quantity: number;
   SkuId: any;
   attributes: any;
+  phoneDesignId: any;
 }
 
 export interface WishlistAddRes {

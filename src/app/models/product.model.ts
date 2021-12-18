@@ -12,6 +12,7 @@ export interface Product {
         shortDescription: string;
         categoryId: number;
         mainImage: string;
+        backgroundImage: string;
         videoUrl: string;
         productPrice: string;
         discountText: string;

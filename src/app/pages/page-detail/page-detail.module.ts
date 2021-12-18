@@ -1,3 +1,4 @@
+import { FooterModule } from './../../components/footer/footer.module';
 import { HeaderModule } from './../../components/modules/header/header.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,6 +16,7 @@ import { PageDetailPage } from './page-detail.page';
     FormsModule,
     IonicModule,
     HeaderModule,
+    FooterModule,
     PageDetailPageRoutingModule
   ],
   declarations: [PageDetailPage]

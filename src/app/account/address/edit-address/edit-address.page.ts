@@ -2,7 +2,7 @@ import { LoadingController, ModalController } from '@ionic/angular';
 import { AddressService } from './../../../services/address/address.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AddressSingle } from 'src/app/models/address.model';
+import { AddressSingle, Area, Division } from 'src/app/models/address.model';
 import { ToastService } from 'src/app/services/controllers/toast.service';
 
 @Component({
@@ -13,6 +13,11 @@ import { ToastService } from 'src/app/services/controllers/toast.service';
 export class EditAddressPage implements OnInit {
 
   @Input() defaultValues: AddressSingle;
+
+  divisions: Division[];
+  districts: Division[];
+  area: Area[];
+  isAreaSelected = false;
 
   editAddressForm: FormGroup;
 
@@ -26,6 +31,7 @@ export class EditAddressPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getDivision();
     this.editAddressForm = new FormGroup({
       name: new FormControl(this.defaultValues.name, {
         updateOn: 'change',
@@ -88,6 +94,53 @@ export class EditAddressPage implements OnInit {
         this.toastService.toast('something went wrong. try again', 'danger', 2000);
       }
     });
+  }
+
+  getDivision(){
+    this.addressService.getDivision().subscribe(divs=>{
+      this.divisions = divs.data;
+      console.log('divisions : ', this.divisions);
+      const div = this.divisions.find(d=>d.name === this.defaultValues.division);
+      this.addressService.getDistrict(div.id).subscribe(dist=>{
+        this.districts = dist.data;
+        console.log('districts : ', this.districts);
+        const city = this.districts.find(d=>d.name === this.defaultValues.city);
+        this.addressService.getArea(city.id).subscribe(a=>{
+          this.area = a.data;
+          console.log('area : ', this.area);
+        });
+      });
+    });
+  }
+  getDivisionId(id){
+    console.log('selected division id : ', id);
+  }
+
+  divisionSelected(e) {
+    console.log(e);
+    const div = this.divisions.find(d=>d.name === e.detail.value);
+    console.log(div);
+
+    this.addressService.getDistrict(div.id).subscribe(dist=>{
+      this.districts = dist.data;
+    });
+  }
+
+  citySelected(e) {
+    console.log(e);
+    const div = this.districts.find(d=>d.name === e.detail.value);
+    console.log(div);
+
+    this.addressService.getArea(div.id).subscribe(dist=>{
+      this.area = dist.data;
+    });
+  }
+
+  areaSelected(e) {
+    console.log(e);
+    this.isAreaSelected = true;
+    const div = this.districts.find(d=>d.name === e.detail.value);
+    console.log(div);
   }
 
 }

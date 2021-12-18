@@ -14,9 +14,10 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="!addressLoading && selectedAddress">
-      <ion-col size="12" sizeSm="12" sizeMd="6" offsetMd="3">
-        <ion-list>
+
+    <ion-row>
+      <ion-col size="12" sizeSm="12" sizeMd="6">
+        <ion-list *ngIf="!addressLoading && selectedAddress !== undefined && selectedAddress">
           <ion-radio-group #address color="warning" [value]="selectedAddress.id" (ionChange)="onSelectAddress(address.value)">
             <ion-list-header>
               <ion-label>
@@ -32,17 +33,27 @@
               </ion-label>
             </ion-item>
 
-            <ion-item (click)="addNewAddress()">
+            <!-- <ion-item (click)="addNewAddress()">
               <ion-buttons>
                 <ion-button>
                   <ion-icon slot="icon-only" color="tertiary" name="add"></ion-icon>
                 </ion-button>
               </ion-buttons>
               <ion-label color="tertiary" class="address"> Add different address</ion-label>
-            </ion-item>
+            </ion-item> -->
 
           </ion-radio-group>
 
+        </ion-list>
+        <ion-list lines="none">
+          <ion-item (click)="addNewAddress()">
+            <ion-buttons>
+              <ion-button>
+                <ion-icon slot="icon-only" color="tertiary" name="add"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-label color="tertiary" class="address"> Add new address</ion-label>
+          </ion-item>
         </ion-list>
         <!-- <ion-card [ngClass]="{'active': address.default==='1'}">
           <ion-card-header class='card-header'>
@@ -58,34 +69,7 @@
           </ion-card-content>
         </ion-card> -->
       </ion-col>
-    </ion-row>
-    <!-- address section ends -->
-    <ion-row>
-      <!-- <ion-col size="12" sizeSm="6" sizeMd="6">
-        <div class="checkout">
-          <form [formGroup]="checkoutForm">
-            <div class="name-section">
-              <ion-input class="rb-input-shadow" formControlName="name" placeholder="Full Name"></ion-input>
-               <ion-note *ngIf="checkoutForm.controls.phone.invalid && (checkoutForm.controls.phone.dirty || checkoutForm.controls.phone.touched)" color="danger" slot="end">valid phone number required !</ion-note>
-              <ion-input class="rb-input-shadow" maxLength="11" formControlName="phone" placeholder="Phone number"></ion-input>
-              <ion-note *ngIf="checkoutForm.controls.email.invalid && (checkoutForm.controls.email.dirty || checkoutForm.controls.email.touched)" color="danger" slot="end">valid email address required !</ion-note>
-              <ion-input class="rb-input-shadow" formControlName="email" type="email" placeholder="email"></ion-input>
-            </div>
-            <div class="address-section">
-              <ion-input class="rb-input-shadow" formControlName="address" placeholder="house, street, local Address"></ion-input>
-            </div>
-          </form>
-          <p-dropdown (onChange)="onChangeArea()" [options]="area" [(ngModel)]="selectedArea" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Area">
-                <ng-template pTemplate="selectedItem">
-                    <div class="country-item country-item-value"  *ngIf="selectedArea">
-
-                        <div>{{selectedArea.name}}</div>
-                    </div>
-                </ng-template>
-          </p-dropdown>
-        </div>
-      </ion-col> -->
-      <ion-col size="12" sizeSm="6" sizeMd="6">
+      <ion-col size="12" sizeSm="12" sizeMd="6">
         <form [formGroup]="giftForm">
           <ion-list>
             <ion-item>
@@ -108,13 +92,9 @@
               <ion-col>
                 <ion-list>
                   <!-- <ion-item>
-                    <ion-checkbox (ionChange)="sendAsGift($event)" [checked]="sendGift" mode="ios" color="warning" ></ion-checkbox>
-                    <ion-label color="dark"> add special packaging </ion-label>
-                  </ion-item> -->
-                  <ion-item>
                     <ion-checkbox (ionChange)="termsAccept($event)" [checked]="terms" mode="md" color="warning" ></ion-checkbox>
                     <ion-label color="dark"> Accept our terms and conditions </ion-label>
-                  </ion-item>
+                  </ion-item> -->
                 </ion-list>
               </ion-col>
             </ion-row>
@@ -146,7 +126,7 @@
                   Shipping cost
                 </div>
                 <div class="shipping-total">
-                  BDT {{cartDetails.data.shippingTotal}}
+                  BDT {{shippingCost ? shippingCost : cartDetails.data.shippingTotal}}
                 </div>
               </div>
 
@@ -155,7 +135,7 @@
                   Grand Total
                 </div>
                 <div class="grand-total-amount">
-                  BDT {{cartDetails.data.grandTotal}}
+                  BDT {{cartDetails.data.grandTotal + (shippingCost ? shippingCost : 0) - cartDetails.data.shippingTotal}}
                 </div>
               </div>
             </div>
@@ -181,9 +161,43 @@
               </ion-list>
             </div>
           </div>
-          <ion-button [disabled]="cartLoading && addressLoading && terms" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>
+          <ion-list>
+            <ion-item>
+              <ion-checkbox (ionChange)="termsAccept($event)" [checked]="terms" mode="md" color="warning" ></ion-checkbox>
+              <ion-label style="margin-left: 10px" color="dark"> Accept our terms and conditions </ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-button [disabled]="cartLoading || !selectedAddress || !terms" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>
         </div>
       </ion-col>
+    </ion-row>
+    <!-- address section ends -->
+    <ion-row>
+      <!-- <ion-col size="12" sizeSm="6" sizeMd="6">
+        <div class="checkout">
+          <form [formGroup]="checkoutForm">
+            <div class="name-section">
+              <ion-input class="rb-input-shadow" formControlName="name" placeholder="Full Name"></ion-input>
+               <ion-note *ngIf="checkoutForm.controls.phone.invalid && (checkoutForm.controls.phone.dirty || checkoutForm.controls.phone.touched)" color="danger" slot="end">valid phone number required !</ion-note>
+              <ion-input class="rb-input-shadow" maxLength="11" formControlName="phone" placeholder="Phone number"></ion-input>
+              <ion-note *ngIf="checkoutForm.controls.email.invalid && (checkoutForm.controls.email.dirty || checkoutForm.controls.email.touched)" color="danger" slot="end">valid email address required !</ion-note>
+              <ion-input class="rb-input-shadow" formControlName="email" type="email" placeholder="email"></ion-input>
+            </div>
+            <div class="address-section">
+              <ion-input class="rb-input-shadow" formControlName="address" placeholder="house, street, local Address"></ion-input>
+            </div>
+          </form>
+          <p-dropdown (onChange)="onChangeArea()" [options]="area" [(ngModel)]="selectedArea" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Area">
+                <ng-template pTemplate="selectedItem">
+                    <div class="country-item country-item-value"  *ngIf="selectedArea">
+
+                        <div>{{selectedArea.name}}</div>
+                    </div>
+                </ng-template>
+          </p-dropdown>
+        </div>
+      </ion-col> -->
+
     </ion-row>
   </ion-grid>
 

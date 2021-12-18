@@ -42,6 +42,7 @@ export interface OrderSingle {
   shipping_address: ShippingAddress;
   customer: Customer;
   orderItems: OrderItem[];
+  created_at:  string;
 }
 export interface Order {
     id: number;
@@ -53,6 +54,7 @@ export interface Order {
     status: string;
     shipping_address: ShippingAddress;
     customer: Customer;
+    created_at:  string;
 };
 
 
@@ -62,6 +64,7 @@ export interface OrderItem {
     productId: string;
     productTitle: string;
     image: string;
+    backgroundImage: string;
     quantity: number;
     price: number;
     skuId: string;

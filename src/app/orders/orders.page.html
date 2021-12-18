@@ -11,7 +11,7 @@
         <div class="card">
             <div class="header">
               <ion-chip color="tertiary">#{{order.orderId}}</ion-chip>
-              <div class="date"> 12-10-2021 </div>
+              <div class="date"> {{ order.created_at | date : 'MMM d, y, h:mm:ss a' }} </div>
             </div>
             <div class="content">
               <div class="status">

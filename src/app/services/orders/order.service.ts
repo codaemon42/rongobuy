@@ -24,9 +24,10 @@ export class OrderService {
 
   fetchOrders() {
     const headerOps = this.headerOptions();
-    return this.http.get<OrdersRes>(`${environment.url.base}/order/all?status=pending`, headerOps).pipe(
+    return this.http.get<OrdersRes>(`${environment.url.base}/order/all`, headerOps).pipe(
       take(1),
       tap(orderRes => {
+        console.log('orders : ', orderRes);
         const data: any = orderRes.data;
         if(!orderRes.success && data === 401) {
           this.accountService.logOut();

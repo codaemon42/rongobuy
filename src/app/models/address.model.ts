@@ -43,3 +43,54 @@ export interface AddressAdd {
     type: string;
     default: string;
 }
+
+
+export interface DivisionRes {
+  success: boolean;
+  data: Division[];
+  message: string;
+};
+
+export interface DistrictRes {
+  success: boolean;
+  data: Division[];
+  message: string;
+};
+
+export interface AreaRes {
+  success: boolean;
+  data: Area[];
+  message: string;
+};
+
+export interface Division {
+  id: number;
+  division_id: string;
+  name: string;
+  bn_name: string;
+  lat: string;
+  long: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export interface Area {
+  id: number;
+  district_id: number;
+  name: string;
+  bn_name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ShippingCostRes {
+  success: boolean;
+  data: number;
+  message: string;
+}
+export interface ParamShippingCost {
+  city: string;
+  area: string;
+}
+
+

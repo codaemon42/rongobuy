@@ -22,7 +22,7 @@ export class SpecificPage implements OnInit, OnDestroy {
   product: Product;
 
   phoneCoverPage = 0;
-  gender = null;
+  gender = 'male';
   phoneModel = null;
 
 
@@ -39,7 +39,7 @@ export class SpecificPage implements OnInit, OnDestroy {
     this.router.params.subscribe(routes=>{
       this.productsService.fetchProductsByCat(routes.catSlug).subscribe(products=>{
         this.product = products.data.data[0];
-        this.backgroundImage = products.data.data[0].mainImage;
+        this.backgroundImage = products.data.data[0].backgroundImage;
         console.log('specific page product : ', this.product);
       });
     });

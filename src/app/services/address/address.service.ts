@@ -1,6 +1,6 @@
 import { AccountService } from './../../account/account.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AddressSingle, AddressRes, AddressSingleRes, AddressAdd } from './../../models/address.model';
+import { AddressSingle, AddressRes, AddressSingleRes, AddressAdd, DivisionRes, AreaRes, DistrictRes, ParamShippingCost } from './../../models/address.model';
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -38,7 +38,12 @@ export class AddressService {
           this.accountService.logOut();
           this.nav.navigateForward('tabs/account');
         }
-        this._address.next(addressRes.data.data);
+
+        if(addressRes.data.data.length === 0){
+          return;
+        } else {
+          this._address.next(addressRes.data.data);
+        }
       })
     );
   }
@@ -65,6 +70,7 @@ export class AddressService {
           } else {
             this.toastService.toast(newAddress.message, 'danger', 2000);
           }
+          //this.fetchAddress();
         });
       })
     );
@@ -78,7 +84,7 @@ export class AddressService {
       tap(res=>{
         console.log('updated address : ', res);
       })
-    )
+    );
   }
 
   getHttpOption() {
@@ -88,5 +94,41 @@ export class AddressService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`})
     };
+  }
+
+  getDivision() {
+    return this.http.get<DivisionRes>(`${environment.url.base}/address/divisions`).pipe(
+      take(1),
+      tap(divs=>{
+        console.log('divs : ', divs);
+      })
+    );
+  }
+
+  getDistrict(id){
+    return this.http.get<DistrictRes>(`${environment.url.base}/address/district/${id}`).pipe(
+      take(1),
+      tap(dist=>{
+        console.log('dist : ', dist);
+      })
+    );
+  }
+
+  getArea(id){
+    return this.http.get<AreaRes>(`${environment.url.base}/address/area/${id}`).pipe(
+      take(1),
+      tap(area=>{
+        console.log('area : ', area);
+      })
+    );
+  }
+
+  getShippingCost(body: ParamShippingCost) {
+    return this.http.post<any>(`${environment.url.base}/shipping/price`, body).pipe(
+      take(1),
+      tap(res=>{
+        console.log('shipping cost : ', res);
+      })
+    );
   }
 }

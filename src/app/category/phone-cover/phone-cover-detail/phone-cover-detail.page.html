@@ -27,9 +27,9 @@
 
   <ion-grid *ngIf="isDisplay" class="ion-no-padding">
     <ion-row>
-      <ion-col size="6" sizeSm="3" sizeMd="3" sizeLg="2" (click)="onSelectImage(cat.slug)" *ngFor="let cat of phoneCoverCatChild">
-        <ion-card class="ion-text-center">
-          <ion-img style="width: 90%; height: 200px; margin: auto" [src]="cat.image"></ion-img>
+      <ion-col size="4" sizeSm="2" sizeMd="2" sizeLg="2" (click)="onSelectImage(cat.slug)" *ngFor="let cat of phoneCoverCatChild">
+        <ion-card class="card ion-no-margin ion-text-center">
+          <ion-img style="width: 75%; height: 120px; margin: auto" [src]="cat.image"></ion-img>
           <ion-card-subtitle class="subtitle ion-text-center">
             <ion-label>{{cat.categoryName}}</ion-label>
           </ion-card-subtitle>

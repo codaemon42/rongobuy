@@ -11,7 +11,7 @@
         <span *ngIf="cartDetails.success">
           <div class="card" *ngFor="let cartItem of cartDetails.data.product; let i = index">
             <img [ngStyle]="{
-            'background-image': 'url('+cartItem.backgroundImage+')',
+            'background-image': 'url('+cartItem.backgroundImage+'_315x525.png)',
             'background-size.%': 100,
             'background-repeat': 'no-repeat',
             'background-position-x.px': 0,
@@ -19,7 +19,12 @@
             }" [src]="cartItem.productImage">
             <ion-label class="detail">
               <h3 class="title">{{ cartItem.productTitle }}</h3>
-              <p class="price">{{ cartItem.discountedPrice }}</p>
+              <p class="price">
+                ৳
+                <span *ngIf="!cartItem.discountedPrice" style="margin-right: 10px">{{ cartItem.orginalPrice*cartItem.quantity }}</span>
+                <span *ngIf="cartItem.discountedPrice" style="text-decoration: line-through; margin-right: 10px">{{ cartItem.orginalPrice*cartItem.quantity }}</span>
+                <span *ngIf="cartItem.discountedPrice">{{ cartItem.discountedPrice }}</span>
+              </p>
               <p class="price">
                 <ion-icon (click)="onDeleteCartItem(cartItem.id)" class="delete"  name="trash"></ion-icon>
                 <!-- <ion-buttons>
@@ -30,9 +35,9 @@
               </p>
             </ion-label>
             <div class="actions">
-                <ion-icon name="add" (click)="increaseCart(cartItem.productId, 1)"></ion-icon>
+                <ion-icon name="add" (click)="increaseCart(cartItem.productId, cartItem.skuId, 1, cartItem.backgroundImage, cartItem.phoneDesignId)"></ion-icon>
               <ion-label>{{ cartItem.quantity }}</ion-label>
-                <ion-icon name="remove" (click)="decreaseCart(cartItem.productId, -1)"></ion-icon>
+                <ion-icon name="remove" (click)="decreaseCart(cartItem.productId, cartItem.skuId, -1, cartItem.backgroundImage, cartItem.phoneDesignId)"></ion-icon>
             </div>
           </div>
         </span>

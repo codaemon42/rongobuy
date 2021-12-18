@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class PageDetailPage implements OnInit, OnDestroy {
 
   page: Page = null;
+  isPageAvailable = false;
 
   title: any;
 
@@ -41,6 +42,7 @@ export class PageDetailPage implements OnInit, OnDestroy {
   loadContent(slug) {
     this.pageService.fetchPage(slug).subscribe((data)=>{
       console.log('fetch : ', data);
+      this.isPageAvailable = true;
     });
     this.pageSub = this.pageService.page.subscribe(data=>{
       this.page = data;

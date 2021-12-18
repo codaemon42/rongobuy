@@ -1,3 +1,4 @@
+import { OrderVideoModule } from './../components/video/order-video/order-video.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +18,7 @@ import { CheckoutPage } from './checkout.page';
     IonicModule,
     DropdownModule,
     ReactiveFormsModule,
+    OrderVideoModule,
     CheckoutPageRoutingModule
   ],
   declarations: [CheckoutPage]

@@ -61,6 +61,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
   selectedSKUProduct: SkuPriceList;
 
   cartQtySub: Subscription;
+  phoneCoverServiceSub: Subscription;
+  selectedProductsServiceSub: Subscription;
 
   disableCartButtons = false;
 
@@ -94,12 +96,15 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
       this.product_slug = data.slug;
       this.getSingleProduct(data.slug);
     });
-    this.phoneCoverService.selectedPhoneCover.subscribe(res=>{
+    this.phoneCoverServiceSub = this.phoneCoverService.selectedPhoneCover.subscribe(res=>{
       this.selectedPhoneCover = res;
       console.log('this.selectedPhoneCover : ', this.selectedPhoneCover);
     });
+    this.phoneCoverService.fetchPhoneCoversByFilter().subscribe(data=>{
+      console.log('fetch fn covers detail page: ', data);
+    });
 
-    this.productsService.selectedProductBackground.subscribe(res=>{
+    this.selectedProductsServiceSub = this.productsService.selectedProductBackground.subscribe(res=>{
       this.backGroundImage = res;
       console.log('this.backGroundImage : ', this.backGroundImage);
     });
@@ -332,8 +337,12 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+
+
   ngOnDestroy() {
     this.cartQtySub.unsubscribe();
+    this.phoneCoverServiceSub.unsubscribe();
+    this.selectedProductsServiceSub.unsubscribe();
   }
 
 

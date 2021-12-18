@@ -38,9 +38,9 @@ export class WishlistPage implements OnInit {
     });
   }
 
-  addToCart(id, productId, skuId, backgroundImage) {
+  addToCart(id, productId, skuId, backgroundImage, phoneDesignId) {
     skuId = skuId ? skuId : productId;
-    this.cartService.addTOCart(productId, skuId, 1, backgroundImage).subscribe(res=>{
+    this.cartService.addTOCart(productId, skuId, 1, backgroundImage, phoneDesignId).subscribe(res=>{
       if(res.success){
         this.wishlistService.deleteWishlist(id).subscribe();
       }

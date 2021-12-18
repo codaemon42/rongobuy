@@ -1,6 +1,13 @@
 <app-header [showSearch]="showSearch" (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)" [searchData]="searchData"></app-header>
 
 <ion-content>
+  <!-- <table>
+    <tr>
+      <th>Materials</th>
+      <td></td>
+    </tr>
+  </table> -->
+
     <!-- full home page  -->
       <!-- [ngStyle]="{
         'background': 'url('+'https://i0.wp.com/www.cssscript.com/wp-content/uploads/2017/12/Animated-Particles-Background.png?fit=499%2C386&ssl=1'+')'
@@ -51,8 +58,8 @@
       <ion-row *ngIf="homeSection.sectionType === 'slider' && homeSection.isActive === 1">
         <ion-col *ngIf="!homeIndex">
           <ion-slides [ngClass]="{'slider-margin': !mobileView}" pager="true" scrollbar="true" [options]="slideOpts">
-            <ion-slide *ngFor="let slide of homeSection.sectioncontent;let i=index" (click)="sliderNavigate(i)">
-              <ion-img [src]="slide.imageUrl+'_'+slide.width+'x'+slide.height+'.jpg'"></ion-img>
+            <ion-slide *ngFor="let slide of homeSection.sectioncontent;let i=index" (click)="onClickHomeContent(slide.slug)">
+              <ion-img [src]="slide.imageUrl"></ion-img>
             </ion-slide>
           </ion-slides>
         </ion-col>
@@ -60,7 +67,7 @@
       <ion-row  *ngIf="homeSection.sectionType === 'emergency' && homeSection.isActive === 1">
         <ion-col>
           <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
-            <ion-slide *ngFor="let emergency of homeSection.sectioncontent; let i = index">
+            <ion-slide *ngFor="let emergency of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(emergency.slug)">
                 <!-- <div class="rb-emergency-info" [ngStyle]="{'background': 'var(--ion-color-'+colors[i]+')'}"> -->
                 <div class="rb-emergency-info">
                   <div class="icon">
@@ -93,7 +100,7 @@
       <ion-row *ngIf="homeSection.sectionType === 'slider' && homeSection.isActive === 1">
         <ion-col *ngIf="homeIndex" size="11" offset="0.5">
           <ion-slides class="cat-slider-2" pager="true" scrollbar="false" [options]="catSlider">
-            <ion-slide *ngFor="let slide of homeSection.sectioncontent; let i = index">
+            <ion-slide *ngFor="let slide of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(slide.slug)">
               <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
                 <ion-img [src]="slide.imageUrl"></ion-img>
               </ion-card>
@@ -107,8 +114,9 @@
       <ion-row *ngIf="homeSection.sectionType === 'category' && homeSection.isActive === 1">
         <ion-col size="11" offset="0.5">
           <ion-slides #categorySlide class="cat-slider" pager="true" scrollbar="false" [options]="catSlider" (ionSlidesDidLoad)="catSliderLoaded($event)" (ionSlideNextStart)="catSliderLoaded($event)">
-            <ion-slide *ngFor="let phoneCat of homeSection.sectioncontent; let i = index">
-              <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
+            <ion-slide *ngFor="let phoneCat of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(phoneCat.slug)">
+              <!-- <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}"> -->
+              <ion-card>
                 <ion-img [src]="phoneCat.imageUrl"></ion-img>
               </ion-card>
             </ion-slide>
@@ -131,18 +139,49 @@
 
       <!-- banner section -->
       <ion-row [ngStyle]="{'background-position-x.px': bannerBg.positionX}" class="bg-drops" *ngIf="homeSection.sectionType === 'banner' && homeSection.isActive === 1">
-        <ion-col size="11" offset="0.5" *ngFor="let banner of homeSection.sectioncontent; let i = index">
-          <div class="banner-images">
+        <ion-col size="12" *ngFor="let banner of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(banner.slug)">
+          <div class="banner-images" [ngStyle]="{'width.%': banner.width}">
             <img
               [ngStyle]="{
-                'border-radius.px': 10,
+                'border-radius.px': banner.height ? banner.height : 0,
                 'width.%': 100
               }"
               [src]="banner.imageUrl" >
           </div>
         </ion-col>
       </ion-row>
+
+      <!-- banner grid -->
+      <ion-row *ngIf="homeSection.sectionType === 'banner_grid' && homeSection.isActive === 1">
+        <div class="p-grid nested-grid">
+          <div class="p-col-6" style="padding-right: 0px">
+            <div class="box box-stretched">
+              <img style="width: -moz-available; width: -webkit-fill-available" [src]="homeSection.sectioncontent[0].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
+            </div>
+          </div>
+          <div class="p-col-6">
+              <div class="p-grid">
+                  <div class="p-col-12" style="padding-bottom: 0px">
+                      <div class="box">
+                        <img style="width: -moz-available; width: -webkit-fill-available;" [src]="homeSection.sectioncontent[1].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
+                      </div>
+                  </div>
+                  <!-- <div class="p-col-6">
+                      <div class="box">Naim</div>
+                  </div> -->
+                  <div class="p-col-12">
+                      <div class="box">
+                        <img style="width: -moz-available; width: -webkit-fill-available; height: -moz-available; height: -webkit-fill-available;" [src]="homeSection.sectioncontent[2].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </ion-row>
+      <!-- banner grid /-->
     </ion-grid>
+
+
 
     <!-- products -->
 

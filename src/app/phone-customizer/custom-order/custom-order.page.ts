@@ -1,14 +1,19 @@
+import { AddAddressPage } from './../../account/address/add-address/add-address.page';
+import { StorageService } from './../../services/storage.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/account/account.service';
-import { AddressSingle } from 'src/app/models/address.model';
+import { OrderVideoComponent } from 'src/app/components/video/order-video/order-video.component';
+import { AddressSingle, ParamShippingCost } from 'src/app/models/address.model';
 import { CartRes } from 'src/app/models/cart.model';
 import { AddressService } from 'src/app/services/address/address.service';
 import { CartService } from 'src/app/services/cart.service';
 import { ToastService } from 'src/app/services/controllers/toast.service';
 import { OrderService } from 'src/app/services/orders/order.service';
+import { ProductService } from 'src/app/services/product.service';
+import { Product } from 'src/app/models/product.model';
 
 @Component({
   selector: 'app-custom-order',
@@ -34,6 +39,12 @@ export class CustomOrderPage implements OnInit, OnDestroy {
   selectedAddress: AddressSingle = null;
   addressLoading = true;
 
+  shippingCost: number;
+
+  singleProduct: Product;
+  productPrice = 0;
+  isProductLoading = true;
+
 
   constructor(
     private nav: NavController,
@@ -42,10 +53,14 @@ export class CustomOrderPage implements OnInit, OnDestroy {
     private cartService: CartService,
     private addressService: AddressService,
     private accountService: AccountService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private modalCtrl: ModalController,
+    private storageService: StorageService,
+    private productService: ProductService
     ) { }
 
   ngOnInit() {
+    this.productInit();
     this.giftFormInit();
     this.addressInit();
     this.cartServiceInit();
@@ -54,6 +69,17 @@ export class CustomOrderPage implements OnInit, OnDestroy {
         this.logoImage ,
         this.text,
     );
+  }
+
+
+  productInit() {
+    this.isProductLoading = true;
+    this.productService.fetchSingleProduct('customized').subscribe(res=>{
+      this.singleProduct = res;
+      this.isProductLoading = false;
+      console.log('this.singleProduct custom check : ',this.singleProduct);
+      this.productPrice = parseInt(this.singleProduct.productPrice, 10);
+    });
   }
 
   giftFormInit() {
@@ -73,7 +99,12 @@ export class CustomOrderPage implements OnInit, OnDestroy {
     this.addressLoading = true;
     this.addressService.fetchAddress().subscribe(res=>{
       this.addressLoading = false;
-      this.selectedAddress = res.data.data.filter(address=>address.default === '1')[0];
+      if(res.data.data.length === 0){
+        //
+      } else {
+        this.selectedAddress = res.data.data.filter(address=>address.default === '1')[0];
+        this.getShippingCost({city: this.selectedAddress.city, area: this.selectedAddress.area});
+      }
     });
     this.addressSub = this.addressService.address.subscribe(addresses=>{
       this.addresses = addresses;
@@ -93,6 +124,9 @@ export class CustomOrderPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter(){
+    this.productInit();
+    this.addressInit();
+
     this.cartLoading = true;
     this.cartService.fetchCartObj().subscribe(res=>{
       this.cartLoading = false;
@@ -106,13 +140,58 @@ export class CustomOrderPage implements OnInit, OnDestroy {
 
   onSelectAddress(addressId) {
     this.selectedAddress = this.addresses.filter(address=>address.id===addressId)[0];
+    this.getShippingCost({city: this.selectedAddress.city, area: this.selectedAddress.area});
     console.log('selected Address : ', this.selectedAddress);
   }
 
   addNewAddress(){
-    this.nav.navigateForward('account/address/add-address');
+    //this.nav.navigateForward('account/address/add-address');
+    this.modalForAddress().then(data=>{
+      if(data['closed']){
+        this.addressInit();
+      }
+      console.log('modal address dismissed', data);
+    });
   }
 
+  async modalForVideo() {
+    const modal = await this.modalCtrl.create({
+        component: OrderVideoComponent,
+        keyboardClose: false,
+        swipeToClose: false,
+        backdropDismiss: false
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    console.log(data);
+
+    return new Promise(resolve => {
+      resolve(data);
+    });
+  }
+
+    async modalForAddress() {
+    const modal = await this.modalCtrl.create({
+        component: AddAddressPage,
+        componentProps: {
+          fromModal: true
+        },
+        keyboardClose: false,
+        swipeToClose: false,
+        backdropDismiss: false
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    console.log(data);
+
+    return new Promise(resolve => {
+      resolve(data);
+    });
+  }
 
   onPlacingOrder() {
     const gift = {
@@ -127,13 +206,36 @@ export class CustomOrderPage implements OnInit, OnDestroy {
       gift.from = this.giftForm.value.sender;
     }
 
-    this.loadingCtrl.create({
-      message: 'Placing order',
-      mode: 'ios'
-    }).then(el=>{
-      el.present();
+    this.storageService.get('first_order_completed').then(firstOrder=>{
+      if(firstOrder){
+        console.log('first_order true');
+        this.loadingCtrl.create({
+          message: 'Placing order',
+          mode: 'ios'
+        }).then(el=>{
+          el.present();
+          this.processOrder(gift);
+        });
+      }
+      else{
+        console.log('first_order false|null');
+        this.modalForVideo().then(data=>{
+          if(data['confirm']){
+            this.loadingCtrl.create({
+              message: 'Placing order',
+              mode: 'ios'
+            }).then(el=>{
+              el.present();
+            });
+            this.processOrder(gift);
+          }
+        });
+      }
+    });
+  }
 
-      this.orderService.addCustomOrder(
+  processOrder(gift){
+        this.orderService.addCustomOrder(
         this.selectedAddress.id,
         this.mainImage, this.backgroundImage,
         this.logoImage ,
@@ -143,14 +245,20 @@ export class CustomOrderPage implements OnInit, OnDestroy {
         gift.from ).subscribe(res=>{
         console.log('custom order res : ', res);
         this.loadingCtrl.dismiss();
+        this.modalCtrl.dismiss();
         this.toastService.toast('Order placed successfully', 'success', 3000);
         this.nav.navigateForward('/all/orders');
       });
-    });
   }
 
 
   // helper
+  getShippingCost(body: ParamShippingCost){
+    this.addressService.getShippingCost(body).subscribe(shippingRes=>{
+      this.shippingCost = parseInt(shippingRes.data,10);
+      console.log('shipped');
+    });
+  }
   sendAsGift(event) {
     console.log('check box event : ', event);
     this.sendGift = !this.sendGift;
@@ -158,7 +266,7 @@ export class CustomOrderPage implements OnInit, OnDestroy {
 
   termsAccept(event) {
     console.log('terms event : ', event);
-    this.terms = !this.sendGift;
+    this.terms = !this.terms;
   }
 
   onChangePayment(payment) {

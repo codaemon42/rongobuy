@@ -5,7 +5,7 @@ import { HomepageService } from './../services/homepage/homepage.service';
 import { Device } from '@ionic-native/device/ngx';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserverService } from '../services/breakpoint.service';
-import { IonSlides, Platform, LoadingController } from '@ionic/angular';
+import { IonSlides, Platform, LoadingController, NavController } from '@ionic/angular';
 import { Homepage } from '../models/homepage.model';
 import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser/ngx';
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -58,7 +58,8 @@ export class HomePage implements OnInit, OnDestroy {
     private homepageService: HomepageService,
     private colorsService: ColorsService,
     private inAppBrowser: InAppBrowser,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private nav: NavController
   ) {
 
    }
@@ -113,17 +114,25 @@ export class HomePage implements OnInit, OnDestroy {
     ];
   }
 
+  onClickHomeContent(slug){
+    console.log('slug : ', slug);
+    if(slug){
+      this.nav.navigateForward(slug);
+    }
+  }
+
+
   bannerBgAnimator() {
     setInterval(()=>{
       this.bannerBg.positionX +=0.15;
     },10);
   }
 
-  sliderNavigate(i) {
-    console.log('selected slider : ', i);
-    console.log('type : ', this.sliderEl[i].type);
-    console.log('type : ', this.sliderEl[i].itemSlug);
-  }
+  // sliderNavigate(i) {
+  //   console.log('selected slider : ', i);
+  //   console.log('type : ', this.sliderEl[i].type);
+  //   console.log('type : ', this.sliderEl[i].itemSlug);
+  // }
 
   onSearch(event) {
     console.log('new event created: ', event);

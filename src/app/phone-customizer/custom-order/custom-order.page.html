@@ -8,14 +8,14 @@
   <ion-grid>
     <!-- address section -->
     <ion-row *ngIf="addressLoading">
-      <ion-col size="12" sizeSm="12" sizeMd="6" offsetMd="3">
+      <ion-col size="12">
         <div class="spinner">
           <ion-spinner color="warning"></ion-spinner>
         </div>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="!addressLoading && selectedAddress">
-      <ion-col size="12" sizeSm="12" sizeMd="6" offsetMd="3">
+      <ion-col size="12">
         <ion-list>
           <ion-radio-group #address color="warning" [value]="selectedAddress.id" (ionChange)="onSelectAddress(address.value)">
             <ion-list-header>
@@ -31,16 +31,6 @@
                 <p> {{address.address}}, {{address.city}}, {{address.area}}, {{address.division}}</p>
               </ion-label>
             </ion-item>
-
-            <ion-item (click)="addNewAddress()">
-              <ion-buttons>
-                <ion-button>
-                  <ion-icon slot="icon-only" color="tertiary" name="add"></ion-icon>
-                </ion-button>
-              </ion-buttons>
-              <ion-label color="tertiary" class="address"> Add different address</ion-label>
-            </ion-item>
-
           </ion-radio-group>
 
         </ion-list>
@@ -57,6 +47,20 @@
             </ion-label>
           </ion-card-content>
         </ion-card> -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-list lines="none">
+          <ion-item (click)="addNewAddress()">
+            <ion-buttons>
+              <ion-button>
+                <ion-icon slot="icon-only" color="tertiary" name="add"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-label color="tertiary" class="address"> Add new address</ion-label>
+          </ion-item>
+        </ion-list>
       </ion-col>
     </ion-row>
     <!-- address section ends -->
@@ -85,7 +89,7 @@
           </p-dropdown>
         </div>
       </ion-col> -->
-      <ion-col size="12" sizeSm="6" sizeMd="6">
+      <ion-col size="12">
         <form [formGroup]="giftForm">
           <ion-list>
             <ion-item>
@@ -105,14 +109,6 @@
               <ion-col size="10" class="gift-box">
                   <ion-input formControlName="sender"></ion-input>
               </ion-col>
-              <ion-col>
-                <ion-list>
-                  <ion-item>
-                    <ion-checkbox (ionChange)="termsAccept($event)" [checked]="terms" mode="md" color="warning" ></ion-checkbox>
-                    <ion-label color="dark"> Accept our terms and conditions </ion-label>
-                  </ion-item>
-                </ion-list>
-              </ion-col>
             </ion-row>
           </ion-grid>
 
@@ -122,18 +118,18 @@
         </form>
         <div >
           <div class="payment-section">
-            <div *ngIf="cartLoading" class="order-amount-section">
+            <div *ngIf="isProductLoading" class="order-amount-section">
               <div class="spinner">
                 <ion-spinner color="warning"></ion-spinner>
               </div>
             </div>
-            <div *ngIf="!cartLoading" class="order-review-section">
+            <div *ngIf="!isProductLoading" class="order-review-section">
               <div class="order-amount-section">
                 <div class="total-ordered-amount-text">
                   Sub-total
                 </div>
                 <div class="total-ordered-amount">
-                  BDT {{cartDetails.data.subtotal}}
+                  BDT {{productPrice}}
                 </div>
               </div>
 
@@ -142,7 +138,7 @@
                   Shipping cost
                 </div>
                 <div class="shipping-total">
-                  BDT {{cartDetails.data.shippingTotal}}
+                  BDT {{shippingCost ? shippingCost : 60}}
                 </div>
               </div>
 
@@ -151,7 +147,7 @@
                   Grand Total
                 </div>
                 <div class="grand-total-amount">
-                  BDT {{cartDetails.data.grandTotal}}
+                   BDT {{productPrice+(shippingCost ? shippingCost : 60)}}
                 </div>
               </div>
             </div>
@@ -177,7 +173,13 @@
               </ion-list>
             </div>
           </div>
-          <ion-button [disabled]="cartLoading && addressLoading && terms" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>
+            <ion-list>
+              <ion-item>
+                <ion-checkbox (ionChange)="termsAccept($event)" [checked]="terms" mode="md" color="warning" ></ion-checkbox>
+                <ion-label color="dark"> Accept our terms and conditions </ion-label>
+              </ion-item>
+            </ion-list>
+          <ion-button [disabled]="cartLoading || !selectedAddress || !terms" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>
         </div>
       </ion-col>
     </ion-row>

@@ -14,6 +14,7 @@ import { ToastService } from 'src/app/services/controllers/toast.service';
 import { OrderService } from 'src/app/services/orders/order.service';
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/models/product.model';
+import { CouponService } from 'src/app/services/coupon/coupon.service';
 
 @Component({
   selector: 'app-custom-order',
@@ -25,6 +26,7 @@ export class CustomOrderPage implements OnInit, OnDestroy {
   @Input() backgroundImage;
   @Input() logoImage;
   @Input() text;
+  @Input() phoneModel;
 
   giftForm: FormGroup;
   sendGift = false;
@@ -45,6 +47,11 @@ export class CustomOrderPage implements OnInit, OnDestroy {
   productPrice = 0;
   isProductLoading = true;
 
+  couponRes: CartRes = null;
+  couponSub: Subscription;
+
+  couponForm: FormGroup;
+
 
   constructor(
     private nav: NavController,
@@ -56,10 +63,12 @@ export class CustomOrderPage implements OnInit, OnDestroy {
     private orderService: OrderService,
     private modalCtrl: ModalController,
     private storageService: StorageService,
-    private productService: ProductService
+    private productService: ProductService,
+    private couponService: CouponService,
     ) { }
 
   ngOnInit() {
+    this.couponInit();
     this.productInit();
     this.giftFormInit();
     this.addressInit();
@@ -71,6 +80,16 @@ export class CustomOrderPage implements OnInit, OnDestroy {
     );
   }
 
+  couponInit() {
+    this.couponSub = this.couponService.couponCode.subscribe(couponRes=>{
+      this.couponRes = couponRes;
+    });
+    this.couponForm = new FormGroup({
+      coupon: new FormControl(null, {
+        updateOn: 'change'
+      })
+    });
+  }
 
   productInit() {
     this.isProductLoading = true;
@@ -103,6 +122,9 @@ export class CustomOrderPage implements OnInit, OnDestroy {
         //
       } else {
         this.selectedAddress = res.data.data.filter(address=>address.default === '1')[0];
+        if(!this.selectedAddress){
+          this.selectedAddress = res.data.data[0];
+        }
         this.getShippingCost({city: this.selectedAddress.city, area: this.selectedAddress.area});
       }
     });
@@ -152,6 +174,22 @@ export class CustomOrderPage implements OnInit, OnDestroy {
       }
       console.log('modal address dismissed', data);
     });
+  }
+
+    applyCoupon() {
+    if(!this.couponForm.valid) {
+      this.toastService.toast('coupon is not valid');
+    } else {
+      this.couponService.applyCoupon(this.couponForm.value.coupon).subscribe(res=>{
+        console.log('got the coupon res : ', res);
+        if(!res.success){
+          this.toastService.toast(res.message);
+        } else {
+          this.couponRes = res;
+          this.toastService.toast('coupon successfully applied', 'success');
+        }
+      });
+    }
   }
 
   async modalForVideo() {
@@ -235,6 +273,12 @@ export class CustomOrderPage implements OnInit, OnDestroy {
   }
 
   processOrder(gift){
+        let couponCode = '';
+        if(this.couponRes){
+          if(this.couponRes.success){
+            couponCode = this.couponRes.data.couponCode;
+          }
+        }
         this.orderService.addCustomOrder(
         this.selectedAddress.id,
         this.mainImage, this.backgroundImage,
@@ -242,7 +286,9 @@ export class CustomOrderPage implements OnInit, OnDestroy {
         this.text,
         gift.isGift,
         gift.message,
-        gift.from ).subscribe(res=>{
+        gift.from,
+        couponCode,
+        this.phoneModel ).subscribe(res=>{
         console.log('custom order res : ', res);
         this.loadingCtrl.dismiss();
         this.modalCtrl.dismiss();

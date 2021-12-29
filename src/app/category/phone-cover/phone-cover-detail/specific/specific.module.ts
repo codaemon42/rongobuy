@@ -1,3 +1,4 @@
+import { ChatButtonModule } from './../../../../components/chat-button/chat-button.module';
 import { PhoneDisplayModule } from './../../../../components/modules/phone-display/phone-display.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,6 +16,7 @@ import { SpecificPage } from './specific.page';
     FormsModule,
     IonicModule,
     PhoneDisplayModule,
+    ChatButtonModule,
     SpecificPageRoutingModule
   ],
   declarations: [SpecificPage]

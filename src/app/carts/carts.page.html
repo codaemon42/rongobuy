@@ -64,6 +64,9 @@
           <ion-input formControlName="coupon" type="text" placeholder="coupon code"></ion-input>
           <ion-button color="warning" type="submit">apply</ion-button>
         </form>
+        <div *ngIf="couponRes">
+          <ion-chip color="warning" *ngIf="couponRes.data.couponPrice">Code: "{{couponRes.data.couponCode}}" || Discount: -৳ {{couponRes.data.couponPrice}}</ion-chip>
+        </div>
       </ion-col>
 
 
@@ -71,7 +74,13 @@
         <div class="proceed" *ngIf="cartDetails">
           <div class="total-section">
             <span class="total-text"> Total </span>
-            <span class="total"> BDT {{ cartDetails.data.subtotal }}</span>
+            <span *ngIf="!couponRes">
+              <span class="total"> ৳ {{ cartDetails.data.subtotal }}</span>
+            </span>
+            <span *ngIf="couponRes">
+              <span *ngIf="!couponRes.success" class="total"> ৳ {{ cartDetails.data.subtotal }}</span>
+              <span *ngIf="couponRes.success" class="total"> ৳ <span style="text-decoration: line-through;">{{cartDetails.data.subtotal}}</span> {{ cartDetails.data.subtotal - couponRes.data.couponPrice }}</span>
+            </span>
           </div>
           <ion-button color="warning" (click)="onProceedCheckout()" > Proceed Checkout </ion-button>
         </div>

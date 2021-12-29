@@ -6,11 +6,13 @@
     </ion-fab-button>
   </ion-fab>
 <!-- <ion-skeleton-text animated style="width: 100%; height: 300px;"></ion-skeleton-text> -->
-  <ion-fab style="bottom: 60px" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab style="bottom: 105px; right: 5px;" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="light" (click)="addToWishlist()">
       <ion-icon [color]="wishlistColor ? 'danger' : 'medium'" name="heart"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+        <!-- chat section -->
+  <app-chat-button class="chat-app"></app-chat-button>
 
   <ion-grid class="fullscreen ion-no-padding">
     <ion-toolbar>
@@ -19,7 +21,17 @@
       </ion-buttons>
     </ion-toolbar>
 
-    <ion-row *ngIf="!singleProduct">
+
+    <ion-row *ngIf="singleProductRes">
+      <ion-col *ngIf="!singleProductRes.success" size="12">
+        <div class="flex-col">
+          <ion-icon style="font-size: 64px" name="document" color="medium"></ion-icon>
+          <ion-label color="medium">No product found</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="!singleProductRes">
       <ion-col size="10" sizeSm="10" sizeMd="4" offset="1">
         <ion-slides pager="true" [options]="slideOpts">
           <ion-slide>
@@ -36,19 +48,21 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="singleProduct">
-      <ion-col size="10" sizeSm="10" sizeMd="4" offset="1">
+    <ion-row *ngIf="singleProductRes">
+      <ion-col *ngIf="singleProductRes.success" size="10" sizeSm="10" sizeMd="4" offset="1">
         <ion-slides pager="true" [options]="slideOpts">
           <ion-slide>
             <img
+              onContextMenu="return false;"
               [ngStyle]="{
+                'pointer-events': 'none',
                 'margin-top.px': 10,
                 'margin-bottom.px': 10,
                 'border-radius.px': 10,
                 'box-shadow': '0px 8px 8px rgba(4, 4, 4, 0.11)',
                 'height.px': 400,
                 'max-height.%': 100,
-                'background-image': 'url('+backGroundImage+'_1260x2100.png)',
+                'background-image': 'url('+backGroundImage+'_630x1150.png)',
                 'background-size.%': 100,
                 'background-repeat': 'no-repeat',
                 'background-position-x.px': 0,
@@ -58,11 +72,14 @@
           </ion-slide>
         </ion-slides>
       </ion-col>
-      <ion-col size="10" sizeSm="10" sizeMd="4" offset="1">
+      <ion-col *ngIf="singleProductRes.success" size="10" sizeSm="10" sizeMd="4" offset="1">
         <h2 style="font-weight: 700;">{{ singleProduct.title }}</h2>
         <p-rating [(ngModel)]="singleProduct.review.avarage" [readonly]="true" [cancel]="false"></p-rating>
         <h3 class="real-price" style="font-weight: 600;"><b>৳ {{selectedPhoneCover ? selectedPhoneCover.price : selectedSKUProduct.discountPrice}}</b></h3>
         <p class="disabled-price" *ngIf="selectedSKUProduct.price !== (selectedPhoneCover ? selectedPhoneCover.price : selectedSKUProduct.discountPrice)" style="font-weight: 500;"><b>৳ {{selectedSKUProduct.price}}</b></p>
+        <span *ngIf="selectedPhoneCover">
+          <p *ngIf="selectedPhoneCover.phoneModel"> SKU: {{selectedPhoneCover.phoneModel}} </p>
+        </span>
         <div [innerHTML]="singleProduct.shortDescription | safeHtml"></div>
           <ion-button color="tertiary" (click)="onCustomize(singleProduct.title)">
             <ion-icon name="brush"></ion-icon>
@@ -75,8 +92,8 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="singleProduct">
-      <ion-col class="ion-margin-top" size="12" class="description">
+    <ion-row *ngIf="singleProductRes">
+      <ion-col *ngIf="singleProductRes.success" class="ion-margin-top" size="12" class="description">
         <ion-segment color="tertiary" value="description" (ionChange)="segmentChanged($event)">
           <ion-segment-button value="description">
             <ion-label>Description</ion-label>
@@ -108,16 +125,16 @@
             </ion-col>
           </ion-row>
         </ion-grid> -->
-        <ion-text class="flex" [innerHTML]="singleProduct.description | safeHtml" *ngIf="segment === 'description'" color="medium">
-        </ion-text>
+        <div class="flex desc" [innerHTML]="singleProduct.description | safeHtml" *ngIf="segment === 'description'" color="medium">
+        </div>
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="singleProduct">
-      <ion-col class="ion-margin-top" size="10" sizeSm="10" sizeMd="6" offset="1" offsetMd="3">
+    <!-- <ion-row *ngIf="singleProductRes">
+      <ion-col *ngIf="singleProductRes.success" class="ion-margin-top" size="10" sizeSm="10" sizeMd="6" offset="1" offsetMd="3">
         <iframe width="100%" height="315" src="https://www.youtube.com/embed/_aCeAMrh-wo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
 
   <!-- <ion-grid *ngIf="singleProduct">
     <ion-row>
@@ -230,8 +247,8 @@
 
   </ion-grid>
 
-  <ion-grid class="ion-no-padding">
-    <ion-row class="actions">
+  <ion-grid class="ion-no-padding" *ngIf="singleProductRes">
+    <ion-row class="actions" *ngIf="singleProductRes.success">
       <ion-col size="6">
           <ion-button [disabled]="disableCartButtons" color="secondary" expand="full" class="buy-now" (click)="buyNow()">Buy Now</ion-button>
       </ion-col>
@@ -239,6 +256,12 @@
           <div class="square"></div>
           <ion-button [disabled]="disableCartButtons" color="warning" expand="full" class="add-to-cart" (click)="addToCart()">Add to cart</ion-button>
       </ion-col>
+      <!-- <ion-col size="2">
+          <ion-button [disabled]="disableCartButtons" color="tertiary" expand="full" (click)="call.click()">
+              <ion-icon name="call"></ion-icon>
+          </ion-button>
+          <a #call [hidden]="true" href="tel:+880196600007"></a>
+      </ion-col> -->
     </ion-row>
   </ion-grid>
 

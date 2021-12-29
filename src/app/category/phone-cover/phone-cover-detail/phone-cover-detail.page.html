@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
         <ion-back-button defaultHref="tabs/home"></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Models</ion-title>
+    <ion-title class="ion-text-center">Select Your Model</ion-title>
   </ion-toolbar>
     <ion-toolbar color="primary" *ngIf="phoneCoverCatChild || phoneCoverCatChild !== undefined">
     <p-dropdown (onChange)="onChangeArea()" [options]="phoneCoverCatChild" [(ngModel)]="selectedCatChild" optionLabel="categoryName" [filter]="true" filterBy="categoryName" [showClear]="true" placeholder="Select Phone Model">

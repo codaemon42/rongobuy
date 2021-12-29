@@ -1,3 +1,4 @@
+import { AccountPageModule } from './../../account/account.module';
 import { OrderVideoModule } from './../../components/video/order-video/order-video.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,6 +16,7 @@ import { CustomOrderPage } from './custom-order.page';
     ReactiveFormsModule,
     IonicModule,
     OrderVideoModule,
+    AccountPageModule,
     CustomOrderPageRoutingModule
   ],
   declarations: [CustomOrderPage]

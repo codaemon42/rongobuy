@@ -23,6 +23,7 @@ export interface CartRes {
         shippingTotal: number;
         grandTotal: number;
         couponCode: string;
+        couponPrice: number;
         discount: number;
         product: CartProduct[];
     };

@@ -1,3 +1,4 @@
+import { ChatButtonModule } from './../../components/chat-button/chat-button.module';
 import { PipesModule } from './../../pipes/pipes/pipes.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -21,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
     ComponentsModule,
     HttpClientModule,
     PipesModule,
+    ChatButtonModule,
     ProductDetailPageRoutingModule
   ],
   declarations: [ProductDetailPage]

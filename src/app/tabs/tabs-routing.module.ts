@@ -16,10 +16,10 @@ const routes: Routes = [
         path: 'category',
         loadChildren: () => import('../category/category.module').then(m => m.CategoryPageModule)
       },
-      {
-        path: 'search',
-        loadChildren: () => import('../search/search.module').then(m => m.SearchPageModule)
-      },
+      // {
+      //   path: 'search',
+      //   loadChildren: () => import('../search/search.module').then(m => m.SearchPageModule)
+      // },
       {
         path: 'carts',
         loadChildren: () => import('../carts/carts.module').then(m => m.CartsPageModule),

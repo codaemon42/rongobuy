@@ -34,3 +34,10 @@ ion-card{
   justify-content: space-between;
   align-items: center;
 }
+
+@media only screen and (min-width: 700px) {
+
+  .brands-wrapper{
+    margin: 0 200px 0 200px;
+  }
+}

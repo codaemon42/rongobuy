@@ -13,12 +13,25 @@ export class PhoneDisplayComponent implements OnInit {
   @Input() categoryImages;
   @Input() backgroundImage;
   @Input() productName;
+  @Input() productPrice;
+  imageLoaded = false;
 
   constructor(
     private phoneCoverService: PhoneCoverService
   ) { }
 
   ngOnInit() {}
+
+  // onLoad(){
+  //   if(this.imageLoaded) {
+  //     this.imageLoaded = true;
+  //     console.log('loading');
+  //   }
+  //   else {
+  //     console.log('loaded');
+  //     return;
+  //   }
+  // }
 
   onClickProduct(index) {
     console.log('category index', index);

@@ -6,6 +6,17 @@
 
 <ion-content>
   <ion-grid>
+    <ion-row>
+      <ion-col>
+        <form class="coupon-form" [formGroup]="couponForm" (ngSubmit)="applyCoupon()">
+          <ion-input formControlName="coupon" type="text" placeholder="coupon code"></ion-input>
+          <ion-button color="warning" type="submit">apply</ion-button>
+        </form>
+        <div *ngIf="couponRes">
+          <ion-chip color="warning" *ngIf="couponRes.data.couponPrice">Code: "{{couponRes.data.couponCode}}" || Discount: -৳ {{couponRes.data.couponPrice}}</ion-chip>
+        </div>
+      </ion-col>
+    </ion-row>
     <!-- address section -->
     <ion-row *ngIf="addressLoading">
       <ion-col size="12">
@@ -14,6 +25,7 @@
         </div>
       </ion-col>
     </ion-row>
+
     <ion-row *ngIf="!addressLoading && selectedAddress">
       <ion-col size="12">
         <ion-list>
@@ -34,21 +46,9 @@
           </ion-radio-group>
 
         </ion-list>
-        <!-- <ion-card [ngClass]="{'active': address.default==='1'}">
-          <ion-card-header class='card-header'>
-            <ion-checkbox [checked]="address.default==='1'" [value]="address.id"></ion-checkbox>
-            {{address.type}}
-            <span *ngIf="address.default==='1'"> (Default Address) </span>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-label>
-              <p>{{address.name}} : {{address.phone}}</p>
-              <p>{{address.address}}, {{address.city}}, {{address.area}}, {{address.division}}</p>
-            </ion-label>
-          </ion-card-content>
-        </ion-card> -->
       </ion-col>
     </ion-row>
+
     <ion-row>
       <ion-col size="12">
         <ion-list lines="none">
@@ -65,32 +65,8 @@
     </ion-row>
     <!-- address section ends -->
     <ion-row>
-      <!-- <ion-col size="12" sizeSm="6" sizeMd="6">
-        <div class="checkout">
-          <form [formGroup]="checkoutForm">
-            <div class="name-section">
-              <ion-input class="rb-input-shadow" formControlName="name" placeholder="Full Name"></ion-input>
-               <ion-note *ngIf="checkoutForm.controls.phone.invalid && (checkoutForm.controls.phone.dirty || checkoutForm.controls.phone.touched)" color="danger" slot="end">valid phone number required !</ion-note>
-              <ion-input class="rb-input-shadow" maxLength="11" formControlName="phone" placeholder="Phone number"></ion-input>
-              <ion-note *ngIf="checkoutForm.controls.email.invalid && (checkoutForm.controls.email.dirty || checkoutForm.controls.email.touched)" color="danger" slot="end">valid email address required !</ion-note>
-              <ion-input class="rb-input-shadow" formControlName="email" type="email" placeholder="email"></ion-input>
-            </div>
-            <div class="address-section">
-              <ion-input class="rb-input-shadow" formControlName="address" placeholder="house, street, local Address"></ion-input>
-            </div>
-          </form>
-          <p-dropdown (onChange)="onChangeArea()" [options]="area" [(ngModel)]="selectedArea" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select Area">
-                <ng-template pTemplate="selectedItem">
-                    <div class="country-item country-item-value"  *ngIf="selectedArea">
-
-                        <div>{{selectedArea.name}}</div>
-                    </div>
-                </ng-template>
-          </p-dropdown>
-        </div>
-      </ion-col> -->
       <ion-col size="12">
-        <form [formGroup]="giftForm">
+        <form [hidden]="true" [formGroup]="giftForm">
           <ion-list>
             <ion-item>
               <ion-checkbox (ionChange)="sendAsGift($event)" [checked]="sendGift" mode="ios" color="warning" ></ion-checkbox>
@@ -129,7 +105,18 @@
                   Sub-total
                 </div>
                 <div class="total-ordered-amount">
-                  BDT {{productPrice}}
+                  <span *ngIf="!couponRes">
+                    ৳ {{productPrice}}
+                  </span>
+                  <span *ngIf="couponRes">
+                    <span *ngIf="!couponRes.success">
+                      ৳ {{productPrice}}
+                    </span>
+                    <span *ngIf="couponRes.success">
+                      ৳  <span style="text-decoration: line-through;">{{productPrice}}</span>
+                      {{productPrice - couponRes.data.couponPrice}}
+                    </span>
+                  </span>
                 </div>
               </div>
 
@@ -138,7 +125,7 @@
                   Shipping cost
                 </div>
                 <div class="shipping-total">
-                  BDT {{shippingCost ? shippingCost : 60}}
+                  ৳ {{shippingCost ? shippingCost : 60}}
                 </div>
               </div>
 
@@ -147,7 +134,17 @@
                   Grand Total
                 </div>
                 <div class="grand-total-amount">
-                   BDT {{productPrice+(shippingCost ? shippingCost : 60)}}
+                  <span *ngIf="!couponRes">
+                    ৳ {{productPrice+(shippingCost ? shippingCost : 60)}}
+                  </span>
+                  <span *ngIf="couponRes">
+                    <span *ngIf="!couponRes.success">
+                      ৳ {{productPrice+(shippingCost ? shippingCost : 60)}}
+                    </span>
+                    <span *ngIf="couponRes.success">
+                      ৳ {{productPrice+(shippingCost ? shippingCost : 60) - couponRes.data.couponPrice}}
+                    </span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -176,7 +173,7 @@
             <ion-list>
               <ion-item>
                 <ion-checkbox (ionChange)="termsAccept($event)" [checked]="terms" mode="md" color="warning" ></ion-checkbox>
-                <ion-label color="dark"> Accept our terms and conditions </ion-label>
+                <ion-label style="margin-left: 10px" color="dark"> Accept our terms and conditions </ion-label>
               </ion-item>
             </ion-list>
           <ion-button [disabled]="cartLoading || !selectedAddress || !terms" color="warning" expand="full" (click)="onPlacingOrder()">Place Order</ion-button>

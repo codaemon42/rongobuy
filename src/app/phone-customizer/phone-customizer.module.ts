@@ -42,6 +42,7 @@ export class MyHammerConfig extends HammerGestureConfig {
 import { PhoneCustomizerPageRoutingModule } from './phone-customizer-routing.module';
 
 import { PhoneCustomizerPage } from './phone-customizer.page';
+import { AccountPageModule } from '../account/account.module';
 
 @NgModule({
   imports: [

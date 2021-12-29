@@ -70,7 +70,7 @@
         </ion-card> -->
       </ion-col>
       <ion-col size="12" sizeSm="12" sizeMd="6">
-        <form [formGroup]="giftForm">
+        <form [hidden]="true" [formGroup]="giftForm">
           <ion-list>
             <ion-item>
               <ion-checkbox (ionChange)="sendAsGift($event)" [checked]="sendGift" mode="ios" color="warning" ></ion-checkbox>
@@ -112,12 +112,27 @@
               </div>
             </div>
             <div *ngIf="!cartLoading" class="order-review-section">
+              <div *ngIf="couponRes">
+                <span *ngIf="couponRes.success">
+                  <ion-chip>Coupon Code:"{{couponRes.data.couponCode}}" || Discount -৳ {{couponRes.data.couponPrice}}</ion-chip>
+                </span>
+              </div>
               <div class="order-amount-section">
                 <div class="total-ordered-amount-text">
                   Sub-total
                 </div>
                 <div class="total-ordered-amount">
-                  BDT {{cartDetails.data.subtotal}}
+                  <span *ngIf="!couponRes">
+                    ৳ {{cartDetails.data.subtotal}}
+                  </span>
+                  <span *ngIf="couponRes">
+                    <span *ngIf="!couponRes.success">
+                      ৳ {{cartDetails.data.subtotal}}
+                    </span>
+                    <span *ngIf="couponRes.success">
+                      ৳ {{cartDetails.data.subtotal - couponRes.data.couponPrice}}
+                    </span>
+                  </span>
                 </div>
               </div>
 
@@ -126,7 +141,7 @@
                   Shipping cost
                 </div>
                 <div class="shipping-total">
-                  BDT {{shippingCost ? shippingCost : cartDetails.data.shippingTotal}}
+                  ৳  {{shippingCost ? shippingCost : cartDetails.data.shippingTotal}}
                 </div>
               </div>
 
@@ -135,7 +150,17 @@
                   Grand Total
                 </div>
                 <div class="grand-total-amount">
-                  BDT {{cartDetails.data.grandTotal + (shippingCost ? shippingCost : 0) - cartDetails.data.shippingTotal}}
+                  <span *ngIf="!couponRes">
+                    ৳ {{cartDetails.data.grandTotal + (shippingCost ? shippingCost : 0) - cartDetails.data.shippingTotal}}
+                  </span>
+                  <span *ngIf="couponRes">
+                    <span *ngIf="!couponRes.success">
+                      ৳ {{cartDetails.data.grandTotal + (shippingCost ? shippingCost : 0) - cartDetails.data.shippingTotal}}
+                    </span>
+                    <span *ngIf="couponRes.success">
+                      ৳ {{cartDetails.data.grandTotal + (shippingCost ? shippingCost : 0) - cartDetails.data.shippingTotal - couponRes.data.couponPrice}}
+                    </span>
+                  </span>
                 </div>
               </div>
             </div>

@@ -50,7 +50,9 @@
                 <!-- mockup image -->
                 <img #mainSlot
                   crossorigin="*"
+                  onContextMenu="return false;"
                   [ngStyle]="{
+                    'pointer-events': 'none',
                     'margin-bottom.px': -4,
                     'position': 'relative',
                     'z-index': 1000

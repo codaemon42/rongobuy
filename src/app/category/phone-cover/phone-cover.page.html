@@ -3,13 +3,13 @@
     <ion-buttons slot="start">
         <ion-back-button defaultHref="tabs/home"></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Phone Brands</ion-title>
+    <ion-title class="ion-text-center" style="font-size: 15px;">Select Your Phone Brands</ion-title>
   </ion-toolbar>
   <ion-toolbar color="primary" *ngIf="phoneCoverCat || phoneCoverCat !== undefined">
     <p-dropdown (onChange)="onChangeArea()" [options]="phoneCoverChild" [(ngModel)]="selectedBrand" optionLabel="categoryName" [filter]="true" filterBy="categoryName" [showClear]="true" placeholder="Select Phone Brand">
       <ng-template pTemplate="selectedItem">
         <div class="country-item country-item-value brand-option"  *ngIf="selectedBrand.categoryName">
-          <img [src]="selectedBrand.image" class="flag" style="width: 20px;" />
+          <img [src]="selectedBrand.image" class="flag" style="width: 20px;" >
           <div>{{selectedBrand.categoryName}}</div>
         </div>
       </ng-template>
@@ -25,7 +25,7 @@
 
 <ion-content>
 
-  <ion-grid class="ion-no-padding">
+  <ion-grid class="ion-no-padding brands-wrapper">
     <ion-row *ngIf="!phoneCoverCat || phoneCoverCat === undefined">
       <ion-col size="3" sizeSm="3" sizeMd="2" *ngFor="let s of skeletonCount">
         <ion-card>

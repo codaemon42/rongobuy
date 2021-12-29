@@ -3,9 +3,9 @@ import { ToastService } from './../services/controllers/toast.service';
 /* eslint-disable no-underscore-dangle */
 import { AccountService } from './account.service';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, ModalController } from '@ionic/angular';
 import { position } from 'html2canvas/dist/types/css/property-descriptors/position';
 import { StorageService } from '../services/storage.service';
 
@@ -15,6 +15,7 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./account.page.scss'],
 })
 export class AccountPage implements OnInit {
+  @Input() isFromCustom;
 
   isLogin = true;
   enableResend = false;
@@ -33,7 +34,8 @@ export class AccountPage implements OnInit {
     private loadingCtrl: LoadingController,
     private toastService: ToastService,
     private nav: NavController,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private modalCtrl: ModalController
   ) { }
 
   async ngOnInit() {
@@ -94,7 +96,13 @@ export class AccountPage implements OnInit {
             this.accountService.storeToken(resp.data.access_token);
             console.log('successfully logged from account page');
             this.userLoggedIn = true;
-            this.nav.navigateForward(this.referrer);
+            if(this.isFromCustom){
+              // dismiss modal
+              this.modalCtrl.dismiss({loggedIn: true});
+            }
+            else {
+              this.nav.navigateForward(this.referrer);
+            }
           } else {
             this.toastService.toast('invalid otp executed');
           }
@@ -136,6 +144,10 @@ export class AccountPage implements OnInit {
     clearInterval(this.timer);
     this.timer = null;
     this.counter = this.refCounter;
+ }
+
+ dismissModal(){
+   this.modalCtrl.dismiss({loggedIn: false});
  }
 
 }

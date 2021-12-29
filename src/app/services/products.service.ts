@@ -47,7 +47,7 @@ export class ProductsService {
       return this.http.get<ProductListResponse>(`${environment.url.base}/category/${slug}?page=${page}`).pipe(
         take(1),
         tap( productList =>{
-          console.log('productListRes : ', productList.data);
+          console.log('productListRes : ', productList);
           console.log('productList : ', productList.data.data);
           this.products.pipe(take(1)).subscribe(res=>{
             this._product.next(res.concat(productList.data.data));
@@ -59,7 +59,7 @@ export class ProductsService {
       return this.http.get<ProductListResponse>(`${environment.url.base}/category/${slug}?page=${page}`).pipe(
         take(1),
         tap( productList =>{
-          console.log('productListRes : ', productList.data);
+          console.log('productListRes : ', productList);
           console.log('productList : ', productList.data.data);
           this._product.next(productList.data.data);
         })

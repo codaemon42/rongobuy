@@ -1,18 +1,7 @@
 <app-header [showSearch]="showSearch" (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)" [searchData]="searchData"></app-header>
 
 <ion-content>
-  <!-- <table>
-    <tr>
-      <th>Materials</th>
-      <td></td>
-    </tr>
-  </table> -->
-
     <!-- full home page  -->
-      <!-- [ngStyle]="{
-        'background': 'url('+'https://i0.wp.com/www.cssscript.com/wp-content/uploads/2017/12/Animated-Particles-Background.png?fit=499%2C386&ssl=1'+')'
-      }" -->
-     <!-- *ngIf="homepage.length <= 0" -->
     <ion-grid
     *ngIf="homepage.length <= 0"
      >
@@ -59,12 +48,12 @@
         <ion-col *ngIf="!homeIndex">
           <ion-slides [ngClass]="{'slider-margin': !mobileView}" pager="true" scrollbar="true" [options]="slideOpts">
             <ion-slide *ngFor="let slide of homeSection.sectioncontent;let i=index" (click)="onClickHomeContent(slide.slug)">
-              <ion-img [src]="slide.imageUrl"></ion-img>
+              <ion-img style="width: 100%;" [src]="slide.imageUrl+'_800x350.png'"></ion-img>
             </ion-slide>
           </ion-slides>
         </ion-col>
       </ion-row>
-      <ion-row  *ngIf="homeSection.sectionType === 'emergency' && homeSection.isActive === 1">
+      <ion-row *ngIf="homeSection.sectionType === 'emergency' && homeSection.isActive === 1">
         <ion-col>
           <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
             <ion-slide *ngFor="let emergency of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(emergency.slug)">
@@ -80,28 +69,13 @@
         </ion-col>
       </ion-row>
 
-      <!-- <ion-row *ngIf="!homeIndex">
-        <ion-col>
-          <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
-            <ion-slide *ngFor="let emergency of emergencyInfo; let i = index">
-                      <div class="rb-emergency-info" [ngStyle]="{'background': 'var(--ion-color-'+colors[i]+')'}">
-                  <div class="icon">
-                    <img [src]="emergency.link" alt="icon">
-                    <ion-icon color="light" name="accessibility"></ion-icon>
-                  </div>
-                  <ion-label style="margin: 10px; text-align: left;">{{emergency.name}}</ion-label>
-                </div>
-            </ion-slide>
-          </ion-slides>
-        </ion-col>
-      </ion-row> -->
-<!-- https://media.rongobuy.com/p/product/e5h8yai2l36m47ckvot9uwbsxq0d1r.png -->
       <!-- other slider -->
       <ion-row *ngIf="homeSection.sectionType === 'slider' && homeSection.isActive === 1">
         <ion-col *ngIf="homeIndex" size="11" offset="0.5">
           <ion-slides class="cat-slider-2" pager="true" scrollbar="false" [options]="catSlider">
             <ion-slide *ngFor="let slide of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(slide.slug)">
-              <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
+              <!-- <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}"> -->
+              <ion-card>
                 <ion-img [src]="slide.imageUrl"></ion-img>
               </ion-card>
             </ion-slide>
@@ -129,7 +103,8 @@
         <ion-col size="11" offset="0.5" >
           <ion-slides class="cat-slider" pager="true" scrollbar="false" [options]="catSlider2" (ionSlidesDidLoad)="catSliderLoaded($event)" (ionSlideNextStart)="catSliderLoaded($event)">
             <ion-slide *ngFor="let videoContent of homeSection.sectioncontent; let i = index">
-              <ion-card *ngIf="videoContent.imageUrl" [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}">
+              <!-- <ion-card *ngIf="videoContent.imageUrl" [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}"> -->
+              <ion-card *ngIf="videoContent.imageUrl">
                <iframe width="100%" height="200" src="https://www.youtube.com/embed/{{videoContent.imageUrl}}" [title]="videoContent.title" frameborder="0" allowfullscreen ng-show="showvideo"></iframe>
               </ion-card>
             </ion-slide>
@@ -156,25 +131,23 @@
         <div class="p-grid nested-grid">
           <div class="p-col-6" style="padding-right: 0px">
             <div class="box box-stretched">
-              <img style="width: -moz-available; width: -webkit-fill-available" [src]="homeSection.sectioncontent[0].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
+              <img style="width: 100%" [src]="homeSection.sectioncontent[0].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
             </div>
           </div>
           <div class="p-col-6">
-              <div class="p-grid">
-                  <div class="p-col-12" style="padding-bottom: 0px">
-                      <div class="box">
-                        <img style="width: -moz-available; width: -webkit-fill-available;" [src]="homeSection.sectioncontent[1].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
-                      </div>
-                  </div>
-                  <!-- <div class="p-col-6">
-                      <div class="box">Naim</div>
-                  </div> -->
-                  <div class="p-col-12">
-                      <div class="box">
-                        <img style="width: -moz-available; width: -webkit-fill-available; height: -moz-available; height: -webkit-fill-available;" [src]="homeSection.sectioncontent[2].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
-                      </div>
+            <div class="p-grid">
+              <div class="p-col-12" style="padding-bottom: 0px">
+                  <div class="box">
+                    <img style="width: 100%" [src]="homeSection.sectioncontent[1].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
                   </div>
               </div>
+
+              <div class="p-col-12">
+                  <div class="box">
+                    <img style="width: 100%" [src]="homeSection.sectioncontent[2].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
+                  </div>
+              </div>
+            </div>
           </div>
         </div>
       </ion-row>
@@ -186,11 +159,12 @@
     <!-- products -->
 
     <!-- chat section -->
-      <ion-fab class="rb-chat-icon" vertical="bottom" horizontal="end" slot="fixed">
+      <!-- <ion-fab class="rb-chat-icon" vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="warning" (click)="openAppUrl('facebook', 'rongobuy', '228677831034067')">
           <ion-icon name="chatbubbles"></ion-icon>
         </ion-fab-button>
-      </ion-fab>
+      </ion-fab> -->
+      <app-chat-button class="chat-app"></app-chat-button>
     <!-- full home page  /-->
     <!-- footer -->
     <app-footer></app-footer>

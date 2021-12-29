@@ -21,6 +21,9 @@ export class CartsPage implements OnInit, OnDestroy {
   cartDetails: CartRes = null;
   cartSub: Subscription;
 
+  couponRes: CartRes = null;
+  couponSub: Subscription;
+
   couponForm: FormGroup;
 
   constructor(
@@ -39,6 +42,9 @@ export class CartsPage implements OnInit, OnDestroy {
     this.couponInit();
   }
   couponInit() {
+    this.couponSub = this.couponService.couponCode.subscribe(couponRes=>{
+      this.couponRes = couponRes;
+    });
     this.couponForm = new FormGroup({
       coupon: new FormControl(null, {
         updateOn: 'change'
@@ -55,6 +61,7 @@ export class CartsPage implements OnInit, OnDestroy {
         if(!res.success){
           this.toastService.toast(res.message);
         } else {
+          this.couponRes = res;
           this.toastService.toast('coupon successfully applied', 'success');
         }
       });
@@ -150,5 +157,6 @@ export class CartsPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cartSub.unsubscribe();
+    this.couponSub.unsubscribe();
   }
 }

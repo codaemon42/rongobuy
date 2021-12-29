@@ -25,6 +25,7 @@ export class ProductService {
     return this._product.asObservable();
   }
 
+
   fetchSingleProduct(slug) {
     return this.http.get<ProductResponse>(`${environment.url.base}/details/${slug}`).pipe(
       take(1),
@@ -35,6 +36,19 @@ export class ProductService {
       tap( product=>{
         console.log('product details: ', product);
         this._product.next(product);
+      })
+    );
+  }
+  fetchSingleProductOnly(slug) {
+    return this.http.get<ProductResponse>(`${environment.url.base}/details/${slug}`).pipe(
+      take(1),
+      map(data=>{
+        console.log(data);
+        return data;
+      }),
+      tap( product=>{
+        console.log('product details: ', product);
+        this._product.next(product.data);
       })
     );
   }

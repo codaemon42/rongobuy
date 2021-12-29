@@ -6,6 +6,7 @@ import { PhoneCover } from 'src/app/models/phone-cover.model';
 import { Product } from 'src/app/models/product.model';
 import { ToastService } from 'src/app/services/controllers/toast.service';
 import { PhoneCoverService } from 'src/app/services/phone-cover/phone-cover.service';
+import { PhoneModelService } from 'src/app/services/phone-model/phone-model.service';
 import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
@@ -32,14 +33,17 @@ export class SpecificPage implements OnInit, OnDestroy {
     private productsService: ProductsService,
     private nav: NavController,
     private phoneCoverService: PhoneCoverService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private phoneModelService: PhoneModelService
   ) { }
 
   ngOnInit() {
     this.router.params.subscribe(routes=>{
       this.productsService.fetchProductsByCat(routes.catSlug).subscribe(products=>{
         this.product = products.data.data[0];
-        this.backgroundImage = products.data.data[0].backgroundImage;
+        if(this.product){
+          this.backgroundImage = products.data.data[0].backgroundImage;
+        }
         console.log('specific page product : ', this.product);
       });
     });
@@ -89,6 +93,13 @@ export class SpecificPage implements OnInit, OnDestroy {
     console.log('selected backGround : ',this.phoneCovers[event]);
     this.productsService.addSelectedProductBackground(this.phoneCovers[event].image);
     this.nav.navigateForward(`products/${this.product.slug}`);
+  }
+
+  moveToCustomizer(){
+    if(this.product){
+      this.phoneModelService.addSelectedModel(this.product.title);
+      this.nav.navigateForward('phone-customizer');
+    }
   }
 
   ngOnDestroy() {

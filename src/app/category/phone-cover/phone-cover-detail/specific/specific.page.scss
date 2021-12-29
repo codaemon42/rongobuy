@@ -1,0 +1,12 @@
+.flex-col{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.chat-app{
+  position: fixed;
+  right: -5px;
+  bottom: 0;
+  z-index: 2000;
+}

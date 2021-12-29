@@ -1,3 +1,4 @@
+import { ProductResponse } from './../../services/product.service';
 import { PhoneCoverService } from 'src/app/services/phone-cover/phone-cover.service';
 import { AuthService } from './../../services/auth.service';
 import { WishlistService } from './../../services/wishlist/wishlist.service';
@@ -15,7 +16,7 @@ import { Product } from '../../models/product.model';
 //import { CartsService } from './../../carts/carts.service';
 import { Review } from './../../components/reviews/reviews.model';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AnimationController, IonContent, NavController } from '@ionic/angular';
+import { AnimationController, IonContent, NavController, ToastController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { CartService } from '../../services/cart.service';
@@ -42,6 +43,7 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
   cartItem: Cart;
   products: Product[];
   singleProduct: Product;
+  singleProductRes: ProductResponse;
   rating = 4;
   segment = 'description';
   reviews: Review[];
@@ -82,6 +84,7 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     private productsService: ProductsService,
     private accountService: AccountService,
     private toastService: ToastService,
+    private toastCtrl: ToastController,
     private authService: AuthService,
     private phoneCoverService: PhoneCoverService,
     private phoneModelService: PhoneModelService
@@ -99,9 +102,6 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     this.phoneCoverServiceSub = this.phoneCoverService.selectedPhoneCover.subscribe(res=>{
       this.selectedPhoneCover = res;
       console.log('this.selectedPhoneCover : ', this.selectedPhoneCover);
-    });
-    this.phoneCoverService.fetchPhoneCoversByFilter().subscribe(data=>{
-      console.log('fetch fn covers detail page: ', data);
     });
 
     this.selectedProductsServiceSub = this.productsService.selectedProductBackground.subscribe(res=>{
@@ -162,9 +162,10 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
 
   getSingleProduct(product_slug) {
-    this.productService.fetchSingleProduct(product_slug).subscribe( product => {
-      console.log('product detail : ', product);
-      this.singleProduct = product;
+    this.productService.fetchSingleProductOnly(product_slug).subscribe( productRes => {
+      console.log('product detail : ', productRes);
+      this.singleProductRes = productRes;
+      this.singleProduct = this.singleProductRes.data;
 
       //document.getElementById('short').innerHTML = this.singleProduct.shortDescription;
       this.selectedSKUProduct = this.singleProduct.skuModule.skuPriceList[0];
@@ -236,7 +237,23 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
       const designId = this.selectedPhoneCover ? this.selectedPhoneCover.id : null;
       this.wishlistService.addToWishlist(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage, designId).subscribe(res=>{
         if(res.success){
-          this.toastService.toast('added to wishlist', 'success', 2000);
+          //this.toastService.toast('added to wishlist', 'success', 2000);
+          this.toastCtrl.create({
+            message: 'Added !',
+            color: 'success',
+            position: 'top',
+            duration: 4000,
+            buttons: [
+                      {
+                        side: 'end',
+                        icon: 'heart',
+                        text: 'view Wishlist',
+                        handler: () => {
+                          this.nav.navigateForward('tabs/wishlist');
+                        }
+                      }
+                    ]
+          }).then(el=>el.present());
         } else {
           this.wishlistColor = !this.wishlistColor;
           this.toastService.toast(res.message, 'danger', 2000);
@@ -419,6 +436,5 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     .fromTo('right', '10%', '12px')
     .fromTo('opacity', '0.2', '1');
   }
-
 
 }

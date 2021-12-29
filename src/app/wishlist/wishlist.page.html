@@ -14,7 +14,9 @@
         </div>
         <span *ngIf="!isLoading && wishlists.length > 0">
           <div class="card" *ngFor="let wishlist of wishlists; let i = index">
-            <img [ngStyle]="{
+            <img
+            (click)="onViewProduct(i)"
+            [ngStyle]="{
             'background-image': 'url('+wishlist.backgroundImage+'_315x525.png)',
             'background-size.%': 100,
             'background-repeat': 'no-repeat',
@@ -22,7 +24,7 @@
             'background-position-y.px': 0
             }" [src]="wishlist.image">
             <ion-label class="detail">
-              <h3 class="title">{{ wishlist.title }}</h3>
+              <h3 (click)="onViewProduct(i)" class="title">{{ wishlist.title }}</h3>
               <p class="price">
                 <ion-icon style="margin-right: 20px" (click)="onDeleteWishItem(wishlist.id)" class="delete"  name="trash"></ion-icon>
                 <ion-icon class="delete" color="dark" name="cart" (click)="addToCart(wishlist.id ,wishlist.productId, wishlist.SkuId, wishlist.backgroundImage, wishlist.phoneDesignId)"></ion-icon>

@@ -5,6 +5,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AddressSingle } from 'src/app/models/address.model';
 import { AddressService } from 'src/app/services/address/address.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-address',
@@ -19,7 +20,8 @@ export class AddressPage implements OnInit, OnDestroy {
 
   constructor(
     private addressService: AddressService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
@@ -34,6 +36,10 @@ export class AddressPage implements OnInit, OnDestroy {
     this.addressService.fetchAddress().subscribe(res=>{
       this.addressLoading = false;
     });
+  }
+
+  addAddressRef() {
+    this.authService.addReferrer('/tabs/account/address');
   }
 
   onEdit(address) {

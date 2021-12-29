@@ -48,10 +48,11 @@ export class OrderService {
     );
   }
 
-  addOrder(shippingAddressId, gift=0, message='', from='') {
+  addOrder(shippingAddressId, couponCode=null, gift=0, message='', from='') {
     const headerOps = this.headerOptions();
     const body = {
       shippingAddressId,
+      couponCode,
       gift,
       message,
       from
@@ -67,7 +68,8 @@ export class OrderService {
     );
   }
 
-  addCustomOrder(shippingAddressId, mainImage='', backgroundImage='', logoImage='', text='', gift=0, message='', from='') {
+  addCustomOrder(shippingAddressId, mainImage='', backgroundImage='', logoImage='', text='',
+  gift=0, message='', from='', couponCode=null, modelName='Customized') {
     const headerOps = this.headerOptions();
     const body = {
       shippingAddressId,
@@ -77,7 +79,9 @@ export class OrderService {
       text,
       gift,
       message,
-      from
+      from,
+      couponCode,
+      modelName
     };
     console.log('custom order body : ', body, text.length);
     return this.http.post<any>(`${environment.url.base}/order/custom`, body, headerOps).pipe(

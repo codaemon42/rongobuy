@@ -490,7 +490,8 @@ controlImageParamConst = {
             mainImage: this.mainImage,
             backgroundImage: this.backgroundImage,
             logoImage: this.logoImage,
-            text: this.text
+            text: this.text,
+            phoneModel: this.selectedPhoneModel.name
             }).then(data => {
             if ( data['confirm'] ) {
               console.log('confirm');

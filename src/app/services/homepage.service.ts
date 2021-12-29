@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Homepage, HomepageRes } from '../models/homepage.model';
-import { take, tap } from 'rxjs/operators';
+import { catchError, take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,10 @@ export class HomepageService {
       take(1),
       tap(res=>{
         this._homepage.next(res.data);
-      })
+      }),
+      // catchError((err=>{
+      //   console.log(err);
+      // })
     );
   }
 }

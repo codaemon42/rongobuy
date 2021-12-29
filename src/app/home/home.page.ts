@@ -1,13 +1,15 @@
-import { ColorsService } from './../services/colors/colors.service';
 import { Subscription } from 'rxjs';
 import { Category } from './../models/category.model';
 import { HomepageService } from './../services/homepage/homepage.service';
-import { Device } from '@ionic-native/device/ngx';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserverService } from '../services/breakpoint.service';
 import { IonSlides, Platform, LoadingController, NavController } from '@ionic/angular';
 import { Homepage } from '../models/homepage.model';
 import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser/ngx';
+
+// import { Device } from '@ionic-native/device/ngx';
+// import { ColorsService } from './../services/colors/colors.service';
+
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable curly */
 /* eslint-disable object-shorthand */
@@ -20,10 +22,13 @@ import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser/n
 })
 export class HomePage implements OnInit, OnDestroy {
   @ViewChild('categorySlide') categorySlide: IonSlides;
+  // colors: any[];
+  // logo = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=4vf2J_gHjV4AX9Iw4WH&_nc_ht=scontent.fdac22-1.fna&oh=cc8086e722ec06839a2993d3ac1852a3&oe=6180485F';
+  // image = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/243141730_1930955927087406_8439625270110780804_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=666b5a&_nc_ohc=zAXTa3xu9zgAX-Mzz2d&_nc_ht=scontent.fdac22-1.fna&oh=4c6324ea350ce5d6bdcb6adc428527bd&oe=617ED4F1';
+  // pImage = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/p960x960/196212923_938037606764749_8713735566665562108_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=730e14&_nc_ohc=7cDGYr4RfeUAX-XeiRq&_nc_ht=scontent.fdac22-1.fna&oh=6736547cb51ace26d76ca4d70c7a05f2&oe=618033C6';
+
   skeleton = [1,2,3,4];
-  logo = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/52384618_403447716890410_7519901944706498560_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=4vf2J_gHjV4AX9Iw4WH&_nc_ht=scontent.fdac22-1.fna&oh=cc8086e722ec06839a2993d3ac1852a3&oe=6180485F';
-  image = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/243141730_1930955927087406_8439625270110780804_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=666b5a&_nc_ohc=zAXTa3xu9zgAX-Mzz2d&_nc_ht=scontent.fdac22-1.fna&oh=4c6324ea350ce5d6bdcb6adc428527bd&oe=617ED4F1';
-  pImage = 'https://scontent.fdac22-1.fna.fbcdn.net/v/t1.6435-9/p960x960/196212923_938037606764749_8713735566665562108_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=730e14&_nc_ohc=7cDGYr4RfeUAX-XeiRq&_nc_ht=scontent.fdac22-1.fna&oh=6736547cb51ace26d76ca4d70c7a05f2&oe=618033C6';
+
   slideOpts;
   emergencyCatSlider;
   catSlider;
@@ -32,7 +37,6 @@ export class HomePage implements OnInit, OnDestroy {
   emergencyInfo;
   searchData;
   isLoadingSearch = false;
-  colors: any[];
   mobileView = true;
   showSearch = false;
 
@@ -52,66 +56,28 @@ export class HomePage implements OnInit, OnDestroy {
   };
 
   constructor(
-    private device: Device,
     private platform: Platform,
     private brkPointService: BreakpointObserverService,
     private homepageService: HomepageService,
-    private colorsService: ColorsService,
     private inAppBrowser: InAppBrowser,
     private loadingCtrl: LoadingController,
     private nav: NavController
+    // private device: Device,
+    // private colorsService: ColorsService,
   ) {
 
    }
 
 
   ngOnInit() {
-    this.platform.ready().then(res=>{
-      console.log('Device UUID is: ' + this.device);
-    });
-
-    this.setColors();
+    // this.platform.ready().then(res=>{
+    //   console.log('Device UUID is: ' + this.device);
+    // });
+    // this.setColors();
     this.setHomePage();
     this.sizeController();
-
     this.bannerBgAnimator();
-
     this.setSliderOptions();
-    // extra static
-    this.emergencyInfo = [
-      {
-        id: '1',
-        name: 'Customized Design',
-        slug: 'delivery-charge',
-        description: 'This is my page',
-        link: this.pImage,
-        type: 'below-header'
-      },
-      {
-        id: '1',
-        name: '7 days return',
-        slug: 'delivery-charge',
-        description: 'This is my page',
-        link: this.pImage,
-        type: 'below-header'
-      },
-      {
-        id: '1',
-        name: '15 days Refund',
-        slug: 'delivery-charge',
-        description: 'This is my page',
-        link: this.pImage,
-        type: 'below-header'
-      },
-      {
-        id: '1',
-        name: 'Secure Payment',
-        slug: 'delivery-charge',
-        description: 'This is my page',
-        link: this.pImage,
-        type: 'below-header'
-      }
-    ];
   }
 
   onClickHomeContent(slug){
@@ -121,18 +87,11 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
-
   bannerBgAnimator() {
     setInterval(()=>{
       this.bannerBg.positionX +=0.15;
     },10);
   }
-
-  // sliderNavigate(i) {
-  //   console.log('selected slider : ', i);
-  //   console.log('type : ', this.sliderEl[i].type);
-  //   console.log('type : ', this.sliderEl[i].itemSlug);
-  // }
 
   onSearch(event) {
     console.log('new event created: ', event);
@@ -149,39 +108,7 @@ export class HomePage implements OnInit, OnDestroy {
     console.log('catslide : ', event);
   }
 
-  //fb page
-  openAppUrl(app: string, name: string, id?: string) {
-    this.loadingCtrl.create({
-      message: 'Opening Chat',
-      duration: 3000
-    }).then(el=>el.present());
-    switch (app) {
-        case 'facebook':
-            this.launchApp(
-              'fb://', 'com.facebook.orca',
-              'http://m.me/' + name,
-              'http://m.me/' + name,
-              'https://www.facebook.com/' + name);
-            break;
-        case 'instagram':
-            this.launchApp(
-              'instagram://',
-              'com.instagram.android',
-              'instagram://user?username=' + name,
-              'instagram://user?username=' + name,
-              'https://www.instagram.com/' + name);
-            break;
-        case 'twitter':
-            this.launchApp(
-              'twitter://', 'com.twitter.android',
-              'twitter://user?screen_name=' + name,
-              'twitter://user?screen_name=' + name,
-              'https://twitter.com/' + name);
-            break;
-        default:
-            break;
-      }
-  }
+
 
   ngOnDestroy() {
     this.homepageSub.unsubscribe();
@@ -194,11 +121,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.homepageService.fetchHomePage().subscribe();
     this.homepageSub = this.homepageService.homepage.subscribe(res => {
       this.homepage = res;
-      // this.sliderEl = this.homepage.find(homepage => homepage.sectionTitle === 'slider');
-      // this.sliderEl2 = this.homepage.find(homepage => homepage.sectionTitle === 'Slider 2');
-      // this.banner = this.homepage.find(homepage => homepage.sectionTitle === 'Banner');
-      // this.banner2 = this.homepage.find(homepage => homepage.sectionTitle === 'Banner 2');
-      // this.banner3 = this.homepage.find(homepage => homepage.sectionTitle === 'Banner 3');
     });
   }
   sizeController() {
@@ -211,13 +133,13 @@ export class HomePage implements OnInit, OnDestroy {
       }
     });
   }
-  setColors() {
-    this.colorsService.getColors();
-    this.colorsService.randomColors.subscribe(res=>{
-      this.colors = res;
-    });
-    console.log(this.colors);
-  }
+  // setColors() {
+  //   this.colorsService.getColors();
+  //   this.colorsService.randomColors.subscribe(res=>{
+  //     this.colors = res;
+  //   });
+  //   console.log(this.colors);
+  // }
   setSliderOptions() {
       this.slideOpts = {
       grabCursor: true,
@@ -468,6 +390,40 @@ export class HomePage implements OnInit, OnDestroy {
           }
       }
     };
+  }
+
+    //fb page
+  openAppUrl(app: string, name: string, id?: string) {
+    this.loadingCtrl.create({
+      message: 'Opening Chat',
+      duration: 3000
+    }).then(el=>el.present());
+    switch (app) {
+        case 'facebook':
+            this.launchApp(
+              'fb://', 'com.facebook.orca',
+              'http://m.me/' + name,
+              'http://m.me/' + name,
+              'https://www.facebook.com/' + name);
+            break;
+        case 'instagram':
+            this.launchApp(
+              'instagram://',
+              'com.instagram.android',
+              'instagram://user?username=' + name,
+              'instagram://user?username=' + name,
+              'https://www.instagram.com/' + name);
+            break;
+        case 'twitter':
+            this.launchApp(
+              'twitter://', 'com.twitter.android',
+              'twitter://user?screen_name=' + name,
+              'twitter://user?screen_name=' + name,
+              'https://twitter.com/' + name);
+            break;
+        default:
+            break;
+      }
   }
   launchApp(iosApp: string, androidApp: string, appUrlIOS: string, appUrlAndroid: string, webUrl: string) {
     let app: string;

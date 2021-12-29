@@ -13,6 +13,8 @@ import { AddressSingle } from '../models/address.model';
 import { ToastService } from '../services/controllers/toast.service';
 import { AccountService } from '../account/account.service';
 import { StorageService } from '../services/storage.service';
+import { CouponService } from '../services/coupon/coupon.service';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -38,6 +40,9 @@ export class CheckoutPage implements OnInit, OnDestroy {
 
   shippingCost: number;
 
+  couponRes: CartRes = null;
+  couponSub: Subscription;
+
 
   constructor(
     private nav: NavController,
@@ -48,16 +53,25 @@ export class CheckoutPage implements OnInit, OnDestroy {
     private accountService: AccountService,
     private orderService: OrderService,
     private modalCtrl: ModalController,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private couponService: CouponService,
+    private authService: AuthService
     ) { }
 
   ngOnInit() {
     if(this.modalCtrl){
       this.modalCtrl.dismiss();
     }
+    this.couponInit();
     this.giftFormInit();
     this.AddressInit();
     this.cartServiceInit();
+  }
+
+  couponInit(){
+    this.couponSub = this.couponService.couponCode.subscribe(couponRes=>{
+      this.couponRes = couponRes;
+    });
   }
 
   giftFormInit() {
@@ -120,7 +134,8 @@ export class CheckoutPage implements OnInit, OnDestroy {
   }
 
   addNewAddress(){
-    this.nav.navigateForward('account/address/add-address');
+    this.authService.addReferrer('/checkout');
+    this.nav.navigateForward('tabs/account/address/add-address');
   }
 
   async modal() {
@@ -182,7 +197,21 @@ export class CheckoutPage implements OnInit, OnDestroy {
     });
   }
   processOrder(){
-    this.orderService.addOrder(this.selectedAddress.id).subscribe(res=>{
+    let gift = 0;
+    let message = '';
+    let from = '';
+    let couponCode = '';
+    if(this.couponRes){
+      if(this.couponRes.success){
+        couponCode = this.couponRes.data.couponCode;
+      }
+    }
+    if ( this.sendGift ) {
+      gift = 1;
+      message = this.giftForm.value.message;
+      from = this.giftForm.value.from;
+    }
+    this.orderService.addOrder(this.selectedAddress.id, couponCode, gift, message, from).subscribe(res=>{
       this.loadingCtrl.dismiss();
       this.toastService.toast('Order placed successfully', 'success', 3000);
       this.nav.navigateForward('/all/orders');
@@ -209,6 +238,7 @@ export class CheckoutPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.cartSub.unsubscribe();
     this.addressSub.unsubscribe();
+    this.couponSub.unsubscribe();
   }
 
 }

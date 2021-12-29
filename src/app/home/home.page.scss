@@ -212,3 +212,10 @@ ion-slides {
 .bg-drops {
   background: url("https://i0.wp.com/www.cssscript.com/wp-content/uploads/2017/12/Animated-Particles-Background.png?fit=499%2C386&ssl=1");
 }
+
+.chat-app{
+  position: fixed;
+  right: -5px;
+  bottom: 50px;
+  z-index: 2000;
+}

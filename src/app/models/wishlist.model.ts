@@ -6,8 +6,10 @@ export interface WishlistRes{
 export interface Wishlist{
   id: number;
   title: string;
+  slug: string;
   productId: number;
   image: string;
+  price: number;
   backgroundImage: string;
   quantity: number;
   SkuId: any;

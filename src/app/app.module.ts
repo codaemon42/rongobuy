@@ -2,20 +2,23 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import { Device } from '@ionic-native/device/ngx';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
+// mobile usage
+// import { StatusBar } from '@ionic-native/status-bar/ngx';
+// import { Device } from '@ionic-native/device/ngx';
+// import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,11 +33,11 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
     IonicStorageModule.forRoot()
   ],
   providers: [
-    StatusBar,
+    // StatusBar,
     Storage,
-    Device,
+    // Device,
     InAppBrowser,
-    Deeplinks,
+    // Deeplinks,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],
   bootstrap: [AppComponent],

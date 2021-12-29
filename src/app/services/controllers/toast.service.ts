@@ -16,7 +16,7 @@ export class ToastService {
       mode,
       position,
       duration,
-      cssClass
+      cssClass,
     }).then(toaslEl=>{
       toaslEl.present();
     });

@@ -18,6 +18,7 @@ export class AddAddressPage implements OnInit, OnDestroy {
   divisions: Division[];
   districts: Division[];
   area: Area[];
+  areaDisable = true;
   isAreaSelected = false;
 
   defaultGender = 'female';
@@ -45,6 +46,7 @@ export class AddAddressPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.areaDisable = this.addressService.areaDisable;
     this.referrerInit();
     this.getDivision();
     this.addressForm = new FormGroup({
@@ -70,7 +72,7 @@ export class AddAddressPage implements OnInit, OnDestroy {
       }),
       area: new FormControl(null, {
         updateOn: 'change',
-        validators: [Validators.required]
+        // validators: [Validators.required]
       }),
       division: new FormControl(null, {
         updateOn: 'change',
@@ -112,7 +114,8 @@ export class AddAddressPage implements OnInit, OnDestroy {
   // }
 
   updateProfile() {
-    console.log(this.addressForm);
+    console.log(this.addressForm.value);
+
      this.addressForm.value.default = this.addressForm.value.default ? 1 : 0;
     //  this.validatorSchema(this.addressForm).then(valid=>{
     //    if(valid){
@@ -138,10 +141,6 @@ export class AddAddressPage implements OnInit, OnDestroy {
             this.toastService.toast('something went wrong. try again', 'danger', 2000);
           }
         });
-    //    } else {
-    //      return;
-    //    }
-    //  });
   }
 
   validatorSchema(form){
@@ -217,12 +216,18 @@ export class AddAddressPage implements OnInit, OnDestroy {
     const div = this.districts.find(d=>d.name === e.detail.value);
     console.log(div);
 
-    this.addressForm.patchValue({area: null});
-    this.isAreaSelected = false;
+    if(this.areaDisable){
+      this.isAreaSelected = true;
+    }
+    else {
+      this.addressForm.patchValue({area: null});
+      this.isAreaSelected = false;
 
-    this.addressService.getArea(div.id).subscribe(dist=>{
-      this.area = dist.data;
-    });
+      this.addressService.getArea(div.id).subscribe(dist=>{
+        this.area = dist.data;
+      });
+    }
+
   }
 
   areaSelected(e) {

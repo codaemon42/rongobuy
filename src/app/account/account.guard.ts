@@ -12,7 +12,7 @@ export class AccountGuard implements CanActivate {
     canActivate(
       route: ActivatedRouteSnapshot,
       state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        if(!this.accountService.userIsAuthenticated){
+        if(!this.accountService.isLoggedIn()){
           console.log('segments from acc guard : ', state);
 
           this.authService.addReferrer(state.url);

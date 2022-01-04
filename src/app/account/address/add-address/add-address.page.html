@@ -36,8 +36,8 @@
           </ion-select>
 
 
-            <ion-note class="ion-text-center" color="danger" *ngIf="(!addressForm.get('area').valid && addressForm.get('area').touched) || (!validScheme.area && area)">Please provide valid area</ion-note>
-          <ion-select *ngIf="area" (ionCancel)="areaBlur($event)" (ionChange)="areaSelected($event)" formControlName="area" placeholder="Select area *" okText="Okay" cancelText="Dismiss">
+            <ion-note [hidden]="areaDisable" class="ion-text-center" color="danger" *ngIf="(!addressForm.get('area').valid && addressForm.get('area').touched) || (!validScheme.area && area)">Please provide valid area</ion-note>
+          <ion-select [hidden]="areaDisable" *ngIf="area" (ionCancel)="areaBlur($event)" (ionChange)="areaSelected($event)" formControlName="area" placeholder="Select area *" okText="Okay" cancelText="Dismiss">
             <ion-select-option *ngFor="let a of area" [value]="a.name">{{a.name}}</ion-select-option>
           </ion-select>
 
@@ -51,7 +51,7 @@
               <ion-checkbox formControlName="default" slot="start"></ion-checkbox>
             </ion-item>
           </ion-list>
-          <ion-button [disabled]="!addressForm.valid" type="submit" class="update-btn" expand="full" color="success">Update</ion-button>
+          <ion-button [disabled]="!addressForm.valid" type="submit" class="update-btn" expand="full" color="success">Add Address</ion-button>
         </form>
       </ion-col>
     </ion-row>

@@ -123,14 +123,14 @@
                 </div>
                 <div class="total-ordered-amount">
                   <span *ngIf="!couponRes">
-                    ৳ {{cartDetails.data.subtotal}}
+                    ৳ {{cartDetails.data.subtotal ? cartDetails.data.subtotal : 0}}
                   </span>
                   <span *ngIf="couponRes">
                     <span *ngIf="!couponRes.success">
-                      ৳ {{cartDetails.data.subtotal}}
+                      ৳ {{cartDetails.data.subtotal ? cartDetails.data.subtotal : 0}}
                     </span>
                     <span *ngIf="couponRes.success">
-                      ৳ {{cartDetails.data.subtotal - couponRes.data.couponPrice}}
+                      ৳ {{(cartDetails.data.subtotal ? cartDetails.data.subtotal : 0) - couponRes.data.couponPrice}}
                     </span>
                   </span>
                 </div>
@@ -151,14 +151,14 @@
                 </div>
                 <div class="grand-total-amount">
                   <span *ngIf="!couponRes">
-                    ৳ {{cartDetails.data.grandTotal + (shippingCost ? shippingCost : 0) - cartDetails.data.shippingTotal}}
+                    ৳ {{(cartDetails.data.grandTotal ? cartDetails.data.grandTotal : 0) + (shippingCost ? shippingCost : 0) - (cartDetails.data.shippingTotal ? cartDetails.data.shippingTotal : 0)}}
                   </span>
                   <span *ngIf="couponRes">
                     <span *ngIf="!couponRes.success">
-                      ৳ {{cartDetails.data.grandTotal + (shippingCost ? shippingCost : 0) - cartDetails.data.shippingTotal}}
+                      ৳ {{(cartDetails.data.grandTotal ? cartDetails.data.grandTotal : 0) + (shippingCost ? shippingCost : 0) - (cartDetails.data.shippingTotal ? cartDetails.data.shippingTotal : 0)}}
                     </span>
                     <span *ngIf="couponRes.success">
-                      ৳ {{cartDetails.data.grandTotal + (shippingCost ? shippingCost : 0) - cartDetails.data.shippingTotal - couponRes.data.couponPrice}}
+                      ৳ {{(cartDetails.data.grandTotal ? cartDetails.data.grandTotal : 0) + (shippingCost ? shippingCost : 0) - (cartDetails.data.shippingTotal ? cartDetails.data.shippingTotal : 0) - couponRes.data.couponPrice}}
                     </span>
                   </span>
                 </div>

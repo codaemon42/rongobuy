@@ -16,7 +16,7 @@ import { Product } from '../../models/product.model';
 //import { CartsService } from './../../carts/carts.service';
 import { Review } from './../../components/reviews/reviews.model';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AnimationController, IonContent, NavController, ToastController } from '@ionic/angular';
+import { AnimationController, IonContent, NavController, ToastController, ModalController, LoadingController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { CartService } from '../../services/cart.service';
@@ -24,6 +24,7 @@ import { ToastService } from 'src/app/services/controllers/toast.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { Wishlist } from 'src/app/models/wishlist.model';
 import { PhoneModelService } from 'src/app/services/phone-model/phone-model.service';
+import { AccountPage } from 'src/app/account/account.page';
 
 
 
@@ -87,7 +88,9 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     private toastCtrl: ToastController,
     private authService: AuthService,
     private phoneCoverService: PhoneCoverService,
-    private phoneModelService: PhoneModelService
+    private phoneModelService: PhoneModelService,
+    private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController
     ) { }
 
 
@@ -215,27 +218,77 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     if( this.accountService.isLoggedIn() ) {
       this.cartAdder();
     } else {
-      if(this.product_slug){
-        this.authService.addReferrer(`products/${this.product_slug}`);
-        this.nav.navigateForward('tabs/account');
-      } else {
-        this.nav.navigateForward('tabs/account');
-      }
+      // @since 1.5.7
+      // if(this.product_slug){
+      //   this.authService.addReferrer(`products/${this.product_slug}`);
+      //   this.nav.navigateForward('tabs/account');
+      // } else {
+      //   this.nav.navigateForward('tabs/account');
+      // }
+
+    // @since 1.5.8
+     this.modalForLogin().then(isLoggedIn=>{
+        if(isLoggedIn){
+          this.cartAdder();
+        }
+      });
     }
 
     console.log('carted');
   }
 
   buyNow() {
-    this.addToCart();
-    this.nav.navigateForward('tabs/carts');
+    if( this.accountService.isLoggedIn() ) {
+      this.cartAdder();
+      this.nav.navigateForward('tabs/carts');
+    } else {
+      this.modalForLogin().then(isLoggedIn=>{
+        if(isLoggedIn){
+          this.cartAdder();
+          this.loadingCtrl.create({
+            message: 'adding to cart',
+            mode: 'ios'
+          }).then(loadingEl=>{
+            loadingEl.present();
+          });
+          setTimeout(() => {
+            this.loadingCtrl.dismiss();
+            this.nav.navigateForward('tabs/carts');
+          }, 1000);
+        }
+      });
+    }
   }
 
   addToWishlist() {
     if(this.accountService.isLoggedIn()) {
-      this.wishlistColor = !this.wishlistColor;
+      this.createWishlist();
+    }
+    else {
+      // @since 1.5.7
+      // if(this.product_slug){
+      //   this.authService.addReferrer(`products/${this.product_slug}`);
+      //   this.nav.navigateForward('tabs/account');
+      // } else {
+      //   this.nav.navigateForward('tabs/account');
+      // }
+
+      // @since 1.5.8
+      this.modalForLogin().then(isLoggedIn=>{
+        if(isLoggedIn){
+          this.createWishlist();
+        }
+      });
+    }
+  }
+
+  // @since 1.5.8
+  createWishlist(){
+    this.wishlistColor = !this.wishlistColor;
       const designId = this.selectedPhoneCover ? this.selectedPhoneCover.id : null;
-      this.wishlistService.addToWishlist(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage, designId).subscribe(res=>{
+      this.wishlistService
+      .addToWishlist(this.singleProduct.id, this.selectedSKUProduct.SkuId, this.backGroundImage, designId)
+      .subscribe(res=>{
         if(res.success){
           //this.toastService.toast('added to wishlist', 'success', 2000);
           this.toastCtrl.create({
@@ -259,15 +312,6 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
           this.toastService.toast(res.message, 'danger', 2000);
         }
       });
-    }
-    else {
-      if(this.product_slug){
-        this.authService.addReferrer(`products/${this.product_slug}`);
-        this.nav.navigateForward('tabs/account');
-      } else {
-        this.nav.navigateForward('tabs/account');
-      }
-    }
   }
 
   genarateSKU(skuModule) {
@@ -437,4 +481,28 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     .fromTo('opacity', '0.2', '1');
   }
 
+// for not logged in customers
+  async modalForLogin() {
+    const modal = await this.modalCtrl.create({
+        component: AccountPage,
+        componentProps: {
+          isFromCustom: true
+        },
+        keyboardClose: false,
+        swipeToClose: false,
+        backdropDismiss: false,
+        cssClass: 'login-modal'
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    console.log(data);
+
+    return new Promise(resolve => {
+      resolve(data['loggedIn']);
+    });
+  }
 }
+
+

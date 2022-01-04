@@ -1,6 +1,6 @@
 <ion-content [scrollEvents]="true">
   <ion-fab vertical="top" horizontal="end" slot="fixed">
-    <ion-fab-button  color="danger" [routerLink]="['/carts']">
+    <ion-fab-button  color="danger" [routerLink]="['/', 'tabs', 'carts']">
       <ion-icon name="cart"></ion-icon>
       <ion-badge class="cart-badge" color="warning">{{ totalCartQty }}</ion-badge>
     </ion-fab-button>

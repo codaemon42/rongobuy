@@ -2,7 +2,6 @@ import { EditAddressPage } from './edit-address/edit-address.page';
 import { ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { AddressSingle } from 'src/app/models/address.model';
 import { AddressService } from 'src/app/services/address/address.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -47,7 +46,8 @@ export class AddressPage implements OnInit, OnDestroy {
       component: EditAddressPage,
       componentProps: {
         defaultValues: address
-      }
+      },
+      cssClass: 'preview-modal'
     }).then(el => el.present());
   }
 

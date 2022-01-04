@@ -30,7 +30,7 @@ export class CustomOrderPage implements OnInit, OnDestroy {
 
   giftForm: FormGroup;
   sendGift = false;
-  terms = false;
+  terms = true;
 
   cartSub: Subscription;
   cartDetails: CartRes;
@@ -244,32 +244,42 @@ export class CustomOrderPage implements OnInit, OnDestroy {
       gift.from = this.giftForm.value.sender;
     }
 
-    this.storageService.get('first_order_completed').then(firstOrder=>{
-      if(firstOrder){
-        console.log('first_order true');
+    // without check first order
         this.loadingCtrl.create({
-          message: 'Placing order',
+          message: 'Placing order, wait a minute please',
           mode: 'ios'
         }).then(el=>{
           el.present();
           this.processOrder(gift);
         });
-      }
-      else{
-        console.log('first_order false|null');
-        this.modalForVideo().then(data=>{
-          if(data['confirm']){
-            this.loadingCtrl.create({
-              message: 'Placing order',
-              mode: 'ios'
-            }).then(el=>{
-              el.present();
-            });
-            this.processOrder(gift);
-          }
-        });
-      }
-    });
+
+    // video modal storage check for first order
+    // this.storageService.get('first_order_completed').then(firstOrder=>{
+    //   if(firstOrder){
+    //     console.log('first_order true');
+    //     this.loadingCtrl.create({
+    //       message: 'Placing order',
+    //       mode: 'ios'
+    //     }).then(el=>{
+    //       el.present();
+    //       this.processOrder(gift);
+    //     });
+    //   }
+    //   else{
+    //     console.log('first_order false|null');
+    //     this.modalForVideo().then(data=>{
+    //       if(data['confirm']){
+    //         this.loadingCtrl.create({
+    //           message: 'Placing order',
+    //           mode: 'ios'
+    //         }).then(el=>{
+    //           el.present();
+    //         });
+    //         this.processOrder(gift);
+    //       }
+    //     });
+    //   }
+    // });
   }
 
   processOrder(gift){

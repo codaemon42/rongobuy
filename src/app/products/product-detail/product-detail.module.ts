@@ -12,6 +12,7 @@ import { ProductDetailPageRoutingModule } from './product-detail-routing.module'
 import { ProductDetailPage } from './product-detail.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HttpClientModule } from '@angular/common/http';
+import { NgOtpInputModule } from 'ng-otp-input';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     PipesModule,
     ChatButtonModule,
+    NgOtpInputModule,
     ProductDetailPageRoutingModule
   ],
   declarations: [ProductDetailPage]

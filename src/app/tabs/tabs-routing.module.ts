@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, CanActivate } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AccountGuard } from '../account/account.guard';
 import { TabsPage } from './tabs.page';
 
@@ -14,12 +14,11 @@ const routes: Routes = [
       },
       {
         path: 'category',
-        loadChildren: () => import('../category/category.module').then(m => m.CategoryPageModule)
+        //@since 1.5.8
+        loadChildren: () => import('../category/phone-cover/phone-cover.module').then(m => m.PhoneCoverPageModule)
+        // @since 1.5.7
+        //loadChildren: () => import('../category/category.module').then(m => m.CategoryPageModule)
       },
-      // {
-      //   path: 'search',
-      //   loadChildren: () => import('../search/search.module').then(m => m.SearchPageModule)
-      // },
       {
         path: 'carts',
         loadChildren: () => import('../carts/carts.module').then(m => m.CartsPageModule),

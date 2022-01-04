@@ -2,6 +2,7 @@
 // import { Component, NgZone } from '@angular/core';
 import { Component } from '@angular/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
+import { AccountService } from './account/account.service';
 import { MenuService } from './services/menu.service';
 
 // import { LoadingService } from './services/controllers/loading.service';
@@ -32,6 +33,7 @@ export class AppComponent {
     private menuCtrl: MenuController,
     private menuService: MenuService,
     private platform: Platform,
+    private accountService: AccountService,
     // private statusBar: StatusBar,
     private nav: NavController,
     // private device: Device,
@@ -44,6 +46,8 @@ export class AppComponent {
   }
 
   initializeApp() {
+      //this.accountService.isLoggedIn();
+
       // if(this.accountService.isLoggedIn()){
       //   this.isLoggedIn = true;
       // } else {

@@ -1,3 +1,4 @@
+import { NavController } from '@ionic/angular';
 
 import { environment } from './../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -7,7 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CartAddRes, CartProduct, CartRes } from '../models/cart.model';
-import { take, map, tap, delay, switchMap } from 'rxjs/operators';
+import { take, map, tap, delay, switchMap, catchError } from 'rxjs/operators';
 import { AccountService } from '../account/account.service';
 
 @Injectable({
@@ -26,7 +27,8 @@ export class CartService {
 
   constructor(
     private http: HttpClient,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private nav: NavController
   ) { }
 
   // get cartObj() {

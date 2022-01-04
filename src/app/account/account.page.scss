@@ -2,10 +2,10 @@
 
 
 ion-content{
-
+  --background: #fff;
 
     ion-toolbar{
-      --background: transparent;
+      --background: #fff;
     }
 
 
@@ -18,7 +18,7 @@ ion-content{
       }
 
       .main-list {
-        background: transparent;
+        background: #fff;
 
         ion-item{
           --background: rgba(255, 255, 255, 0.5);

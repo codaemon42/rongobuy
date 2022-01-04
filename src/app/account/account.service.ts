@@ -11,7 +11,9 @@ export class AccountService {
   _userToken = null;
 
   constructor(private storageService: StorageService) {
-    this.setConstants();
+    this.setConstants().then(()=>{
+      this.isLoggedIn();
+    });
   }
 
   async setConstants() {

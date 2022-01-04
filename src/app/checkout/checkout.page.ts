@@ -27,7 +27,7 @@ export class CheckoutPage implements OnInit, OnDestroy {
 
   giftForm: FormGroup;
   sendGift = false;
-  terms = false;
+  terms = true;
 
   cartSub: Subscription;
   cartDetails: CartRes;
@@ -111,7 +111,9 @@ export class CheckoutPage implements OnInit, OnDestroy {
   cartServiceInit() {
     this.cartLoading = true;
     this.cartService.fetchCartObj().subscribe(res=>{
-      this.cartLoading = false;
+      if(res.success){
+        this.cartLoading = false;
+      }
     });
     this.cartSub = this.cartService.cartDetails.subscribe(res=>{
       this.cartDetails = res;
@@ -158,31 +160,40 @@ export class CheckoutPage implements OnInit, OnDestroy {
 
 
   onPlacingOrder() {
-    this.storageService.get('first_order_completed').then(firstOrder=>{
-      if(firstOrder){
-        console.log('first_order true');
-        this.loadingCtrl.create({
-          message: 'Placing order',
-          mode: 'ios'
-        }).then(el=>{
-          el.present();
-        });
-        this.processOrder();
-      } else {
-        console.log('first_order false|null');
-        this.modal().then(data=>{
-          if(data['confirm']){
-            this.loadingCtrl.create({
-              message: 'Placing order',
-              mode: 'ios'
-            }).then(el=>{
-              el.present();
-            });
-            this.processOrder();
-          }
-        });
-      }
+    // @since 1.5.8
+    this.loadingCtrl.create({
+      message: 'Placing order',
+      mode: 'ios'
+    }).then(el=>{
+      el.present();
     });
+    this.processOrder();
+    // @since 1.5.7
+    // this.storageService.get('first_order_completed').then(firstOrder=>{
+    //   if(firstOrder){
+    //     console.log('first_order true');
+    //     this.loadingCtrl.create({
+    //       message: 'Placing order',
+    //       mode: 'ios'
+    //     }).then(el=>{
+    //       el.present();
+    //     });
+    //     this.processOrder();
+    //   } else {
+    //     console.log('first_order false|null');
+    //     this.modal().then(data=>{
+    //       if(data['confirm']){
+    //         this.loadingCtrl.create({
+    //           message: 'Placing order',
+    //           mode: 'ios'
+    //         }).then(el=>{
+    //           el.present();
+    //         });
+    //         this.processOrder();
+    //       }
+    //     });
+    //   }
+    // });
   }
 
 
@@ -217,6 +228,8 @@ export class CheckoutPage implements OnInit, OnDestroy {
       this.nav.navigateForward('/all/orders');
     });
   }
+
+
   sendAsGift(event) {
     console.log('check box event : ', event);
     this.sendGift = !this.sendGift;

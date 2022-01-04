@@ -14,6 +14,7 @@ import { NavController } from '@ionic/angular';
 export class AddressService {
 
   private _address = new BehaviorSubject<AddressSingle[]>([]);
+  public areaDisable = true;
 
   constructor(
     private http: HttpClient,

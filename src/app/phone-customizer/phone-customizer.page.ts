@@ -471,20 +471,21 @@ controlImageParamConst = {
       mode: 'ios'
     }).then(loadingEl => {
       loadingEl.present();
+    });
 
       this.domToImage.toSvg(this.screen.nativeElement).then( dataUrl => {
         console.log('data  : ',dataUrl);
         //this.img = dataUrl;
-        this.loadingCtrl.dismiss();
+        //this.loadingCtrl.dismiss();
         const start = 'data:image/svg+xml;charset=utf-8,'.length + 1;
         const preview = dataUrl.slice(start+1 ,dataUrl.length);
-        const svg = new Blob([preview], {type:"image/svg+xml;charset=utf-8"});
-        console.log('svg blob : ', svg);
+        // const svg = new Blob([preview], {type:"image/svg+xml;charset=utf-8"});
+        // console.log('svg blob : ', svg);
 
         this.domToImage.toPng(this.screen.nativeElement).then( dataUrls => {
+          //this.modalCtrl.dismiss();
           console.log('png : ',dataUrls);
           this.mainImage = dataUrls;
-          this.modalCtrl.dismiss();
           this.modal({
             dataUrl,
             mainImage: this.mainImage,
@@ -495,14 +496,14 @@ controlImageParamConst = {
             }).then(data => {
             if ( data['confirm'] ) {
               console.log('confirm');
-              this.isWebPlatform().then(web => {
-                if ( web ) {
-                  this.webDownloadManager('phone-cover.png', dataUrl);
-                }
-                else {
-                  this.appDownloadManager('phone-cover.png', dataUrl);
-                }
-              });
+              // this.isWebPlatform().then(web => {
+              //   if ( web ) {
+              //     this.webDownloadManager('phone-cover.png', dataUrl);
+              //   }
+              //   else {
+              //     this.appDownloadManager('phone-cover.png', dataUrl);
+              //   }
+              // });
 
               if( data['buy'] ) {
                 console.log('want to buy the design now');
@@ -521,7 +522,6 @@ controlImageParamConst = {
       .catch(err=>{
         console.log('err : ', err);
       });
-    });
   }
 
   addBackgroundCover() {

@@ -2,7 +2,7 @@ import { ToastService } from './../../services/controllers/toast.service';
 import { AccountService } from './../../account/account.service';
 import { CustomOrderPage } from './../../phone-customizer/custom-order/custom-order.page';
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController, LoadingController } from '@ionic/angular';
 import { present } from '@ionic/core/dist/types/utils/overlays';
 import { AccountPage } from 'src/app/account/account.page';
 
@@ -24,7 +24,8 @@ export class CustomizationReviewComponent implements OnInit {
     private modalCtrl: ModalController,
     private accountService: AccountService,
     private nav: NavController,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
@@ -33,6 +34,7 @@ export class CustomizationReviewComponent implements OnInit {
         this.logoImage ,
         this.text,
     );
+    this.loadingCtrl.dismiss();
     const start = 'data:image/svg+xml;charset=utf-8'.length;
 
     const preview = this.dataUrl.slice(start+1 , this.dataUrl.length);

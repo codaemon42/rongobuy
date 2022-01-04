@@ -18,6 +18,7 @@ export class EditAddressPage implements OnInit {
   districts: Division[];
   area: Area[];
   isAreaSelected = false;
+  areaDisable = true;
 
   editAddressForm: FormGroup;
 
@@ -55,7 +56,7 @@ export class EditAddressPage implements OnInit {
       }),
       area: new FormControl(this.defaultValues.area, {
         updateOn: 'change',
-        validators: [Validators.required]
+        // validators: [Validators.required]
       }),
       division: new FormControl(this.defaultValues.division, {
         updateOn: 'change',
@@ -131,9 +132,13 @@ export class EditAddressPage implements OnInit {
     const div = this.districts.find(d=>d.name === e.detail.value);
     console.log(div);
 
-    this.addressService.getArea(div.id).subscribe(dist=>{
-      this.area = dist.data;
-    });
+    if(this.areaDisable){
+      this.isAreaSelected = true;
+    } else {
+      this.addressService.getArea(div.id).subscribe(dist=>{
+        this.area = dist.data;
+      });
+    }
   }
 
   areaSelected(e) {

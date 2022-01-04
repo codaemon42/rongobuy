@@ -25,6 +25,7 @@ export class CartsPage implements OnInit, OnDestroy {
   couponSub: Subscription;
 
   couponForm: FormGroup;
+  haveCoupon = false;
 
   constructor(
     private breakpoint: BreakpointObserverService,
@@ -90,8 +91,16 @@ export class CartsPage implements OnInit, OnDestroy {
     });
   }
 
+  showCoupon(){
+    this.haveCoupon = !this.haveCoupon;
+  }
+
   onProceedCheckout() {
-    this.nav.navigateForward('checkout');
+    if(this.cartDetails.message === 'Your cart is empty'){
+      this.toastService.toast('please cart a product before proceed checkout');
+    } else{
+      this.nav.navigateForward('checkout');
+    }
     console.log('next');
   }
 

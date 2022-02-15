@@ -1,3 +1,5 @@
+import { TextBannerModalComponent } from './../../components/text-banner-modal/text-banner-modal.component';
+import { SettingsService } from './../../services/settings.service';
 import { ProductResponse } from './../../services/product.service';
 import { PhoneCoverService } from 'src/app/services/phone-cover/phone-cover.service';
 import { AuthService } from './../../services/auth.service';
@@ -75,6 +77,8 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   selectedPhoneCover = null;
 
+  discountBanner = null;
+
   constructor(
     private animationCtrl: AnimationController,
     private nav: NavController,
@@ -89,14 +93,16 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private phoneCoverService: PhoneCoverService,
     private phoneModelService: PhoneModelService,
+    private settingsService: SettingsService,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController
     ) { }
 
-
   ngOnInit() {
     this.totalCartQty = 0;
+    this.cartService.fetchCartObj().subscribe();
     this.cartQuantityController();
+    this.getBuyDiscount();
     this.activatedRoute.params.subscribe(data => {
       console.log('activated route : ', data.slug);
       this.product_slug = data.slug;
@@ -106,14 +112,11 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
       this.selectedPhoneCover = res;
       console.log('this.selectedPhoneCover : ', this.selectedPhoneCover);
     });
-
     this.selectedProductsServiceSub = this.productsService.selectedProductBackground.subscribe(res=>{
       this.backGroundImage = res;
       console.log('this.backGroundImage : ', this.backGroundImage);
     });
-
     console.log(' on init');
-
     this.reviews = [
       {
         id: '1',
@@ -151,6 +154,19 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
         review: 'this is the description of the review given'
       },
     ];
+  }
+
+  openTextBanner(){
+    this.modalCtrl.create({
+      component: TextBannerModalComponent,
+      cssClass: 'text-banner-modal'
+    }).then(el=>el.present());
+  }
+
+  getBuyDiscount(){
+    this.settingsService.get('discountImage').subscribe(res=>{
+      this.discountBanner = res;
+    });
   }
 
   // ionViewWillEnter(){
@@ -297,15 +313,15 @@ export class ProductDetailPage implements OnInit, AfterViewInit, OnDestroy {
             position: 'top',
             duration: 4000,
             buttons: [
-                      {
-                        side: 'end',
-                        icon: 'heart',
-                        text: 'view Wishlist',
-                        handler: () => {
-                          this.nav.navigateForward('tabs/wishlist');
-                        }
-                      }
-                    ]
+                {
+                  side: 'end',
+                  icon: 'heart',
+                  text: 'view Wishlist',
+                  handler: () => {
+                    this.nav.navigateForward('tabs/wishlist');
+                  }
+                }
+              ]
           }).then(el=>el.present());
         } else {
           this.wishlistColor = !this.wishlistColor;

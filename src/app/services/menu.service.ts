@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -32,30 +31,7 @@ export class MenuService {
         title: 'Orders',
         route: 'all/orders',
         show: false,
-        children: [
-          // {
-          //   id: '2',
-          //   icon: 'apps',
-          //   title: 'Orders',
-          //   route: 'all/orders',
-          //   children: [
-          //     {
-          //       id: '3',
-          //       icon: 'home',
-          //       title: 'Order Tracking',
-          //       route: 'pages/order-tracking',
-          //       children: []
-          //     }
-          //   ]
-          // },
-          // {
-          //   id: '1',
-          //   icon: 'home',
-          //   title: 'About Us',
-          //   route: 'pages/about-us',
-          //   children: []
-          // }
-        ]
+        children: []
       },
       {
         id: '4',

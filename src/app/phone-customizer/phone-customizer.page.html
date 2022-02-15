@@ -31,22 +31,7 @@
 
             <div style="margin-top: -1px; margin-left: -1px"  #screen  class="customize-section">
               <div id="screen">
-                <!-- old editor image  -->
-                <!-- <img
-                  [ngStyle]="{
-                    'margin-bottom.px': 20,
-                    'background-image': 'url('+backgroundImg+')',
-                    'background-size.%': canvasImgBack.size,
-                    'background-repeat': 'no-repeat',
-                    'background-position-x.px': canvasImgBack.x,
-                    'background-position-y.px': canvasImgBack.y
-                  }"
-                  [src]="selectedArea.img"
-                > -->
-                <!-- old editor image /  -->
-                <!-- layer to control full content -->
-                <!-- new addition added  -->
-                <!-- crossorigin="anonymous" onContextMenu="return false;" -->
+
                 <!-- mockup image -->
                 <img #mainSlot
                   crossorigin="*"
@@ -89,7 +74,6 @@
                     'transform': transformText
                   }"
                 >{{textEditor.text}}</div>
-                <!-- 'transform': 'rotate('+controlImageParam.rotate+'deg) scale('+controlImageParam.scale+')' -->
                 <!-- layer to control image -->
                 <div [hidden]="!backgroundImg"
                   [ngStyle]="{
@@ -114,43 +98,11 @@
                     (pinchend)="endXYZ($event)"
                     (rotateend)="endXYZ($event)"
                   >
-                  <!-- <div [hidden]="!backgroundImg"
-                  [ngStyle]="{
-                    'position': 'absolute',
-                    'width.px': bgImage.offsetWidth,
-                    'height.px': bgImage.clientHeight,
-                    'left.px': controlImageParam.left,
-                    'top.px': controlImageParam.top,
-                    'background': '#3330',
-                    'border': '0.5px solid #3332',
-                    'z-index': 1100,
-                    'transform': transform
-                  }"
-                    (click)="imageClick()"
-                    (wheel)="controlImage($event, 'wheel')"
-                    (pinchIn)="controlImage($event, 'pinchIn')"
-                    (pinchOut)="controlImage($event, 'pinchOut')"
-                    (panup)="controlImage($event, 'panup')"
-                    (pandown)="controlImage($event, 'pandown')"
-                    (panright)="controlImage($event, 'panright')"
-                    (panleft)="controlImage($event, 'panleft')"
-                  > -->
-                                <!-- 'scale': controlImageParam.scale, -->
                     <ion-icon [hidden]="hideImageActions"
                       [ngStyle]="{
                         'transform': 'rotate('+controlImageParam.rotate+'deg)'
                       }"
                       (click)="deleteImage()" class="action-icon close-img" color="dark" name="close-circle"></ion-icon>
-                    <!-- <ion-icon [hidden]="hideImageActions"
-                      [ngStyle]="{
-                        'transform': 'rotate('+controlImageParam.rotate+'deg)'
-                      }"
-                      (pan)="rotateBgImg($event)" class="action-icon rotate-img" color="dark" name="refresh-circle"></ion-icon>
-                    <ion-icon [hidden]="hideImageActions"
-                      [ngStyle]="{
-                        'transform': 'rotate('+controlImageParam.rotate+'deg)'
-                      }"
-                    (pan)="resizeBgImg($event)" class="action-icon resize-img" color="dark" name="resize"></ion-icon> -->
                   </div>
                   <!-- text overlay -->
                   <div *ngIf="textEditor.text !== ''"
@@ -191,65 +143,6 @@
                   <!-- new addition added / -->
                   <!-- old logo version -->
                 <div style="position: relative">
-                  <!-- <img
-                    #logoRef
-                    [ngStyle]="{
-                      'scale': logoParams.scale,
-                      'width.px': logoParams.width,
-                      'height': logoParams.height,
-                      'margin-top.px': logoParams.marginTop,
-                      'margin-left.px':logoParams.marginLeft,
-                      'z-index': logoParams.zIndex,
-                      'position': logoParams.position
-                      }"
-                    [src]="logoParams.src"
-                  >
-                  <div
-                    (click)="logoClick()"
-                    (dblclick)="addLogoImage()"
-                    (wheel)="logoEdit($event, 'wheel')"
-                    (pinchIn)="logoEdit($event, 'pinchIn')"
-                    (pinchOut)="logoEdit($event, 'pinchOut')"
-                    (panup)="logoEdit($event, 'panup')"
-                    (pandown)="logoEdit($event, 'pandown')"
-                    (panright)="logoEdit($event, 'panright')"
-                    (panleft)="logoEdit($event, 'panleft')"
-                    [ngStyle]="{
-                      'scale': logoParams.scale,
-                      'width.px': logoParams.width,
-                      'margin-top.px': logoParams.marginTop,
-                      'margin-left.px':logoParams.marginLeft,
-                      'z-index': logoParams.zIndex+2,
-                      'position': logoParams.position,
-                      'height.px': logoParams.overlayHeight
-                      }"></div> -->
-                  <!-- <span *ngIf="textEditor">
-                    <span
-                      class="textContext"
-                      (dblclick)="editedText({
-                        text : textEditor.text,
-                        styleParams: textEditor ? textEditor.styleParams : textStyleParams
-                        })"
-                      (click)="textClick()"
-                      (wheel)="textEdit($event, 'wheel')"
-                      (pinchIn)="textEdit($event, 'pinchIn')"
-                      (pinchOut)="textEdit($event, 'pinchOut')"
-                      (panup)="textEdit($event, 'panup')"
-                      (pandown)="textEdit($event, 'pandown')"
-                      (panright)="textEdit($event, 'panright')"
-                      (panleft)="textEdit($event, 'panleft')"
-                      [ngStyle]="{
-                        'scale': textParams.scale,
-                        'margin-top.px': textParams.marginTop,
-                        'margin-left.px':textParams.marginLeft,
-                        'z-index': textParams.zIndex,
-                        'position': textParams.position,
-                        'font-size.px': textEditor.styleParams.font.size,
-                        'font-weight': textEditor.styleParams.font.weight,
-                        'transform': 'scale('+textEditor.styleParams.transform.scale+') rotate('+textEditor.styleParams.transform.rotate+'deg)'
-                        }"
-                      >{{ textEditor.text }}</span>
-                  </span> -->
                 </div>
                 <!-- old logo version /-->
               </div>
@@ -257,15 +150,6 @@
               <div
                 class="canvas overlay"
                 [ngStyle]="{'cursor': cursor}"
-                (click)="initialEditorClick()"
-                (wheel)="wheel($event)"
-                (pinchIn)="pinchIn($event)"
-                (pinchOut)="pinchOut($event)"
-                (panup)="panUp($event)"
-                (pandown)="panDown($event)"
-                (panright)="panRight($event)"
-                (panleft)="panLeft($event)"
-                (rotate)="rotatexyz($event)"
               >
               </div>
               <div
@@ -298,10 +182,7 @@
           </div>
         </ion-col>
         <ion-col class="makeTop" size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-            <!-- <p> adjust : {{controlImageParamConst.adjustRotation}}</p>
-            <p> current : {{controlImageParam.currentRotation}}</p>
-            <p> rotation : {{rotationAll}}</p>
-            <p *ngFor="let f of isFirst"> {{f.name}} : {{f.rotation}}</p> -->
+
 
         </ion-col>
       </ion-row>

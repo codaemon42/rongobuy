@@ -4,7 +4,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoadingController, NavController } from '@ionic/angular';
 import { CategoryService } from 'src/app/services/category.service';
 import { ActivatedRoute } from '@angular/router';
-import { Category } from 'src/app/models/category.model';
 
 @Component({
   selector: 'app-phone-cover-detail',
@@ -64,7 +63,7 @@ export class PhoneCoverDetailPage implements OnInit, OnDestroy {
 
   onSelectImage(slug) {
     this.isDisplay = true;
-    this.onRoute(slug);
+    //this.onRoute(slug);
 
   }
   onChangeArea() {

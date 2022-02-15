@@ -1,5 +1,4 @@
 <ion-app>
-
   <ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu">
     <ion-header>
       <ion-toolbar color="warning">
@@ -8,34 +7,12 @@
     </ion-header>
     <ion-content>
       <ion-list>
-        <!-- <ion-item *ngFor="let menu of menus" detail (click)="closeMenu()"  [routerLink]="menu.route"> {{ menu.title }} </ion-item> -->
-      <!-- <ion-menu-toggle auto-hide="false">
-        <ion-list lines="none">
-          <ion-item [routerLink]="'/'">
-            <ion-icon name="home" slot="start"></ion-icon>
-            Home
-          </ion-item>
-          <ion-item routerLink="todos">
-            <ion-icon name="list" slot="start"></ion-icon>
-            <ion-label>
-              Todos
-            </ion-label>
-          </ion-item>
-          <ion-item routerLink="finance">
-            <ion-icon color="warning" name="cash" slot="start"></ion-icon>
-            <ion-label>
-              Finance
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-menu-toggle> -->
       <div class="main-menu-item" *ngFor="let menu of menus; let i = index">
         <ion-item lines="none" (click)="onClickMenu(i)">
           <ion-icon color="dark" [name]="menu.icon" slot="start"></ion-icon>
           {{ menu.title }}
           <ion-icon color="warning" slot="end" [name]="menuIcon(i)"></ion-icon>
         </ion-item>
-
         <ion-menu-toggle *ngIf="menu.show"  auto-hide="false">
           <ion-list lines="none">
             <ion-item
@@ -52,25 +29,10 @@
           </ion-list>
         </ion-menu-toggle>
       </div>
-      <!-- <div *ngIf="isLoggedIn" class="main-menu-item">
-        <ion-item lines="none" (click)="logOut()">
-          <ion-icon color="dark" name="log-out" slot="start"></ion-icon>
-          Log Out
-        </ion-item>
-      </div>
-      <div *ngIf="!isLoggedIn" class="main-menu-item">
-        <ion-item lines="none" [routerLink]="['/', 'tabs', 'account']">
-          <ion-icon color="dark" name="person" slot="start"></ion-icon>
-          Log In
-        </ion-item>
-      </div> -->
       </ion-list>
     </ion-content>
   </ion-menu>
-
   <ion-router-outlet id="main"></ion-router-outlet>
-
-  <!-- footer void -->
 
   <div class="rb-footer-void"></div>
 </ion-app>

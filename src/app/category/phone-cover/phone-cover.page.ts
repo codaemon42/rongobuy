@@ -14,6 +14,7 @@ export class PhoneCoverPage implements OnInit, OnDestroy {
   hideOverlay = false;
   phoneCoverCat: Category = null;
   phoneCoverChild: Category[] = [];
+  indvPhones: Category[] = [];
   selectedBrand: Category = null;
   catSub: Subscription;
   skeletonCount = [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,6,7];
@@ -41,8 +42,19 @@ export class PhoneCoverPage implements OnInit, OnDestroy {
         //console.log('selectedBrand : ', this.selectedBrand);
         this.phoneCoverChild = this.phoneCoverCat['child'];
         console.log('phoneCoverChild : ', this.phoneCoverChild);
+        this.indvPhones = this.getAllPhoneCats(this.phoneCoverCat['child']);
+        console.log('all cats phone :', this.indvPhones);
+
       }
     });
+  }
+
+  getAllPhoneCats(categories){
+    const category = [];
+    categories.map(parentCats=>{
+      category.push(...parentCats['child']);
+    });
+    return category;
   }
 
   getSpecificCat(categories){
@@ -54,10 +66,15 @@ export class PhoneCoverPage implements OnInit, OnDestroy {
 
   onChangeArea() {
     console.log('changed', this.selectedBrand);
+    if(!this.selectedBrand){
+      return;
+    }
     this.loadingCtrl.create({message: 'Loading Model'}).then(el=>el.present());
     setTimeout(()=>{
       this.loadingCtrl.dismiss();
-      this.onRoute(this.selectedBrand.slug);
+      //this.onRoute(this.selectedBrand.slug);
+      //category/phone-cover/phone-cover-detail/vivo/vivo-y12a-8925
+      this.nav.navigateForward(`category/phone-cover/phone-cover-detail/any/${this.selectedBrand.slug}`);
     },1000);
   }
 

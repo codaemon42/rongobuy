@@ -7,7 +7,7 @@ import { HammerModule } from '@angular/platform-browser';
 
 import { IonicModule } from '@ionic/angular';
 
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 
 import {DropdownModule} from 'primeng/dropdown';

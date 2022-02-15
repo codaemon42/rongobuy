@@ -2,11 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
-
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
-
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';

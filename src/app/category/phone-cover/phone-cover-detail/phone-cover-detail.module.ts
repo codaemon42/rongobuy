@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { PhoneDisplayModule } from './../../../components/modules/phone-display/phone-display.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,6 +16,7 @@ import { DropdownModule } from 'primeng/dropdown';
     CommonModule,
     FormsModule,
     IonicModule,
+    RouterModule,
     PhoneDisplayModule,
     DropdownModule,
     PhoneCoverDetailPageRoutingModule

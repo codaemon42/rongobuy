@@ -24,8 +24,8 @@ export interface SectionContent {
   slug: string;
   imageUrl: string;
   description: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
   content: string;
   created_at: string;
   updated_at: string;

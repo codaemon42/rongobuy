@@ -242,3 +242,8 @@ ion-content{
   bottom: 35px;
   z-index: 2000;
 }
+@media screen and (max-width: 480px) {
+  .btn-text{
+    font-size: 11px;
+  }
+}

@@ -123,15 +123,25 @@
                 </div>
                 <div class="total-ordered-amount">
                   <span *ngIf="!couponRes">
-                    ৳ {{cartDetails.data.subtotal ? cartDetails.data.subtotal : 0}}
+                    ৳ {{cartDetails.data.subtotal ? (cartDetails.data.subtotal + (cartDetails.data.discount?cartDetails.data.discount:0)) : 0}}
                   </span>
                   <span *ngIf="couponRes">
                     <span *ngIf="!couponRes.success">
-                      ৳ {{cartDetails.data.subtotal ? cartDetails.data.subtotal : 0}}
+                      ৳ {{cartDetails.data.subtotal ? (cartDetails.data.subtotal + (cartDetails.data.discount?cartDetails.data.discount:0)) : 0}}
                     </span>
                     <span *ngIf="couponRes.success">
-                      ৳ {{(cartDetails.data.subtotal ? cartDetails.data.subtotal : 0) - couponRes.data.couponPrice}}
+                      ৳ {{(cartDetails.data.subtotal ? (cartDetails.data.subtotal + (cartDetails.data.discount?cartDetails.data.discount:0)) : 0) - couponRes.data.couponPrice}}
                     </span>
+                  </span>
+                </div>
+              </div>
+              <div *ngIf="cartDetails.data.discount" class="order-amount-section">
+                <div class="total-ordered-amount-text">
+                  Discount
+                </div>
+                <div class="total-ordered-amount">
+                  <span>
+                    - ৳ {{cartDetails.data.discount}}
                   </span>
                 </div>
               </div>

@@ -27,11 +27,15 @@
 
   <ion-grid *ngIf="isDisplay" class="ion-no-padding">
     <ion-row>
-      <ion-col size="4" sizeSm="2" sizeMd="2" sizeLg="2" (click)="onSelectImage(cat.slug)" *ngFor="let cat of phoneCoverCatChild">
+      <ion-col size="4" sizeSm="2" sizeMd="2" sizeLg="2" [routerLink]="['/','category','phone-cover','phone-cover-detail',slug,cat.slug]" (click)="onSelectImage(cat.slug)" *ngFor="let cat of phoneCoverCatChild">
         <ion-card class="card ion-no-margin ion-text-center">
-          <ion-img style="width: 75%; height: 120px; margin: auto" [src]="cat.image"></ion-img>
+            <a [href]="'category/phone-cover/phone-cover-detail/'+slug+'/'+cat.slug">
+              <ion-img style="width: 75%; height: 120px; margin: auto" [src]="cat.image"></ion-img>
+            </a>
           <ion-card-subtitle class="subtitle ion-text-center">
-            <ion-label>{{cat.categoryName}}</ion-label>
+              <ion-label style="text-decoration: none;">
+                  {{cat.categoryName}}
+              </ion-label>
           </ion-card-subtitle>
         </ion-card>
       </ion-col>

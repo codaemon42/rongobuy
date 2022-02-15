@@ -16,7 +16,6 @@ import { StorageService } from '../services/storage.service';
 })
 export class AccountPage implements OnInit {
   @Input() isFromCustom;
-
   isLogin = true;
   enableResend = false;
   phoneNumber;

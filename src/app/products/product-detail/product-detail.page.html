@@ -77,13 +77,18 @@
         <p-rating [(ngModel)]="singleProduct.review.avarage" [readonly]="true" [cancel]="false"></p-rating>
         <h3 class="real-price" style="font-weight: 600;"><b>৳ {{selectedPhoneCover ? selectedPhoneCover.price : selectedSKUProduct.discountPrice}}</b></h3>
         <p class="disabled-price" *ngIf="selectedSKUProduct.price !== (selectedPhoneCover ? selectedPhoneCover.price : selectedSKUProduct.discountPrice)" style="font-weight: 500;"><b>৳ {{selectedSKUProduct.price}}</b></p>
+
+        <div (click)="openTextBanner()" style="margin-top: 10px" *ngIf="discountBanner">
+          <ion-img *ngFor="let image of discountBanner.data" [src]="image.value"></ion-img>
+        </div>
+
         <span *ngIf="selectedPhoneCover">
           <p *ngIf="selectedPhoneCover.phoneModel"> SKU: {{selectedPhoneCover.phoneModel}} </p>
         </span>
         <div [innerHTML]="singleProduct.shortDescription | safeHtml"></div>
           <ion-button color="tertiary" (click)="onCustomize(singleProduct.title)">
             <ion-icon name="brush"></ion-icon>
-            <ion-label style="margin-left: 10px">Customize with your design</ion-label>
+            <ion-label class="btn-text" style="margin-left: 10px">Customize with your design</ion-label>
           </ion-button>
           <!-- <ion-button color="warning">
             <ion-icon name="basket"></ion-icon>

@@ -19,7 +19,6 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     HeaderComponent,
-    // SearchResultsComponent
     ]
 })
 export class HeaderModule { }

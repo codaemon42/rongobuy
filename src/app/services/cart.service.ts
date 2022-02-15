@@ -109,18 +109,20 @@ export class CartService {
         );
   }
 
-  addTOCart(productId, skuId, quantity=1, backgroundImage=null, phoneDesignId=null){
+  addTOCart(productId, skuId, quantity=1, backgroundImage=null, phoneDesignId=2, type=null, modelName=null, mainImage=null){
     const token = this.accountService.userToken;
     const httpOptions = {
       headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`})
     };
-    const body = {productId, skuId, quantity, backgroundImage, phoneDesignId};
-    if(phoneDesignId === null || phoneDesignId === '' || phoneDesignId === undefined) {
-      delete body.phoneDesignId;
+    const body = {productId, skuId, quantity, phoneDesignId, type, modelName, mainImage, backgroundImage};
+    console.log(body);
+    if(phoneDesignId === null || phoneDesignId === undefined) {
+      body.phoneDesignId = 2;
     }
     return this.http.post<any>(
+      //`http://demo.rongobuy.com/api/v1/add-to-cart`,
       `${environment.url.base}/cart/add`,
       body,
       httpOptions).pipe(

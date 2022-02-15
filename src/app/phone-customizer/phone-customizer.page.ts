@@ -1,152 +1,96 @@
-import { present } from '@ionic/core/dist/types/utils/overlays';
-import { Observable, Observer, Subscription } from 'rxjs';
-import { PhoneModelService } from './../services/phone-model/phone-model.service';
-import { AccountService } from './../account/account.service';
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { LoadingController, ModalController, Platform, ToastController, NavController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
-import { textEditor, TextEditorScreenComponent } from './../components/text-editor-screen/text-editor-screen.component';
-import { AfterViewInit, OnDestroy } from '@angular/core';
-/* eslint-disable @typescript-eslint/member-ordering */
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import html2canvas from 'html2canvas';
-
-//or     import jsPDF from 'jspdf';
 import domtoimage from 'dom-to-image-improved';
 
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { File } from '@ionic-native/file/ngx';
+import { AccountService } from './../account/account.service';
+import { ProductService } from '../services/product.service';
+import { PhoneModelService } from './../services/phone-model/phone-model.service';
+import { CartService } from '../services/cart.service';
 
-import { ActionSheetController, LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
-
-import { MenuItem } from 'primeng/api';
+import { textEditor, TextEditorScreenComponent } from './../components/text-editor-screen/text-editor-screen.component';
 import { CustomizationReviewComponent } from '../components/customization-review/customization-review.component';
+
 import { PhoneModel } from '../models/phoneModels.model';
-import { take } from 'rxjs/operators';
+import { Product } from '../models/product.model';
+// import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+// import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-phone-customizer',
   templateUrl: './phone-customizer.page.html',
   styleUrls: ['./phone-customizer.page.scss'],
 })
-export class PhoneCustomizerPage implements OnInit, AfterViewInit, OnDestroy {
+export class PhoneCustomizerPage implements OnInit, OnDestroy {
 
   @ViewChild('addbg', {static: false}) addbg: ElementRef<HTMLInputElement>;
   @ViewChild('addLogo', {static: false}) addLogo: ElementRef<HTMLInputElement>;
-  @ViewChild('logoRef', {static: false}) logoRef: ElementRef;
   // canvas image download
   @ViewChild('screen', {static: false}) screen: ElementRef;
-  @ViewChild('canvas', {static: false}) canvas: ElementRef;
   @ViewChild('downloadLink', {static: false}) downloadLink: ElementRef;
-  valRanges = [20,30];
+ selectedArea =
+   {name: 'Samsung', img: 'https://rongobuy.s3.ap-southeast-1.amazonaws.com/images/r9ome7n52zf6bxja0wiupcg8dk41ht.png'};
   hideImageActions = false;
-  actionWorking = false;
-  rotateAngle = 0;
   logoImage = '';
   mainImage = '';
   backgroundImage = '';
   text = '';
-
   domToImage: any = domtoimage;
   backgroundImg;
-  canvasImgBackConst = {
-    size: 110,
-    x: 0,
-    y: 30
-  };
-  canvasImgBack = {
-    size: 110,
-    x: 0,
-    y: 30
-  };
   img: any = '';
-
-
   cursor = 'move';
-
   downloadHref= '';
   phoneModelsSub: Subscription;
   phoneModels: PhoneModel[] = [];
   selectedPhoneModel: PhoneModel;
-   area = [
-     {name: 'Samsung', img: '../../assets/phone-cover/samsung/A5-2017.png', cost: '60'},
-     {name: 'Realme', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'},
-     {name: 'vivo', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'},
-     {name: 'oppo', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'}
-    ];
-  selectedArea = {name: 'Samsung', img: 'https://rongobuy.s3.ap-southeast-1.amazonaws.com/images/r9ome7n52zf6bxja0wiupcg8dk41ht.png', cost: '60'};
-  // editor menu item
-  items: MenuItem[];
-  tooltipItems: MenuItem[];
-  leftTooltipItems: MenuItem[];
-  rotateBack = 180;
   transform = null;
   transformText = null;
   isFirst = [];
   isImgEditor = true;
-controlTextParam = {
-  left: 0,
-  top: 0,
-  scale: 1,
-  rotate: 0,
-  currentDeltaX: null,
-  currentDeltaY: null,
-  currentScale: null,
-  currentRotation: null
-};
-controlTextParamConst = {
-  left: 0,
-  top: 0,
-  scale: 1,
-  rotate: 0,
-  adjustDeltaX: 0,
-  adjustDeltaY: 0,
-  adjustScale: 1,
-  adjustRotation: 0
-};
-controlImageParam = {
-  left: 0,
-  top: 0,
-  scale: 1,
-  rotate: 0,
-  currentDeltaX: null,
-  currentDeltaY: null,
-  currentScale: null,
-  currentRotation: null
-};
-controlImageParamConst = {
-  left: 0,
-  top: 0,
-  scale: 1,
-  rotate: 0,
-  adjustDeltaX: 0,
-  adjustDeltaY: 0,
-  adjustScale: 1,
-  adjustRotation: 0
-};
+  controlTextParam = {
+    left: 0,
+    top: 0,
+    scale: 1,
+    rotate: 0,
+    currentDeltaX: null,
+    currentDeltaY: null,
+    currentScale: null,
+    currentRotation: null
+  };
+  controlTextParamConst = {
+    left: 0,
+    top: 0,
+    scale: 1,
+    rotate: 0,
+    adjustDeltaX: 0,
+    adjustDeltaY: 0,
+    adjustScale: 1,
+    adjustRotation: 0
+  };
+  controlImageParam = {
+    left: 0,
+    top: 0,
+    scale: 1,
+    rotate: 0,
+    currentDeltaX: null,
+    currentDeltaY: null,
+    currentScale: null,
+    currentRotation: null
+  };
+  controlImageParamConst = {
+    left: 0,
+    top: 0,
+    scale: 1,
+    rotate: 0,
+    adjustDeltaX: 0,
+    adjustDeltaY: 0,
+    adjustScale: 1,
+    adjustRotation: 0
+  };
   rotationAll = 0;
   rotateStarter = false;
   rotateStarterText = false;
-  logoParams = {
-    scale: 1,
-    width: 153,
-    height: 'auto',
-    overlayHeight: 10,
-    marginTop: -333,
-    marginLeft: 100,
-    zIndex: 15,
-    position: 'absolute',
-    src: ''
-  };
-  logoParamConst = {
-    scale: 1,
-    width: 153,
-    height: 'auto',
-    overlayHeight: 10,
-    marginTop: -333,
-    marginLeft: 100,
-    zIndex: 15,
-    position: 'absolute',
-    src: ''
-  };
 
   textStyleParams = {
     color: '#333',
@@ -188,18 +132,26 @@ controlImageParamConst = {
     text: '',
     styleParams: this.textStyleParams
   };
+  isProductLoading = true;
+  singleProduct: Product;
+  skuId: string;
 
   constructor(
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
+    private nav: NavController,
     private platform: Platform,
-    private transfer: FileTransfer,
-    private file: File,
+    // private transfer: FileTransfer,
+    // private file: File,
     private accountService: AccountService,
     private phoneModelsService: PhoneModelService, // this
+    private cartService: CartService,
+    private productService: ProductService
   ) { }
 
+  // @since 1.4.0 ~
+  // customizer functions
   rotatexyz(event){
     console.log('rotate event : ', event);
   }
@@ -326,103 +278,16 @@ controlImageParamConst = {
     this.controlImageParamConst.adjustDeltaX = this.controlTextParam.currentDeltaX;
     this.controlTextParamConst.adjustDeltaY = this.controlTextParam.currentDeltaY;
   }
+
+
   async ngOnInit() {
+    this.productInit();
     if(!this.accountService.isLoggedIn()){
       this.toastCtrl.create({message: 'please login if you wish to place an order', color: 'danger', duration:4000, position: 'top'})
       .then(el=>el.present());
     }
-    this.tooltipItems = [
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Add Text'
-                },
-                icon: 'pi pi-sort-alpha-up',
-                command: () => {
-                  console.log('text clicked');
-                  this.editedText({
-                    text : this.textEditor ? this.textEditor.text : '',
-                    styleParams: this.textEditor ? this.textEditor.styleParams : this.textStyleParams
-                    });
-                }
-            },
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Logo'
-                },
-                icon: 'pi pi-images',
-                command: () => { this.addLogo.nativeElement.click(); }
-            },
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Delete'
-                },
-                icon: 'pi pi-trash',
-                command: (event) => {
-                    this.toolClick(event);
-                }
-            },
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Background Image'
-                },
-                icon: 'pi pi-mobile',
-                command: () => { this.addbg.nativeElement.click(); }
-            },
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Save'
-                },
-                icon: 'pi pi-save',
-                command: () => {
-                  this.captureScreen();
-                }
-            }
-    ];
-
-    this.leftTooltipItems = [
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Add',
-                    tooltipPosition: 'left',
-                },
-                icon: 'pi pi-pencil',
-                command: (event) => {
-                    this.toolClick(event);
-                }
-            },
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Background Image',
-                    tooltipPosition: 'left',
-                },
-                icon: 'pi pi-mobile',
-                command: () => { this.addbg.nativeElement.click(); }
-            },
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Delete',
-                    tooltipPosition: 'left',
-                },
-                icon: 'pi pi-trash',
-                command: (event) => {
-                    this.toolClick(event);
-                }
-            },
-            {
-                icon: 'pi pi-upload',
-                tooltipOptions: {
-                    tooltipLabel: 'Upload',
-                    tooltipPosition: 'left',
-                },
-            },
-            {
-                tooltipOptions: {
-                    tooltipLabel: 'Angular Website',
-                    tooltipPosition: 'left',
-                },
-                icon: 'pi pi-external-link'
-            }
-    ];
+    // @since 1.6.0
+    //this.tooltipItemInit();
     this.phoneModelsService.fetchPhoneModels().subscribe();
     this.phoneModelsSub = this.phoneModelsService.phoneModel.subscribe(models=>{
       this.phoneModels = models;
@@ -440,32 +305,21 @@ controlImageParamConst = {
           });
         }
       });
-      // setTimeout(()=>{
-      //   this.selectedPhoneModel = models[1];
-      // },100);
     });
   }
 
-  definePhoneModels() {
-    //this.phoneModelsSub = this.phoneModelsService.phoneModel.subscribe(models=>this.phoneModels = models);
-    //this.phoneModelsService.fetchPhoneModels().subscribe
-  }
-
-  ngAfterViewInit() {
-    //console.log('ref : ', this.logoRef.nativeElement.clientHeight);
-  }
 
   onChangeArea() { console.log('changed'); }
 
   captureScreen() {
     this.textBackground = '#3330';
     this.hideImageActions = true;
-        console.log(
-          this.mainImage,
-          this.backgroundImage,
-          this.logoImage,
-          this.text,
-        );
+    console.log(
+      this.mainImage,
+      this.backgroundImage,
+      this.logoImage,
+      this.text,
+    );
     this.loadingCtrl.create({
       message: 'Loading Image ...',
       mode: 'ios'
@@ -474,17 +328,10 @@ controlImageParamConst = {
     });
 
       this.domToImage.toSvg(this.screen.nativeElement).then( dataUrl => {
-        console.log('data  : ',dataUrl);
-        //this.img = dataUrl;
-        //this.loadingCtrl.dismiss();
-        const start = 'data:image/svg+xml;charset=utf-8,'.length + 1;
-        const preview = dataUrl.slice(start+1 ,dataUrl.length);
-        // const svg = new Blob([preview], {type:"image/svg+xml;charset=utf-8"});
-        // console.log('svg blob : ', svg);
-
+        //console.log('data  : ',dataUrl);
         this.domToImage.toPng(this.screen.nativeElement).then( dataUrls => {
-          //this.modalCtrl.dismiss();
-          console.log('png : ',dataUrls);
+
+          //console.log('png : ',dataUrls);
           this.mainImage = dataUrls;
           this.modal({
             dataUrl,
@@ -495,23 +342,48 @@ controlImageParamConst = {
             phoneModel: this.selectedPhoneModel.name
             }).then(data => {
             if ( data['confirm'] ) {
-              console.log('confirm');
-              // this.isWebPlatform().then(web => {
-              //   if ( web ) {
-              //     this.webDownloadManager('phone-cover.png', dataUrl);
-              //   }
-              //   else {
-              //     this.appDownloadManager('phone-cover.png', dataUrl);
-              //   }
-              // });
+              //console.log('confirm');
+              // this.designDownload(dataUrl);
 
               if( data['buy'] ) {
-                console.log('want to buy the design now');
-                // add this item to cart
-                // navigate to the cart page
+                //console.log('want to buy the design now');
+                this.loadingCtrl.create({
+                  message: 'adding to cart, wait a few moment',
+                  mode: 'ios'
+                }).then(loadingEl=>loadingEl.present());
+                this.cartService.addTOCart(
+                  this.singleProduct.id, this.skuId, 1, this.backgroundImage, null, 'custom', this.selectedPhoneModel.name, this.mainImage
+                ).subscribe(res=>{
+                  this.loadingCtrl.dismiss();
+                  if(res.success){
+                    this.toastCtrl.create({
+                      message: 'success',
+                      color: 'success',
+                      duration: 6000,
+                      position: 'top',
+                      buttons: [
+                        {
+                          side: 'end',
+                          icon: 'cart',
+                          text: 'view cart',
+                          handler: () => {
+                            this.nav.navigateForward('tabs/carts');
+                          }
+                        }
+                      ]
+                    }).then(toastEl=>toastEl.present());
+                  } else {
+                    this.toastCtrl.create({
+                      message: 'something went wrong, try again',
+                      color: 'danger',
+                      duration: 4000,
+                      position: 'top'
+                    }).then(toastEl=>toastEl.present());
+                  }
+                });
               }
             } else {
-              console.log('cancelled');
+              //console.log('cancelled');
               this.hideImageActions = false;
             }
           });
@@ -548,13 +420,13 @@ controlImageParamConst = {
         console.log('backgroundImage : ', this.backgroundImage);
       }
       else if ( id === 'logo' ) {
-        const heightTimer = setInterval(()=>{
-          // if ( this.logoRef.nativeElement.clientHeight !== 0 ) {
-          //     this.logoParams.overlayHeight = this.logoRef.nativeElement.clientHeight;
-          //     clearInterval(heightTimer);
-          // }
-        },1);
-        this.logoParams.src = dataUrl;
+        // const heightTimer = setInterval(()=>{
+        //   if ( this.logoRef.nativeElement.clientHeight !== 0 ) {
+        //       this.logoParams.overlayHeight = this.logoRef.nativeElement.clientHeight;
+        //       clearInterval(heightTimer);
+        //   }
+        // },1);
+        //this.logoParams.src = dataUrl;
         this.logoImage = dataUrl;
         console.log('logoImage : ', this.logoImage);
       }
@@ -585,99 +457,7 @@ controlImageParamConst = {
   }
 
 
-  controlImage(event, id) {
-    if(this.actionWorking){
-      return;
-    }
-    if(id === 'pinchIn') {
-      console.log('zoom out');
-      this.controlImageParam.scale -= 0.03;
-      // cursor
-      this.cursor = 'zoom-out';
-      return;
-    }
-    if(id === 'pinchOut')  {
-      console.log('zoom in');
-      this.controlImageParam.scale += 0.03;
-      // bg
-      this.cursor = 'zoom-in';
-      return;
-    }
-    console.log(id , event);
-    if ( id === 'panright' || id === 'panleft' || id === 'panup' || id === 'pandown'  ) {
-      this.controlImageParam.left = this.controlImageParamConst.left + event.deltaX;
-      this.controlImageParam.top = this.controlImageParamConst.top + event.deltaY;
-      return;
-    }
 
-    if (event.deltaY === 114) {
-      console.log('zoom out');
-      // if(this.controlImageParam.scale < 0.2){
-      //   return;
-      // }
-      this.controlImageParam.scale -= 0.03;
-      // cursor
-      this.cursor = 'zoom-out';
-      return;
-    }
-    if (event.deltaY === -114)  {
-      console.log('zoom in');
-      // if(this.controlImageParam.scale > 1.5){
-      //   return;
-      // }
-      this.controlImageParam.scale += 0.03;
-      // bg
-      this.cursor = 'zoom-in';
-      return;
-    }
-
-  }
-
-  rotateBgImg(event) {
-    console.log('rotate : ', event);
-    this.actionWorking = true;
-    // if(event.isFirst){
-    //   this.controlImageParam.rotate = this.controlImageParamConst.rotate+ event.angle/3;
-    // }
-    // if(event.isFirst){
-
-    // }
-    if(event.angle > 0){
-        this.controlImageParam.rotate = this.rotateAngle++;
-    }
-     else {
-      // this.controlImageParam.rotate = this.controlImageParamConst.rotate + event.angle;
-      this.controlImageParam.rotate = this.rotateAngle--;
-    }
-    if(event.isFinal){
-      this.actionWorking = false;
-      //this.controlImageParamConst.rotate = this.controlImageParam.rotate;
-    }
-  }
-  resizeBgImg(event) {
-    console.log('resize : ', event);
-    this.actionWorking = true;
-    if(event.additionalEvent === 'panleft') {
-      this.controlImageParam.scale += 0.01;
-    }
-
-    if(event.additionalEvent === 'panright') {
-      this.controlImageParam.scale -= 0.01;
-    }
-    if(event.isFinal){
-      this.actionWorking = false;
-      this.controlImageParamConst.scale = this.controlImageParam.scale;
-    }
-    // this.actionWorking = true;
-    // // if(event.isFirst){
-    // //   this.controlImageParam.rotate = this.controlImageParamConst.rotate+ event.angle/3;
-    // // }
-    // this.controlImageParam.scale += ;
-    // if(event.isFinal){
-    //   this.actionWorking = false;
-    //   this.controlImageParamConst.rotate = this.controlImageParam.rotate;
-    // }
-  }
   deleteText() {
     this.textEditor.text = '';
     this.imageClick();
@@ -706,44 +486,7 @@ controlImageParamConst = {
       adjustRotation: 0
     };
   }
-  logoClick() {
-    this.logoParamConst.marginLeft = this.logoParams.marginLeft;
-    this.logoParamConst.marginTop = this.logoParams.marginTop;
-  }
-  logoEdit(event, id) {
-    console.log(id , event);
-    if ( id === 'panright' || id === 'panleft' || id === 'panup' || id === 'pandown'  ) {
-      this.logoParams.marginLeft = this.logoParamConst.marginLeft + event.deltaX;
-      this.logoParams.marginTop = this.logoParamConst.marginTop + event.deltaY;
-    }
 
-    if (event.deltaY === 114) {
-      console.log('zoom out');
-      this.logoParams.scale -= 0.05;
-      // cursor
-      this.cursor = 'zoom-out';
-    }
-    if (event.deltaY === -114)  {
-      console.log('zoom in');
-      this.logoParams.scale += 0.05;
-      // bg
-      this.cursor = 'zoom-in';
-    }
-
-    if(id === 'pinchIn') {
-      console.log('zoom out');
-      this.logoParams.scale -= 0.05;
-      // cursor
-      this.cursor = 'zoom-out';
-    }
-    if(id === 'pinchOut')  {
-      console.log('zoom in');
-      this.logoParams.scale += 0.05;
-      // bg
-      this.cursor = 'zoom-in';
-    }
-
-  }
 
 
   textEdit(event, id) {
@@ -842,179 +585,479 @@ controlImageParamConst = {
     this.addbg.nativeElement.click();
   }
 
-  // image editor methods
-  panUp(event) {
-    console.log('up : ', event);
-    // bg
-    this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
-    this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
-    // cursor
-    this.cursor = 'move';
-  }
 
-  panDown(event) {
-    console.log('down : ', event);
-    // bg
-    this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
-    this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
-    // cursor
-    this.cursor = 'move';
-  }
+  // @since 1.6.1
+  // designDownload(dataUrl){
+  //   this.isWebPlatform().then(web => {
+  //     if ( web ) {
+  //       this.webDownloadManager('phone-cover.png', dataUrl);
+  //     }
+  //     else {
+  //       this.appDownloadManager('phone-cover.png', dataUrl);
+  //     }
+  //   });
+  // }
 
-  panRight(event) {
-    console.log('right : ', event);
-    // bg
-    this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
-    this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
+  // // platform checker
+  // isWebPlatform() {
+  //   return new Promise(resolve => {
+  //     this.platform.ready().then(()=>{
+  //       if(
+  //         this.platform.is('cordova')
+  //         || this.platform.is('android')
+  //         || this.platform.is('ios')
+  //         || this.platform.is('iphone')
+  //         || this.platform.is('ipad')
+  //         || this.platform.is('hybrid')
+  //         || this.platform.is('tablet')
+  //       ) {
+  //         resolve(false);
+  //       }
+  //       else {
+  //         resolve(true);
+  //       }
+  //     });
+  //   });
+  // }
 
-        // cursor
-    this.cursor = 'move';
-  }
+  // // downloader
+  // webDownloadManager( name, dataUrl) {
+  //   this.downloadLink.nativeElement.download = name;
+  //   this.downloadLink.nativeElement.href = dataUrl;
+  //   this.downloadLink.nativeElement.click();
+  // }
 
-  panLeft(event) {
-    console.log('left : ', event);
-    // bg
-    this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
-    this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
-    // cursor
-    this.cursor = 'move';
-  }
+  // // download method
+  // appDownloadManager(name, dataUrl) {
+  //   console.log('download');
+  //   const fileTransfer: FileTransferObject = this.transfer.create();
+  //   console.log('download');
+  //   const url = dataUrl;
+  //   console.log('download');
+  //   fileTransfer.download(url, this.file.dataDirectory + name).then(entry => {
+  //     console.log('download complete: ' + entry.toURL());
+  //   }, (error) => {
+  //     // handle error
+  //     console.log('download error', error);
+  //   })
+  //   .catch(err => {
+  //     console.log('err');
+  //   })
+  //   ;
+  //   console.log('download');
+  // }
 
-  wheel(event) {
-    console.log('pinch : ', event);
-    if (event.deltaY > 0) {
-      console.log('zoom out');
-      // bg
-      this.canvasImgBack.size -= 2;
-      // cursor
-      this.cursor = 'zoom-out';
-    }
-    else {
-      console.log('zoom in');
-      // bg
-      this.canvasImgBack.size += 2;
-      // cursor
-        this.cursor = 'zoom-in';
-    }
-  }
-
-  pinchIn(event) {
-    console.log('pinch : ', event);
-    // bg
-    this.canvasImgBack.size -= 0.5;
-    // cursor
-    this.cursor = 'zoom-out';
-  }
-
-  pinchOut(event) {
-    console.log('zoom in');
-    // bg
-    this.canvasImgBack.size += 0.5;
-    // cursor
-    this.cursor = 'zoom-in';
-  }
-
-  initialEditorClick() {
-    this.canvasImgBackConst.x = this.canvasImgBack.x;
-    this.canvasImgBackConst.y = this.canvasImgBack.y;
-    if (this.backgroundImg === '' || this.backgroundImg === undefined) {
-      this.addBG();
-      console.log('clicked');
-    }
-    return;
-  }
-
-  toolClick(event) {
-    console.log('naim : ', event);
-  }
-
-  // platform checker
-
-  isWebPlatform() {
-    return new Promise(resolve => {
-      this.platform.ready().then(()=>{
-        if(
-          this.platform.is('cordova')
-          || this.platform.is('android')
-          || this.platform.is('ios')
-          || this.platform.is('iphone')
-          || this.platform.is('ipad')
-          || this.platform.is('hybrid')
-          || this.platform.is('tablet')
-        ) {
-          resolve(false);
-        }
-        else {
-          resolve(true);
-        }
-      });
-    });
-  }
-
-  // downloader
-  webDownloadManager( name, dataUrl) {
-    this.downloadLink.nativeElement.download = name;
-    this.downloadLink.nativeElement.href = dataUrl;
-    this.downloadLink.nativeElement.click();
-  }
-
-  // download method
-  appDownloadManager(name, dataUrl) {
-    console.log('download');
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    console.log('download');
-    const url = dataUrl;
-    console.log('download');
-    fileTransfer.download(url, this.file.dataDirectory + name).then(entry => {
-      console.log('download complete: ' + entry.toURL());
-    }, (error) => {
-      // handle error
-      console.log('download error', error);
-    })
-    .catch(err => {
-      console.log('err');
-    })
-    ;
-    console.log('download');
-  }
-
-  // garbage
-  htmlToCanvasImg() {
-    const div = this.screen.nativeElement;
-    console.log(div);
-    const divHeight = div.clientHeight;
-    const divWidth = div.clientWidth;
-    const options = { width: divWidth*2, height: divHeight*2 };
-    console.log(options);
-
-    console.log('naim');
-
-    html2canvas(this.screen.nativeElement, options).then(canvas =>{
-      this.loadingCtrl.dismiss();
-
-      const canvasSrc = canvas.toDataURL('image/png');
-      console.log('canvas data url : ', canvasSrc);
-      this.img = canvasSrc;
-
-      this.downloadLink.nativeElement.download = 'phone-cover.png';
-      this.downloadLink.nativeElement.href = canvasSrc;
-      this.downloadLink.nativeElement.click();
-    }).catch(err=>{
-      console.log('err : ', err);
-      this.loadingCtrl.dismiss();
-      this.toastCtrl.create({
-        message: 'something went wrong ...',
-        color: 'danger',
-        duration: 2000
-      }).then(toastEl=>{
-        toastEl.present();
-      });
+    productInit() {
+    this.isProductLoading = true;
+    this.productService.fetchSingleProduct('customized').subscribe(res=>{
+      this.singleProduct = res;
+      this.skuId = this.singleProduct.skuModule.skuPriceList[0].SkuId;
+      this.isProductLoading = false;
+      console.log('this.singleProduct custom check : ',this.singleProduct);
+      //this.productPrice = parseInt(this.singleProduct.productPrice, 10);
     });
   }
 
   ngOnDestroy(){
     this.phoneModelsSub.unsubscribe();
   }
+
+  // garbage
+  // @since 1.6.0
+  // initialEditorClick() {
+  //   this.canvasImgBackConst.x = this.canvasImgBack.x;
+  //   this.canvasImgBackConst.y = this.canvasImgBack.y;
+  //   if (this.backgroundImg === '' || this.backgroundImg === undefined) {
+  //     this.addBG();
+  //     console.log('clicked');
+  //   }
+  //   return;
+  // }
+  // controlImage(event, id) {
+  //   if(this.actionWorking){
+  //     return;
+  //   }
+  //   if(id === 'pinchIn') {
+  //     console.log('zoom out');
+  //     this.controlImageParam.scale -= 0.03;
+  //     // cursor
+  //     this.cursor = 'zoom-out';
+  //     return;
+  //   }
+  //   if(id === 'pinchOut')  {
+  //     console.log('zoom in');
+  //     this.controlImageParam.scale += 0.03;
+  //     // bg
+  //     this.cursor = 'zoom-in';
+  //     return;
+  //   }
+  //   console.log(id , event);
+  //   if ( id === 'panright' || id === 'panleft' || id === 'panup' || id === 'pandown'  ) {
+  //     this.controlImageParam.left = this.controlImageParamConst.left + event.deltaX;
+  //     this.controlImageParam.top = this.controlImageParamConst.top + event.deltaY;
+  //     return;
+  //   }
+
+  //   if (event.deltaY === 114) {
+  //     console.log('zoom out');
+  //     // if(this.controlImageParam.scale < 0.2){
+  //     //   return;
+  //     // }
+  //     this.controlImageParam.scale -= 0.03;
+  //     // cursor
+  //     this.cursor = 'zoom-out';
+  //     return;
+  //   }
+  //   if (event.deltaY === -114)  {
+  //     console.log('zoom in');
+  //     // if(this.controlImageParam.scale > 1.5){
+  //     //   return;
+  //     // }
+  //     this.controlImageParam.scale += 0.03;
+  //     // bg
+  //     this.cursor = 'zoom-in';
+  //     return;
+  //   }
+
+  // }
+
+  // rotateBgImg(event) {
+  //   console.log('rotate : ', event);
+  //   this.actionWorking = true;
+  //   // if(event.isFirst){
+  //   //   this.controlImageParam.rotate = this.controlImageParamConst.rotate+ event.angle/3;
+  //   // }
+  //   // if(event.isFirst){
+
+  //   // }
+  //   if(event.angle > 0){
+  //       this.controlImageParam.rotate = this.rotateAngle++;
+  //   }
+  //    else {
+  //     // this.controlImageParam.rotate = this.controlImageParamConst.rotate + event.angle;
+  //     this.controlImageParam.rotate = this.rotateAngle--;
+  //   }
+  //   if(event.isFinal){
+  //     this.actionWorking = false;
+  //     //this.controlImageParamConst.rotate = this.controlImageParam.rotate;
+  //   }
+  // }
+  // resizeBgImg(event) {
+  //   console.log('resize : ', event);
+  //   this.actionWorking = true;
+  //   if(event.additionalEvent === 'panleft') {
+  //     this.controlImageParam.scale += 0.01;
+  //   }
+
+  //   if(event.additionalEvent === 'panright') {
+  //     this.controlImageParam.scale -= 0.01;
+  //   }
+  //   if(event.isFinal){
+  //     this.actionWorking = false;
+  //     this.controlImageParamConst.scale = this.controlImageParam.scale;
+  //   }
+  //   // this.actionWorking = true;
+  //   // // if(event.isFirst){
+  //   // //   this.controlImageParam.rotate = this.controlImageParamConst.rotate+ event.angle/3;
+  //   // // }
+  //   // this.controlImageParam.scale += ;
+  //   // if(event.isFinal){
+  //   //   this.actionWorking = false;
+  //   //   this.controlImageParamConst.rotate = this.controlImageParam.rotate;
+  //   // }
+  // }
+  // logoClick() {
+  //   this.logoParamConst.marginLeft = this.logoParams.marginLeft;
+  //   this.logoParamConst.marginTop = this.logoParams.marginTop;
+  // }
+  // logoEdit(event, id) {
+  //   console.log(id , event);
+  //   if ( id === 'panright' || id === 'panleft' || id === 'panup' || id === 'pandown'  ) {
+  //     this.logoParams.marginLeft = this.logoParamConst.marginLeft + event.deltaX;
+  //     this.logoParams.marginTop = this.logoParamConst.marginTop + event.deltaY;
+  //   }
+
+  //   if (event.deltaY === 114) {
+  //     console.log('zoom out');
+  //     this.logoParams.scale -= 0.05;
+  //     // cursor
+  //     this.cursor = 'zoom-out';
+  //   }
+  //   if (event.deltaY === -114)  {
+  //     console.log('zoom in');
+  //     this.logoParams.scale += 0.05;
+  //     // bg
+  //     this.cursor = 'zoom-in';
+  //   }
+
+  //   if(id === 'pinchIn') {
+  //     console.log('zoom out');
+  //     this.logoParams.scale -= 0.05;
+  //     // cursor
+  //     this.cursor = 'zoom-out';
+  //   }
+  //   if(id === 'pinchOut')  {
+  //     console.log('zoom in');
+  //     this.logoParams.scale += 0.05;
+  //     // bg
+  //     this.cursor = 'zoom-in';
+  //   }
+
+  // }
+  // toolClick(event) {
+  //   console.log('naim : ', event);
+  // }
+  // @since 1.6.0
+  // image editor methods
+  // panUp(event) {
+  //   console.log('up : ', event);
+  //   // bg
+  //   this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
+  //   this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
+  //   // cursor
+  //   this.cursor = 'move';
+  // }
+
+  // panDown(event) {
+  //   console.log('down : ', event);
+  //   // bg
+  //   this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
+  //   this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
+  //   // cursor
+  //   this.cursor = 'move';
+  // }
+
+  // panRight(event) {
+  //   console.log('right : ', event);
+  //   // bg
+  //   this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
+  //   this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
+
+  //       // cursor
+  //   this.cursor = 'move';
+  // }
+
+  // panLeft(event) {
+  //   console.log('left : ', event);
+  //   // bg
+  //   this.canvasImgBack.x = this.canvasImgBackConst.x + event.deltaX;
+  //   this.canvasImgBack.y = this.canvasImgBackConst.y + event.deltaY;
+  //   // cursor
+  //   this.cursor = 'move';
+  // }
+
+  // wheel(event) {
+  //   console.log('pinch : ', event);
+  //   if (event.deltaY > 0) {
+  //     console.log('zoom out');
+  //     // bg
+  //     this.canvasImgBack.size -= 2;
+  //     // cursor
+  //     this.cursor = 'zoom-out';
+  //   }
+  //   else {
+  //     console.log('zoom in');
+  //     // bg
+  //     this.canvasImgBack.size += 2;
+  //     // cursor
+  //       this.cursor = 'zoom-in';
+  //   }
+  // }
+
+  // pinchIn(event) {
+  //   console.log('pinch : ', event);
+  //   // bg
+  //   this.canvasImgBack.size -= 0.5;
+  //   // cursor
+  //   this.cursor = 'zoom-out';
+  // }
+
+  // pinchOut(event) {
+  //   console.log('zoom in');
+  //   // bg
+  //   this.canvasImgBack.size += 0.5;
+  //   // cursor
+  //   this.cursor = 'zoom-in';
+  // }
+  // tooltipItemInit(){
+  //   this.tooltipItems = [
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Add Text'
+  //               },
+  //               icon: 'pi pi-sort-alpha-up',
+  //               command: () => {
+  //                 console.log('text clicked');
+  //                 this.editedText({
+  //                   text : this.textEditor ? this.textEditor.text : '',
+  //                   styleParams: this.textEditor ? this.textEditor.styleParams : this.textStyleParams
+  //                   });
+  //               }
+  //           },
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Logo'
+  //               },
+  //               icon: 'pi pi-images',
+  //               command: () => { this.addLogo.nativeElement.click(); }
+  //           },
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Delete'
+  //               },
+  //               icon: 'pi pi-trash',
+  //               command: (event) => {
+  //                   this.toolClick(event);
+  //               }
+  //           },
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Background Image'
+  //               },
+  //               icon: 'pi pi-mobile',
+  //               command: () => { this.addbg.nativeElement.click(); }
+  //           },
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Save'
+  //               },
+  //               icon: 'pi pi-save',
+  //               command: () => {
+  //                 this.captureScreen();
+  //               }
+  //           }
+  //   ];
+
+  //   this.leftTooltipItems = [
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Add',
+  //                   tooltipPosition: 'left',
+  //               },
+  //               icon: 'pi pi-pencil',
+  //               command: (event) => {
+  //                   this.toolClick(event);
+  //               }
+  //           },
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Background Image',
+  //                   tooltipPosition: 'left',
+  //               },
+  //               icon: 'pi pi-mobile',
+  //               command: () => { this.addbg.nativeElement.click(); }
+  //           },
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Delete',
+  //                   tooltipPosition: 'left',
+  //               },
+  //               icon: 'pi pi-trash',
+  //               command: (event) => {
+  //                   this.toolClick(event);
+  //               }
+  //           },
+  //           {
+  //               icon: 'pi pi-upload',
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Upload',
+  //                   tooltipPosition: 'left',
+  //               },
+  //           },
+  //           {
+  //               tooltipOptions: {
+  //                   tooltipLabel: 'Angular Website',
+  //                   tooltipPosition: 'left',
+  //               },
+  //               icon: 'pi pi-external-link'
+  //           }
+  //   ];
+  // }
+  // htmlToCanvasImg() {
+  //   const div = this.screen.nativeElement;
+  //   console.log(div);
+  //   const divHeight = div.clientHeight;
+  //   const divWidth = div.clientWidth;
+  //   const options = { width: divWidth*2, height: divHeight*2 };
+  //   console.log(options);
+
+  //   console.log('naim');
+
+  //   html2canvas(this.screen.nativeElement, options).then(canvas =>{
+  //     this.loadingCtrl.dismiss();
+
+  //     const canvasSrc = canvas.toDataURL('image/png');
+  //     console.log('canvas data url : ', canvasSrc);
+  //     this.img = canvasSrc;
+
+  //     this.downloadLink.nativeElement.download = 'phone-cover.png';
+  //     this.downloadLink.nativeElement.href = canvasSrc;
+  //     this.downloadLink.nativeElement.click();
+  //   }).catch(err=>{
+  //     console.log('err : ', err);
+  //     this.loadingCtrl.dismiss();
+  //     this.toastCtrl.create({
+  //       message: 'something went wrong ...',
+  //       color: 'danger',
+  //       duration: 2000
+  //     }).then(toastEl=>{
+  //       toastEl.present();
+  //     });
+  //   });
+  // }
+
+  // properties
+  // valRanges = [20,30];
+  // canvasImgBackConst = {
+  //   size: 110,
+  //   x: 0,
+  //   y: 30
+  // };
+  // canvasImgBack = {
+  //   size: 110,
+  //   x: 0,
+  //   y: 30
+  // };
+
+  // @ViewChild('logoRef', {static: false}) logoRef: ElementRef;
+  // @ViewChild('canvas', {static: false}) canvas: ElementRef;
+  //actionWorking = false;
+  //rotateAngle = 0;
+    //  area = [
+  //    {name: 'Samsung', img: '../../assets/phone-cover/samsung/A5-2017.png', cost: '60'},
+  //    {name: 'Realme', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'},
+  //    {name: 'vivo', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'},
+  //    {name: 'oppo', img: '../../assets/phone-cover/vivo/V5.png', cost: '60'}
+  //   ];
+
+  // editor menu item
+  // items: MenuItem[];
+  // tooltipItems: MenuItem[];
+  // leftTooltipItems: MenuItem[];
+  // rotateBack = 180;
+
+    // logoParams = {
+  //   scale: 1,
+  //   width: 153,
+  //   height: 'auto',
+  //   overlayHeight: 10,
+  //   marginTop: -333,
+  //   marginLeft: 100,
+  //   zIndex: 15,
+  //   position: 'absolute',
+  //   src: ''
+  // };
+  // logoParamConst = {
+  //   scale: 1,
+  //   width: 153,
+  //   height: 'auto',
+  //   overlayHeight: 10,
+  //   marginTop: -333,
+  //   marginLeft: 100,
+  //   zIndex: 15,
+  //   position: 'absolute',
+  //   src: ''
+  // };
 
 
 }

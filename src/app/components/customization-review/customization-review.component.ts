@@ -1,9 +1,7 @@
 import { ToastService } from './../../services/controllers/toast.service';
 import { AccountService } from './../../account/account.service';
-import { CustomOrderPage } from './../../phone-customizer/custom-order/custom-order.page';
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, NavController, LoadingController } from '@ionic/angular';
-import { present } from '@ionic/core/dist/types/utils/overlays';
 import { AccountPage } from 'src/app/account/account.page';
 
 @Component({
@@ -23,8 +21,6 @@ export class CustomizationReviewComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private accountService: AccountService,
-    private nav: NavController,
-    private toastService: ToastService,
     private loadingCtrl: LoadingController
   ) { }
 
@@ -49,38 +45,42 @@ export class CustomizationReviewComponent implements OnInit {
     });
   }
 
-  onPurchase() {
+  onPurchase(confirm) {
     if( this.accountService.isLoggedIn() ) {
       this.modalCtrl.dismiss({
         confirm,
         buy: true
       });
-      this.modalCtrl.create({
-        component: CustomOrderPage,
-        componentProps: {
-            mainImage: this.mainImage,
-            backgroundImage: this.backgroundImage,
-            logoImage: this.logoImage,
-            text: this.text,
-            phoneModel: this.phoneModel
-        },
-        cssClass: 'preview-modal'
-      }).then(el=>el.present());
+      // this.modalCtrl.create({
+      //   component: CustomOrderPage,
+      //   componentProps: {
+      //       mainImage: this.mainImage,
+      //       backgroundImage: this.backgroundImage,
+      //       logoImage: this.logoImage,
+      //       text: this.text,
+      //       phoneModel: this.phoneModel
+      //   },
+      //   cssClass: 'preview-modal'
+      // }).then(el=>el.present());
     } else {
       this.modalForLogin().then(loggedIn=>{
         if(loggedIn){
           // do something
-                this.modalCtrl.create({
-                component: CustomOrderPage,
-                componentProps: {
-                    mainImage: this.mainImage,
-                    backgroundImage: this.backgroundImage,
-                    logoImage: this.logoImage,
-                    text: this.text,
-                    phoneModel: this.phoneModel
-                },
-                cssClass: 'preview-modal'
-              }).then(el=>el.present());
+          // this.modalCtrl.create({
+          //   component: CustomOrderPage,
+          //   componentProps: {
+          //       mainImage: this.mainImage,
+          //       backgroundImage: this.backgroundImage,
+          //       logoImage: this.logoImage,
+          //       text: this.text,
+          //       phoneModel: this.phoneModel
+          //   },
+          //   cssClass: 'preview-modal'
+          // }).then(el=>el.present());
+          this.modalCtrl.dismiss({
+            confirm,
+            buy: true
+          });
         }
       });
       // this.toastService.toast('Please login to order Customized Design', 'danger', 2000);

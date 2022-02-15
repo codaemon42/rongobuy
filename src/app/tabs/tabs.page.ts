@@ -1,3 +1,4 @@
+import { HomepageService } from './../services/homepage/homepage.service';
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserverService } from '../services/breakpoint.service';
 
@@ -11,9 +12,7 @@ export class TabsPage implements OnInit {
   desktop = false;
   constructor(
     private brkPointObs: BreakpointObserverService
-  ) {
-    //this.getSize();
-  }
+  ) { }
   ngOnInit() {
     this.getSize();
   }
@@ -27,7 +26,6 @@ export class TabsPage implements OnInit {
         this.desktop  = false;
       }
     });
-    //console.log('window : ', window.innerWidth);
   }
 
 }

@@ -1,7 +1,6 @@
 <app-header [showSearch]="showSearch" (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)" [searchData]="searchData"></app-header>
 
 <ion-content>
-    <!-- full home page  -->
     <ion-grid
     *ngIf="homepage.length <= 0"
      >
@@ -87,7 +86,7 @@
       <!-- category section -->
       <ion-row *ngIf="homeSection.sectionType === 'category' && homeSection.isActive === 1">
         <ion-col size="11" offset="0.5">
-          <ion-slides #categorySlide class="cat-slider" pager="true" scrollbar="false" [options]="catSlider" (ionSlidesDidLoad)="catSliderLoaded($event)" (ionSlideNextStart)="catSliderLoaded($event)">
+          <ion-slides #categorySlide class="cat-slider" pager="true" scrollbar="false" [options]="catSlider">
             <ion-slide *ngFor="let phoneCat of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(phoneCat.slug)">
               <!-- <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}"> -->
               <ion-card>
@@ -101,7 +100,7 @@
       <!-- Video section -->
       <ion-row *ngIf="homeSection.sectionType === 'video' && homeSection.isActive === 1">
         <ion-col size="11" offset="0.5" >
-          <ion-slides class="cat-slider" pager="true" scrollbar="false" [options]="catSlider2" (ionSlidesDidLoad)="catSliderLoaded($event)" (ionSlideNextStart)="catSliderLoaded($event)">
+          <ion-slides class="cat-slider" pager="true" scrollbar="false" [options]="catSlider2">
             <ion-slide *ngFor="let videoContent of homeSection.sectioncontent; let i = index">
               <!-- <ion-card *ngIf="videoContent.imageUrl" [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}"> -->
               <ion-card *ngIf="videoContent.imageUrl">
@@ -128,23 +127,23 @@
 
       <!-- banner grid -->
       <ion-row *ngIf="homeSection.sectionType === 'banner_grid' && homeSection.isActive === 1">
-        <div class="p-grid nested-grid">
+        <div style="padding: 10px" class="p-grid nested-grid">
           <div class="p-col-6" style="padding-right: 0px">
             <div class="box box-stretched">
-              <img style="width: 100%" [src]="homeSection.sectioncontent[0].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
+              <img style="width: 100%; border-radius: 10px 0px 0px 10px; box-shadow: 0px 5px 8px #0000004b;" [src]="homeSection.sectioncontent[0].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
             </div>
           </div>
           <div class="p-col-6">
             <div class="p-grid">
               <div class="p-col-12" style="padding-bottom: 0px">
                   <div class="box">
-                    <img style="width: 100%" [src]="homeSection.sectioncontent[1].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
+                    <img style="width: 100%; border-radius: 0px 10px 0px 0px; box-shadow: 0px 5px 8px #0000004b;" [src]="homeSection.sectioncontent[1].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
                   </div>
               </div>
 
               <div class="p-col-12">
                   <div class="box">
-                    <img style="width: 100%" [src]="homeSection.sectioncontent[2].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
+                    <img style="width: 100%; border-radius: 0px 0px 10px 0px; box-shadow: 0px 5px 8px #0000004b;" [src]="homeSection.sectioncontent[2].imageUrl" alt="" (click)="onClickHomeContent(homeSection.sectioncontent[0].slug)">
                   </div>
               </div>
             </div>
@@ -153,22 +152,8 @@
       </ion-row>
       <!-- banner grid /-->
     </ion-grid>
-
-
-
-    <!-- products -->
-
-    <!-- chat section -->
-      <!-- <ion-fab class="rb-chat-icon" vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button color="warning" (click)="openAppUrl('facebook', 'rongobuy', '228677831034067')">
-          <ion-icon name="chatbubbles"></ion-icon>
-        </ion-fab-button>
-      </ion-fab> -->
-      <app-chat-button class="chat-app"></app-chat-button>
-    <!-- full home page  /-->
-    <!-- footer -->
+    <app-chat-button class="chat-app"></app-chat-button>
     <app-footer></app-footer>
-    <!-- footer /-->
 </ion-content>
 
 

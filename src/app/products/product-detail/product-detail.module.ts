@@ -13,6 +13,7 @@ import { ProductDetailPage } from './product-detail.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgOtpInputModule } from 'ng-otp-input';
+import { TextBannerModalModule } from 'src/app/components/text-banner-modal/text-banner-modal.module';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { NgOtpInputModule } from 'ng-otp-input';
     PipesModule,
     ChatButtonModule,
     NgOtpInputModule,
+    TextBannerModalModule,
     ProductDetailPageRoutingModule
   ],
   declarations: [ProductDetailPage]

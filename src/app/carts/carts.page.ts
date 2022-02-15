@@ -20,7 +20,6 @@ export class CartsPage implements OnInit, OnDestroy {
   subTotal;
   cartDetails: CartRes = null;
   cartSub: Subscription;
-
   couponRes: CartRes = null;
   couponSub: Subscription;
 

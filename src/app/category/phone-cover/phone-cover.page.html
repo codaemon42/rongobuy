@@ -3,10 +3,10 @@
     <ion-buttons slot="start">
         <ion-back-button defaultHref="tabs/home"></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center" style="font-size: 15px;">Select Your Phone Brands</ion-title>
+    <ion-title class="ion-text-center" style="font-size: 15px;">Choose Your Phone Brand</ion-title>
   </ion-toolbar>
   <ion-toolbar color="primary" *ngIf="phoneCoverCat || phoneCoverCat !== undefined">
-    <p-dropdown (onChange)="onChangeArea()" [options]="phoneCoverChild" [(ngModel)]="selectedBrand" optionLabel="categoryName" [filter]="true" filterBy="categoryName" [showClear]="true" placeholder="Select Phone Brand">
+    <p-dropdown (onChange)="onChangeArea()" [options]="indvPhones" [(ngModel)]="selectedBrand" optionLabel="categoryName" [filter]="true" filterBy="categoryName" [showClear]="true" placeholder="Search your Phone Model">
       <ng-template pTemplate="selectedItem">
         <div class="country-item country-item-value brand-option"  *ngIf="selectedBrand.categoryName">
           <img [src]="selectedBrand.image" class="flag" style="width: 20px;" >
@@ -15,8 +15,10 @@
       </ng-template>
       <ng-template let-country pTemplate="item">
         <div class="country-item country-item-value brand-option">
-          <img [src]="country.image" class="flag" style="width: 40px;" />
-          <div>{{country.categoryName}}</div>
+            <img [src]="country.image" class="flag" style="width: 40px;" />
+           <a style="text-decoration: none;" [href]="'/category/phone-cover/phone-cover-detail/any/'+country.slug">
+            <div>{{country.categoryName}}</div>
+          </a>
         </div>
       </ng-template>
     </p-dropdown>
@@ -45,9 +47,11 @@
       </ion-col> -->
     </ion-row>
     <ion-row *ngIf="phoneCoverCat || phoneCoverCat !== undefined">
-      <ion-col class="brands" (click)="onRoute(brand.slug)" size="3" sizeSm="3" sizeMd="2" *ngFor="let brand of phoneCoverCat.child" >
+      <ion-col class="brands" [routerLink]="['/', 'category', 'phone-cover', 'phone-cover-detail', brand.slug]" size="3" sizeSm="3" sizeMd="2" *ngFor="let brand of phoneCoverCat.child" >
         <ion-card class="ion-no-margin">
-          <ion-img [src]="brand.image"></ion-img>
+          <a [href]="'category/phone-cover/phone-cover-detail/'+brand.slug">
+            <ion-img [src]="brand.image"></ion-img>
+          </a>
           <ion-card-subtitle class="subtitle ion-text-center">{{brand.categoryName}}</ion-card-subtitle>
         </ion-card>
       </ion-col>

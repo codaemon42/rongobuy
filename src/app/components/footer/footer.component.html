@@ -1,48 +1,21 @@
     <ion-grid class="footer">
       <ion-row>
-        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-          <ion-list>
-            <ion-list-header>Customer Care</ion-list-header>
-            <ion-item [routerLink]="['/', 'pages', 'terms-and-conditions']" color="dark">
-              <ion-label color="light">Terms & Conditions</ion-label>
+        <ion-col size="12" sizeSm="12" sizeMd="4" sizeLg="4">
+          <ion-list lines="none">
+            <ion-list-header style="font-weight: bolder;">Rongobuy</ion-list-header>
+            <ion-item [routerLink]="['/', 'pages', 'contact-us']">
+              <ion-label>Contact</ion-label>
             </ion-item>
-            <ion-item [routerLink]="['/', 'pages', 'contact-us']" color="dark">
-              <ion-label>Contact Us</ion-label>
+            <ion-item>
+              <ion-label style="font-weight: bold; font-size: 18px;">support@rongobuy.com</ion-label>
             </ion-item>
-            <ion-item [routerLink]="['/', 'pages', 'return-and-refund']" color="dark">
-              <ion-label>Return and Refund policy</ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-col>
-        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-          <ion-list>
-            <ion-list-header>Rongobuy</ion-list-header>
-            <ion-item [routerLink]="['/', 'pages', 'about-us']" color="dark">
-              <ion-label>About Us</ion-label>
-            </ion-item>
-            <ion-item [routerLink]="['/', 'pages', 'privacy-policy']" color="dark">
-              <ion-label>Privacy Policy</ion-label>
-            </ion-item>
-            <ion-item [routerLink]="['/', 'pages', 'career']" color="dark">
-              <ion-label>Career</ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-col>
-        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="4">
-          <ion-list>
-            <ion-list-header>Connect with us</ion-list-header>
-            <ion-item color="dark">
+            <ion-item>
               <ion-buttons>
                 <ion-button>
                   <a href="https://www.facebook.com/rongobuy/" target="_blank" rel="noopener">
                     <ion-icon color="light" slot="icon-only" name="logo-facebook"></ion-icon>
                   </a>
                 </ion-button>
-              </ion-buttons>
-              <ion-label >160K people like this</ion-label>
-            </ion-item>
-            <ion-item color="dark">
-              <ion-buttons>
                 <ion-button>
                   <a href="https://www.instagram.com/rongobuy/" target="_blank" rel="noopener">
                     <ion-icon color="light" slot="icon-only" name="logo-instagram"></ion-icon>
@@ -67,12 +40,60 @@
             </ion-item>
           </ion-list>
         </ion-col>
+        <ion-col size="0" sizeSm="0" sizeMd="1" sizeLg="1"></ion-col>
+        <ion-col size="6" sizeSm="6" sizeMd="1.5" sizeLg="1.5">
+          <ion-list lines="none">
+            <ion-list-header style="color: #fff; font-size: 14px;box-shadow: 14px 1px;margin-top: 20px;">Navigation</ion-list-header>
+            <ion-item [routerLink]="['/', 'tabs', 'home']">
+              <ion-label color="light">Home</ion-label>
+            </ion-item>
+            <ion-item [routerLink]="['/', 'category']">
+              <ion-label>Category</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col size="6" sizeSm="6" sizeMd="2.5" sizeLg="2.5">
+          <ion-list lines="none">
+            <ion-list-header style="margin-top: 20px;"></ion-list-header>
+            <ion-item [routerLink]="['/', 'pages', 'contact-us']">
+              <ion-label>Contact Us</ion-label>
+            </ion-item>
+            <ion-item [routerLink]="['/', 'pages', 'return-and-refund']">
+              <ion-label>Return and Refund policy</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col size="12" sizeSm="12" sizeMd="2" sizeLg="2">
+          <ion-list lines="none">
+            <ion-list-header style="color: #fff; font-size: 14px;box-shadow: 14px 1px;margin-top: 20px;">Connect with us</ion-list-header>
+            <ion-item [routerLink]="['/', 'pages', 'about-us']">
+              <ion-label>About Us</ion-label>
+            </ion-item>
+            <ion-item [routerLink]="['/', 'pages', 'career']">
+              <ion-label>Career</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
       </ion-row>
+      <hr>
       <ion-row>
-        <ion-col>
+        <ion-col size="12" sizeSm="12" sizeMd="6" sizeLg="6">
           <div class="copyright">
             <ion-note>© All Rights Reserved | Rongobuy private Limited</ion-note>
           </div>
+        </ion-col>
+        <ion-col size="0" sizeSm="0" sizeMd="2" sizeLg="2">
+
+        </ion-col>
+        <ion-col size="6" sizeSm="6" sizeMd="2" sizeLg="2">
+          <a style="text-decoration: none;" [routerLink]="['/', 'pages', 'privacy-policy']" class="copyright">
+            <ion-note>Privacy policy</ion-note>
+          </a>
+        </ion-col>
+        <ion-col size="6" sizeSm="6" sizeMd="2" sizeLg="2">
+          <a style="text-decoration: none;" [routerLink]="['/', 'pages', 'terms-and-conditions']" class="copyright">
+            <ion-note>Terms & conditions</ion-note>
+          </a>
         </ion-col>
       </ion-row>
     </ion-grid>

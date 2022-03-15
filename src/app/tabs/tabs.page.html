@@ -1,32 +1,60 @@
 <ion-tabs class="desktop" *ngIf="desktop">
   <ion-tab-bar slot="top" class="bottom-tab-bar">
+
+    <ion-tab-button class="logo">
+      <ion-img style="width:150px; margin-left: 20px" src="../../assets/logo/logo.gif"></ion-img>
+    </ion-tab-button>
+
+    <ion-tab-button></ion-tab-button>
+
     <ion-tab-button tab="home">
-      <ion-icon name="home"></ion-icon>
+      <!-- <ion-icon name="home"></ion-icon> -->
       <ion-label *ngIf="showTabTitle">Home</ion-label>
     </ion-tab-button>
+
     <ion-tab-button [routerLink]="['/','category', 'phone-cover']"    class="inner-left-btn">
-      <ion-icon name="apps-sharp"></ion-icon>
+      <!-- <ion-icon name="apps-sharp"></ion-icon> -->
       <ion-label *ngIf="showTabTitle">Category</ion-label>
     </ion-tab-button>
-    <ion-tab-button [routerLink]="['/','phone-customizer']"  class="inner-left-btn">
-      <ion-icon name="phone-portrait-sharp"></ion-icon>
-      <ion-label *ngIf="showTabTitle">Customize</ion-label>
-    </ion-tab-button>
-    <ion-tab-button class="button-center">
-      <ion-img style="width:150px" src="../../assets/logo/logo.gif"></ion-img>
-    </ion-tab-button>
+
     <ion-tab-button tab="wishlist" class="inner-right-btn">
-      <ion-icon name="heart"></ion-icon>
+      <!-- <ion-icon name="heart"></ion-icon> -->
       <ion-label *ngIf="showTabTitle">Wishlist</ion-label>
     </ion-tab-button>
-    <ion-tab-button tab="carts">
-      <ion-icon name="cart"></ion-icon>
-      <ion-label *ngIf="showTabTitle">Cart</ion-label>
+
+    <ion-tab-button [routerLink]="['/','pages', 'about-us']"  class="inner-left-btn">
+      <!-- <ion-icon name="phone-portrait-sharp"></ion-icon> -->
+      <ion-label *ngIf="showTabTitle">About us</ion-label>
     </ion-tab-button>
+
+    <ion-tab-button></ion-tab-button>
+
+    <ion-searchbar class="menu-search"></ion-searchbar>
+
+    <ion-tab-button [routerLink]="['/','phone-customizer']"  class="inner-left-btn">
+      <!-- <ion-icon name="phone-portrait-sharp"></ion-icon> -->
+      <!-- <ion-label *ngIf="showTabTitle">Customize</ion-label> -->
+      <ion-chip *ngIf="showTabTitle" style="--background: #FAC94C; --color: #fff; font-weight: bold;">
+        <ion-icon style="color: #fff" name="add-circle"></ion-icon>
+        <ion-label>Customize</ion-label>
+      </ion-chip>
+    </ion-tab-button>
+
     <ion-tab-button tab="account">
-      <ion-icon name="person"></ion-icon>
-      <ion-label *ngIf="showTabTitle">Account</ion-label>
+      <!-- <ion-icon name="person"></ion-icon> -->
+      <!-- <ion-label *ngIf="showTabTitle">Account</ion-label> -->
+      <ion-chip *ngIf="showTabTitle" color="warning" [outline]="true">
+        <ion-icon style="color: #FAC94C; font-size: 12px" name="person"></ion-icon>
+        <ion-label>Account</ion-label>
+      </ion-chip>
     </ion-tab-button>
+
+    <ion-tab-button tab="carts" style="display: flex;flex-direction: row;justify-content: flex-start;">
+      <!-- <ion-icon name="cart"></ion-icon> -->
+      <!-- <ion-label *ngIf="showTabTitle">Cart</ion-label> -->
+      <ion-icon name="cart-sharp"></ion-icon>
+    </ion-tab-button>
+
   </ion-tab-bar>
 </ion-tabs>
 <ion-tabs class="mobile" *ngIf="!desktop">

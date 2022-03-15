@@ -30,17 +30,42 @@
 .desktop{
     flex-direction: row !important;
     justify-content: center;
+
+  .button-center{
+
+  }
   ion-tab-bar{
     position: absolute;
-    width: 70%;
+    width: 100%;
     margin: auto;
     border: none;
-    --background: transparent;
+    --background: #fff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 12%;
   }
   ion-tab-button {
     --background: transparent;
     --color: var(--ion-color-dark);
     --color-selected: var(--ion-color-warning-shade);
+
+    ion-label {
+        font-weight: 500;
+        font-size: 14px;
+    }
   }
+
+    .logo{
+      margin-left: 20px;
+    }
+    .menu-search{
+      width: 300px;
+      --border-radius: 20px;
+      padding: 0px;
+      margin: 0;
+      transform: scale(1, 0.75);
+      --box-shadow: 0 0 0px 1px #0005;
+    }
 }
 

@@ -1,5 +1,7 @@
-<app-header [showSearch]="showSearch" (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)" [searchData]="searchData"></app-header>
-
+<!-- <app-header [showSearch]="showSearch" (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)" [searchData]="searchData"></app-header> -->
+<ion-header>
+  <ion-toolbar></ion-toolbar>
+</ion-header>
 <ion-content>
     <ion-grid
     *ngIf="homepage.length <= 0"

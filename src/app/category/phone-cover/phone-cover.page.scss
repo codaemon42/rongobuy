@@ -35,6 +35,18 @@ ion-card{
   align-items: center;
 }
 
+.chat-app{
+  position: fixed;
+  right: -5px;
+  bottom: 50px;
+  z-index: 2000;
+}
+
+.banner{
+  padding: 10px 0;
+}
+
+
 @media only screen and (min-width: 700px) {
 
   .brands-wrapper{

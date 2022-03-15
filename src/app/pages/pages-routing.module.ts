@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'invite',
     loadChildren: () => import('./invite/invite.module').then( m => m.InvitePageModule)
   },
+  // {
+  //   path: 'offer',
+  //   loadChildren: () => import('./offer/offer.module').then( m => m.OfferPageModule)
+  // },
   {
     path: ':slug',
     loadChildren: () => import('./page-detail/page-detail.module').then( m => m.PageDetailPageModule)

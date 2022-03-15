@@ -9,6 +9,7 @@ import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser/n
 })
 export class ChatButtonComponent implements OnInit {
   @Input() style;
+  @Input() open: boolean;
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -16,7 +17,13 @@ export class ChatButtonComponent implements OnInit {
     private inAppBrowser: InAppBrowser
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log("open", this.open);
+    if(this.open) {
+      console.log('open chat');
+      this.openAppUrl('facebook', 'rongobuy', '228677831034067');
+    }
+  }
 
         //fb page
   openAppUrl(app: string, name: string, id?: string) {

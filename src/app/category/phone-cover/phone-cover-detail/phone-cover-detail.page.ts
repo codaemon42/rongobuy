@@ -25,7 +25,7 @@ export class PhoneCoverDetailPage implements OnInit, OnDestroy {
     private loadingCtrl: LoadingController,
     private categoryService: CategoryService,
     private router: ActivatedRoute,
-    private nav: NavController,
+    private nav: NavController
   ) { }
 
   ngOnInit() {

@@ -1,3 +1,4 @@
+import { MainHeaderModule } from './../../components/main-header/main-header.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +14,7 @@ import { OrderTrackingPage } from './order-tracking.page';
     CommonModule,
     FormsModule,
     IonicModule,
+    MainHeaderModule,
     ReactiveFormsModule,
     OrderTrackingPageRoutingModule
   ],

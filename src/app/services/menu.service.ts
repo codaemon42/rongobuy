@@ -13,7 +13,7 @@ export class MenuService {
         id: '1',
         icon: 'phone-portrait-sharp',
         title: 'Customize Phone Cover',
-        route: 'phone-customizer',
+        route: 'tabs/phone-customizer',
         show: false,
         children: []
       },
@@ -21,7 +21,7 @@ export class MenuService {
         id: '2',
         icon: 'image',
         title: 'Cover Designs',
-        route: 'category/phone-cover',
+        route: 'tabs/category/phone-cover',
         show: false,
         children: []
       },
@@ -29,7 +29,7 @@ export class MenuService {
         id: '3',
         icon: 'pie-chart',
         title: 'Orders',
-        route: 'all/orders',
+        route: 'tabs/all/orders',
         show: false,
         children: []
       },
@@ -37,7 +37,7 @@ export class MenuService {
         id: '4',
         icon: 'radio',
         title: 'Order Tracking',
-        route: 'pages/order-tracking',
+        route: 'tabs/pages/order-tracking',
         show: false,
         children: []
       },
@@ -45,7 +45,7 @@ export class MenuService {
         id: '5',
         icon: 'happy',
         title: 'About Us',
-        route: 'pages/about-us',
+        route: 'tabs/pages/about-us',
         show: false,
         children: []
       },
@@ -53,7 +53,7 @@ export class MenuService {
         id: '6',
         icon: 'newspaper',
         title: 'Terms & Conditions',
-        route: 'pages/terms-and-conditions',
+        route: 'tabs/pages/terms-and-conditions',
         show: false,
         children: []
       }

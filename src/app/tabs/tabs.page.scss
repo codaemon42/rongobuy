@@ -69,3 +69,16 @@
     }
 }
 
+.search-results{
+  position: absolute;
+  top: 88px;
+  right: 25%;
+  width: 350px;
+}
+.search-results::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    background: #8070D4;
+    border: 6px solid rgba(0,0,0,0.2);
+}
+
+

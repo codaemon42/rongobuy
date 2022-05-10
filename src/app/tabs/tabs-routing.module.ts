@@ -14,10 +14,7 @@ const routes: Routes = [
       },
       {
         path: 'category',
-        //@since 1.5.8
-        loadChildren: () => import('../category/phone-cover/phone-cover.module').then(m => m.PhoneCoverPageModule)
-        // @since 1.5.7
-        //loadChildren: () => import('../category/category.module').then(m => m.CategoryPageModule)
+        loadChildren: () => import('../category/category.module').then( m => m.CategoryPageModule)
       },
       {
         path: 'carts',
@@ -36,6 +33,19 @@ const routes: Routes = [
       {
         path: 'offer',
         loadChildren: () => import('../pages/offer/offer.module').then(m => m.OfferPageModule)
+      },
+      {
+        path: 'pages',
+        loadChildren: () => import('../pages/pages.module').then(m => m.PagesPageModule)
+      },
+      {
+        path: 'all/orders',
+        loadChildren: () => import('../orders/orders.module').then( m => m.OrdersPageModule),
+        canActivate:[AccountGuard]
+      },
+      {
+        path: 'phone-customizer',
+        loadChildren: () => import('../phone-customizer/phone-customizer.module').then( m => m.PhoneCustomizerPageModule)
       },
       {
         path: '',

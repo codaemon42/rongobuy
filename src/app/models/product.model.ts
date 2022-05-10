@@ -6,6 +6,7 @@ import { Sku } from './sku.model';
 
 export interface Product {
         id: number;
+        design: any;
         productId: string;
         title: string;
         description: string;

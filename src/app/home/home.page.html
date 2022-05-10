@@ -1,14 +1,15 @@
-<!-- <app-header [showSearch]="showSearch" (isLoadingSearch)="isLoading($event)" (searchTextFound)="onSearch($event)" [searchData]="searchData"></app-header> -->
+
 <ion-header>
-  <ion-toolbar></ion-toolbar>
+  <app-main-header></app-main-header>
 </ion-header>
 <ion-content>
+
     <ion-grid
     *ngIf="homepage.length <= 0"
      >
       <ion-row>
         <ion-col>
-          <ion-slides pager="true" scrollbar="true" [options]="slideOpts">
+          <ion-slides bulletActiveClass="bulletActive" pager="true" scrollbar="true" [options]="slideOpts">
             <ion-slide *ngFor="let s of skeleton">
               <ion-skeleton-text animated style="width: 100%; height: 300px;"></ion-skeleton-text>
             </ion-slide>
@@ -38,8 +39,12 @@
       <ion-row *ngIf="homeSection.isActive === 1">
         <ion-col>
           <div *ngIf="homeIndex" class="header-center">
-            <span>
-              {{ homeSection.sectionTitle }}
+            <p class="section-small-header">{{ homeSection.bgColor }}</p>
+            <p class="primary-title">
+              {{ homeSection.sectionTitle.split('xx')[0] }}
+            </p>
+            <span class="secondary-title">
+              {{ homeSection.sectionTitle.split('xx')[1] ? homeSection.sectionTitle.split('xx')[1] : ''  }}
             </span>
           </div>
         </ion-col>
@@ -54,11 +59,10 @@
           </ion-slides>
         </ion-col>
       </ion-row>
-      <ion-row *ngIf="homeSection.sectionType === 'emergency' && homeSection.isActive === 1">
-        <ion-col>
-          <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
+      <ion-row style="margin: 0 20px" *ngIf="homeSection.sectionType === 'emergency' && homeSection.isActive === 1">
+        <ion-col size="12" sizeSm="12" sizeMd="3" sizeLg="3" *ngFor="let emergency of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(emergency.slug)">
+          <!-- <ion-slides class="emergency-slider" pager="true" scrollbar="false" [options]="emergencyCatSlider">
             <ion-slide *ngFor="let emergency of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(emergency.slug)">
-                <!-- <div class="rb-emergency-info" [ngStyle]="{'background': 'var(--ion-color-'+colors[i]+')'}"> -->
                 <div class="rb-emergency-info">
                   <div class="icon">
                     <img [src]="emergency.imageUrl" alt="icon">
@@ -66,7 +70,18 @@
                   <ion-label style="margin: 10px; text-align: left;">{{emergency.title}}</ion-label>
                 </div>
             </ion-slide>
-          </ion-slides>
+          </ion-slides> -->
+          <div class="emergency-slider">
+            <div>
+                <div class="rb-emergency-info">
+                  <div class="icon">
+                    <img [src]="emergency.imageUrl" alt="icon">
+                  </div>
+                  <ion-label style="margin: 10px; text-align: left; color: #1F2227;">{{emergency.title}}</ion-label>
+                  <p>{{emergency.content}}</p>
+                </div>
+            </div>
+          </div>
         </ion-col>
       </ion-row>
 
@@ -76,9 +91,9 @@
           <ion-slides class="cat-slider-2" pager="true" scrollbar="false" [options]="catSlider">
             <ion-slide *ngFor="let slide of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(slide.slug)">
               <!-- <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}"> -->
-              <ion-card>
+              <div>
                 <ion-img [src]="slide.imageUrl"></ion-img>
-              </ion-card>
+              </div>
             </ion-slide>
           </ion-slides>
         </ion-col>
@@ -86,14 +101,15 @@
 
 
       <!-- category section -->
-      <ion-row *ngIf="homeSection.sectionType === 'category' && homeSection.isActive === 1">
+      <ion-row style="margin: 0 20px;" *ngIf="homeSection.sectionType === 'category' && homeSection.isActive === 1">
         <ion-col size="11" offset="0.5">
           <ion-slides #categorySlide class="cat-slider" pager="true" scrollbar="false" [options]="catSlider">
             <ion-slide *ngFor="let phoneCat of homeSection.sectioncontent; let i = index" (click)="onClickHomeContent(phoneCat.slug)">
               <!-- <ion-card [ngStyle]="{'background': 'var(--ion-color-'+colors[i+2]+')'}"> -->
-              <ion-card>
-                <ion-img [src]="phoneCat.imageUrl"></ion-img>
-              </ion-card>
+              <div class="img-container">
+                <img [src]="phoneCat.imageUrl">
+                <span>{{phoneCat.title}}</span>
+              </div>
             </ion-slide>
           </ion-slides>
         </ion-col>
@@ -127,6 +143,14 @@
         </ion-col>
       </ion-row>
 
+      <!-- products -->
+      <ion-row *ngIf="homeSection.sectionType === 'products' && homeSection.isActive === 1">
+        <ion-col>
+          <app-display-products></app-display-products>
+        </ion-col>
+      </ion-row>
+      <!-- products -->
+
       <!-- banner grid -->
       <ion-row *ngIf="homeSection.sectionType === 'banner_grid' && homeSection.isActive === 1">
         <div style="padding: 10px" class="p-grid nested-grid">
@@ -154,6 +178,7 @@
       </ion-row>
       <!-- banner grid /-->
     </ion-grid>
+     <!-- <iframe width="100%" height="400px" src="http://localhost:8100/category/phone-cover" title="models"></iframe> -->
     <app-chat-button class="chat-app"></app-chat-button>
     <app-footer></app-footer>
 </ion-content>

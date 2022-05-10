@@ -90,6 +90,10 @@ export class HomePage implements OnInit, OnDestroy {
       this.slideOpts = {
       grabCursor: true,
       autoplay: true,
+      // pagination: {
+      //   type: 'bullets',
+      //   el: '.swiper-pagination'
+      // },
       cubeEffect: {
         shadow: true,
         slideShadows: true,
@@ -279,29 +283,29 @@ export class HomePage implements OnInit, OnDestroy {
       initialSlide: 0,
       speed: 400,
       loop: true,
-      slidesPerView: 3.9,
+      slidesPerView: 4.9,
       spaceBetween: 1,
       autoplay: true,
       breakpoints: {
           // when window width is >= 320px
           320: {
-            slidesPerView: 3.7,
+            slidesPerView: 2.7,
             spaceBetween: 10
           },
           // when window width is >= 480px
           480: {
-            slidesPerView: 3.3,
+            slidesPerView: 2.7,
             spaceBetween: 30
           },
           // when window width is >= 640px
           768: {
-            slidesPerView: 3.9,
-            spaceBetween: 40
+            slidesPerView: 4.9,
+            spaceBetween: 30
           },
           // when window width is >= 640px
           980: {
-            slidesPerView: 3.9,
-            spaceBetween: 40
+            slidesPerView: 5.9,
+            spaceBetween: 30
           }
       }
     };

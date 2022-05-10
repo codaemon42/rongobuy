@@ -1,3 +1,4 @@
+import { MainHeaderModule } from './../../components/main-header/main-header.module';
 import { RouterModule } from '@angular/router';
 import { HeaderModule } from './../../components/modules/header/header.module';
 import { NgModule } from '@angular/core';
@@ -14,6 +15,7 @@ import { OfferPage } from './offer.page';
     CommonModule,
     IonicModule,
     RouterModule,
+    MainHeaderModule,
     HeaderModule,
     OfferPageRoutingModule
   ],

@@ -1,8 +1,10 @@
 <ion-content>
-  <ion-toolbar>
+  <app-main-header></app-main-header>
+  <ion-toolbar color="secondary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="tabs/home"></ion-back-button>
     </ion-buttons>
+    <ion-title class="ion-text-center" style="margin-left: -50px">Orders</ion-title>
   </ion-toolbar>
 
   <ion-grid>
@@ -66,4 +68,5 @@
       </ion-col> -->
     </ion-row>
   </ion-grid>
+  <app-footer></app-footer>
 </ion-content>

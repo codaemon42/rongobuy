@@ -56,7 +56,7 @@ export class HeaderComponent implements OnInit {
 
   onSearch(event){
     console.log('search text', event.detail.value);
-    if ( event.detail.value === '') {
+    if ( event.detail.value === '' || event.detail.value.length < 2) {
       this.searchShow = false;
       this.isLoading = false;
       this.isLoadingSearch.emit(false);

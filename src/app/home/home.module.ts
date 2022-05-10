@@ -1,3 +1,5 @@
+import { DisplayProductsModule } from './../components/display-products/display-products.module';
+import { MainHeaderModule } from './../components/main-header/main-header.module';
 import { ChatButtonModule } from './../components/chat-button/chat-button.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,7 +10,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 
 import { FooterModule } from './../components/footer/footer.module';
-import { HeaderModule } from './../components/modules/header/header.module';
+// import { HeaderModule } from './../components/modules/header/header.module';
 
 // import { ComponentsModule } from '../components/components.module';
 
@@ -19,9 +21,10 @@ import { HeaderModule } from './../components/modules/header/header.module';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    HeaderModule,
+    DisplayProductsModule,
+    MainHeaderModule,
     FooterModule,
-    ChatButtonModule
+    ChatButtonModule,
   ],
   declarations: [HomePage]
 })

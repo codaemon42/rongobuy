@@ -1,5 +1,6 @@
+import { MainHeaderModule } from './../../components/main-header/main-header.module';
 import { FooterModule } from './../../components/footer/footer.module';
-import { HeaderModule } from './../../components/modules/header/header.module';
+// import { HeaderModule } from './../../components/modules/header/header.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +16,7 @@ import { PageDetailPage } from './page-detail.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    HeaderModule,
+    MainHeaderModule,
     FooterModule,
     PageDetailPageRoutingModule
   ],
